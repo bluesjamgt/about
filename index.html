@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Picture View｜Mac 圖片瀏覽應用</title>
+  <meta name="description" content="一款輕巧俐落的 macOS 圖片瀏覽應用，支援單張與長條文件式瀏覽，快捷操作、EXIF 檢視與多種格式。">
+  <meta property="og:title" content="Picture View｜Mac 圖片瀏覽應用" />
+  <meta property="og:description" content="輕巧俐落、操作順手，適合作為預設看圖工具。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="." />
+  <link rel="icon" href="favicon.ico" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <!-- 導覽列 -->
+  <header class="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-slate-200">
+    <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2 font-semibold">
+        <span class="inline-block w-8 h-8 rounded-xl bg-indigo-200"></span>
+        <span>Picture View</span>
+      </a>
+      <ul class="flex items-center gap-5 text-sm">
+        <li><a class="hover:text-indigo-600" href="#">首頁</a></li>
+        <li><a class="hover:text-indigo-600" href="changelog.html">日誌</a></li>
+        <li><a class="hover:text-indigo-600" href="feedback.html">回饋問題</a></li>
+        <li><a class="hover:text-indigo-600" href="about.html">關於</a></li>
+        <li>
+          <a class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700" href="#download">
+            下載
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- 主視覺 -->
+  <section class="max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-2 gap-10 items-center">
+    <div>
+      <p class="text-sm text-slate-500 mb-2">macOS 圖片瀏覽應用</p>
+      <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">輕巧、快速、順手的<br class="hidden md:block"> Picture View</h1>
+      <p class="text-slate-600 mb-6">
+        單張與長條文件式瀏覽自由切換，快捷鍵優化操作，支援 EXIF 檢視、常見格式與多視窗。適合取代預設看圖工具。
+      </p>
+      <div class="flex items-center gap-3">
+        <a id="download" href="#" class="px-5 py-3 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700">免費下載</a>
+        <a href="https://github.com/你的帳號/你的repo" class="px-5 py-3 rounded-xl border border-slate-300 hover:bg-white">
+          GitHub
+        </a>
+      </div>
+      <p class="text-xs text-slate-500 mt-3">支援：macOS 10.14+｜Intel & Apple Silicon</p>
+    </div>
+    <div class="relative">
+      <div class="absolute -inset-6 bg-indigo-200/40 blur-2xl rounded-3xl"></div>
+      <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1200&auto=format&fit=crop"
+           alt="App 預覽示意圖"
+           class="relative rounded-3xl shadow-xl ring-1 ring-black/5">
+    </div>
+  </section>
+
+  <!-- 功能亮點 -->
+  <section class="max-w-6xl mx-auto px-4 pb-16 grid md:grid-cols-2 gap-8">
+    <article class="bg-white rounded-2xl p-6 shadow-sm ring-1 ring-slate-200">
+      <img class="rounded-xl mb-4"
+           src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop"
+           alt="瀏覽模式示意">
+      <h3 class="text-xl font-semibold mb-2">兩種看圖模式</h3>
+      <p class="text-slate-600">單張快速瀏覽，或像文件一樣捲動檢視。支援多列縮圖、長圖閱讀友善，畫面更明白。</p>
+    </article>
+    <article class="bg-white rounded-2xl p-6 shadow-sm ring-1 ring-slate-200">
+      <img class="rounded-xl mb-4"
+           src="https://images.unsplash.com/photo-1520975682031-a68f6a0b3750?q=80&w=1200&auto=format&fit=crop"
+           alt="快捷操作示意">
+      <h3 class="text-xl font-semibold mb-2">快捷的操作</h3>
+      <p class="text-slate-600">優化鍵盤切換／縮放體驗，雙擊適配圖片大小；EXIF 快速查看、支援常見格式與拖放。</p>
+    </article>
+  </section>
+
+  <!-- 頁尾 -->
+  <footer class="border-t border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 py-8 text-sm text-slate-500 flex flex-col md:flex-row justify-between gap-3">
+      <p>© 2025 小哥 · Picture View</p>
+      <p>Made with GitHub Pages · <a class="underline hover:text-slate-700" href="mailto:contact@example.com">聯絡我</a></p>
+    </div>
+  </footer>
+</body>
+</html>
