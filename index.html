@@ -2,86 +2,105 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Picture View｜Mac 圖片瀏覽應用</title>
-  <meta name="description" content="一款輕巧俐落的 macOS 圖片瀏覽應用，支援單張與長條文件式瀏覽，快捷操作、EXIF 檢視與多種格式。">
-  <meta property="og:title" content="Picture View｜Mac 圖片瀏覽應用" />
-  <meta property="og:description" content="輕巧俐落、操作順手，適合作為預設看圖工具。" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bluz J｜個人創作站</title>
+  <meta name="description" content="Bluz J 的個人創作站，放著音樂、AI 實驗、與文字思索。" />
   <link rel="icon" href="favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 text-slate-800">
+
   <!-- 導覽列 -->
   <header class="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-slate-200">
     <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-2 font-semibold">
-        <span class="inline-block w-8 h-8 rounded-xl bg-indigo-200"></span>
-        <span>Picture View</span>
+      <a href="#" class="flex items-center gap-2 font-semibold text-indigo-600">
+        <span class="text-lg font-bold">Bluz J</span>
       </a>
       <ul class="flex items-center gap-5 text-sm">
         <li><a class="hover:text-indigo-600" href="#">首頁</a></li>
-        <li><a class="hover:text-indigo-600" href="changelog.html">日誌</a></li>
-        <li><a class="hover:text-indigo-600" href="feedback.html">回饋問題</a></li>
-        <li><a class="hover:text-indigo-600" href="about.html">關於</a></li>
-        <li>
-          <a class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700" href="#download">
-            下載
-          </a>
-        </li>
+        <li><a class="hover:text-indigo-600" href="#works">作品</a></li>
+        <li><a class="hover:text-indigo-600" href="#music">音樂</a></li>
+        <li><a class="hover:text-indigo-600" href="#about">關於</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- 主視覺 -->
+  <!-- Hero 區塊 -->
   <section class="max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-2 gap-10 items-center">
     <div>
-      <p class="text-sm text-slate-500 mb-2">macOS 圖片瀏覽應用</p>
-      <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">輕巧、快速、順手的<br class="hidden md:block"> Picture View</h1>
-      <p class="text-slate-600 mb-6">
-        單張與長條文件式瀏覽自由切換，快捷鍵優化操作，支援 EXIF 檢視、常見格式與多視窗。適合取代預設看圖工具。
+      <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">Bluz J</h1>
+      <p class="text-slate-600 mb-6 text-lg">
+        在音樂、AI 與文字之間探索自我。<br>
+        這裡是我存放作品與思索的角落。
       </p>
       <div class="flex items-center gap-3">
-        <a id="download" href="#" class="px-5 py-3 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700">免費下載</a>
-        <a href="https://github.com/你的帳號/你的repo" class="px-5 py-3 rounded-xl border border-slate-300 hover:bg-white">
-          GitHub
-        </a>
+        <a href="#music" class="px-5 py-3 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700">🎧 聽音樂</a>
+        <a href="#works" class="px-5 py-3 rounded-xl border border-slate-300 hover:bg-white">📂 看作品</a>
       </div>
-      <p class="text-xs text-slate-500 mt-3">支援：macOS 10.14+｜Intel & Apple Silicon</p>
     </div>
-    <div class="relative">
-      <div class="absolute -inset-6 bg-indigo-200/40 blur-2xl rounded-3xl"></div>
-      <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1200&auto=format&fit=crop"
-           alt="App 預覽示意圖"
-           class="relative rounded-3xl shadow-xl ring-1 ring-black/5">
+    <div>
+      <img src="https://images.unsplash.com/photo-1503264116251-35a269479413?q=80&w=1200&auto=format&fit=crop"
+           alt="Bluz J illustration" class="rounded-3xl shadow-xl ring-1 ring-black/5">
     </div>
   </section>
 
-  <!-- 功能亮點 -->
-  <section class="max-w-6xl mx-auto px-4 pb-16 grid md:grid-cols-2 gap-8">
+  <!-- 三個特色 -->
+  <section class="max-w-6xl mx-auto px-4 pb-16 grid md:grid-cols-3 gap-8">
     <article class="bg-white rounded-2xl p-6 shadow-sm ring-1 ring-slate-200">
-      <img class="rounded-xl mb-4"
-           src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop"
-           alt="瀏覽模式示意">
-      <h3 class="text-xl font-semibold mb-2">兩種看圖模式</h3>
-      <p class="text-slate-600">單張快速瀏覽，或像文件一樣捲動檢視。支援多列縮圖、長圖閱讀友善，畫面更明白。</p>
+      <h3 class="text-xl font-semibold mb-2">🎶 音樂創作</h3>
+      <p class="text-slate-600">吉他、編曲與錄音，偶爾的 Ambient 練習。</p>
     </article>
     <article class="bg-white rounded-2xl p-6 shadow-sm ring-1 ring-slate-200">
-      <img class="rounded-xl mb-4"
-           src="https://images.unsplash.com/photo-1520975682031-a68f6a0b3750?q=80&w=1200&auto=format&fit=crop"
-           alt="快捷操作示意">
-      <h3 class="text-xl font-semibold mb-2">快捷的操作</h3>
-      <p class="text-slate-600">優化鍵盤切換／縮放體驗，雙擊適配圖片大小；EXIF 快速查看、支援常見格式與拖放。</p>
+      <h3 class="text-xl font-semibold mb-2">🤖 AI 與技術</h3>
+      <p class="text-slate-600">程式練習、AI 生成，數位實驗與好奇心。</p>
     </article>
+    <article class="bg-white rounded-2xl p-6 shadow-sm ring-1 ring-slate-200">
+      <h3 class="text-xl font-semibold mb-2">✍️ 文字與思想</h3>
+      <p class="text-slate-600">語言學、心理觀察與自省的紀錄。</p>
+    </article>
+  </section>
+
+  <!-- 作品區塊 -->
+  <section id="works" class="max-w-6xl mx-auto px-4 pb-16">
+    <h2 class="text-2xl font-bold mb-6">📂 近期作品</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-white rounded-xl shadow ring-1 ring-slate-200 p-4">
+        <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1200&auto=format&fit=crop"
+             alt="音樂作品" class="rounded-lg mb-3">
+        <p class="font-semibold">Ambient Sketch 01</p>
+        <p class="text-sm text-slate-600">音樂實驗片段</p>
+      </div>
+      <div class="bg-white rounded-xl shadow ring-1 ring-slate-200 p-4">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop"
+             alt="文字作品" class="rounded-lg mb-3">
+        <p class="font-semibold">語言與陰影</p>
+        <p class="text-sm text-slate-600">文字筆記系列</p>
+      </div>
+      <div class="bg-white rounded-xl shadow ring-1 ring-slate-200 p-4">
+        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop"
+             alt="AI 作品" class="rounded-lg mb-3">
+        <p class="font-semibold">AI Portrait</p>
+        <p class="text-sm text-slate-600">生成實驗影像</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 關於我 -->
+  <section id="about" class="max-w-3xl mx-auto px-4 pb-16 text-center">
+    <h2 class="text-2xl font-bold mb-4">🌿 關於我</h2>
+    <p class="text-slate-600 leading-relaxed">
+      Bluz J。<br>
+      音樂片段、AI 練習，以及一些的文字。<br>    
+    </p>
   </section>
 
   <!-- 頁尾 -->
-  <footer class="border-t border-slate-200">
-    <div class="max-w-6xl mx-auto px-4 py-8 text-sm text-slate-500 flex flex-col md:flex-row justify-between gap-3">
-      <p>© 2025 小哥 · Picture View</p>
-      <p>Made with GitHub Pages · <a class="underline hover:text-slate-700" href="mailto:contact@example.com">聯絡我</a></p>
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-sm text-slate-500 flex flex-col md:flex-row justify-between gap-3">
+      <p>© 2025 Bluz J</p>
+      <p>聯絡我：<a class="underline hover:text-slate-700" href="mailto:contact@example.com">contact@example.com</a></p>
     </div>
   </footer>
+
 </body>
 </html>
