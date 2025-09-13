@@ -5,21 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Blu J | Dev</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // 載入 navbar.html
+    async function loadInclude(id, file) {
+      const res = await fetch(file);
+      const html = await res.text();
+      document.getElementById(id).innerHTML = html;
+    }
+    window.onload = () => loadInclude("navbar","navbar.html");
+  </script>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
 
-  <header class="border-b border-gray-200 bg-white shadow-sm">
-    <nav class="max-w-5xl mx-auto flex justify-between items-center px-4 py-4 text-sm">
-      <span class="font-bold text-lg">Blu J</span>
-      <ul class="flex gap-6">
-        <li><a href="index.html#bluj" class="hover:underline">Blu J</a></li>
-        <li><a href="index.html#ai" class="hover:underline">AI</a></li>
-        <li><a href="index.html#music" class="hover:underline">Music</a></li>
-        <li><a href="dev.html" class="font-semibold underline">Dev</a></li>
-        <li><a href="index.html#text" class="hover:underline">Text</a></li>
-      </ul>
-    </nav>
-  </header>
+  <!-- Navbar (載入外部檔案) -->
+  <div id="navbar"></div>
 
   <main class="max-w-4xl mx-auto px-4 py-10 space-y-10">
 
