@@ -1,0 +1,33 @@
+<!-- navbar.html -->
+<header class="border-b border-gray-200 bg-white shadow-sm">
+  <nav class="max-w-5xl mx-auto flex justify-between items-center px-4 py-4 text-sm">
+    <a href="index.html" class="font-bold text-lg">Blu J</a>
+    <ul class="flex gap-6">
+      <li><a href="index.html#bluj" class="nav-link" data-page="index.html#bluj">Blu J</a></li>
+      <li><a href="index.html#ai" class="nav-link" data-page="index.html#ai">AI</a></li>
+      <li><a href="dev.html" class="nav-link" data-page="dev.html">Dev</a></li>
+      <li><a href="index.html#music" class="nav-link" data-page="index.html#music">Music</a></li>
+      <li><a href="index.html#text" class="nav-link" data-page="index.html#text">Text</a></li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  // 自動高亮當前頁面與錨點
+  document.addEventListener("DOMContentLoaded", () => {
+    const links = document.querySelectorAll(".nav-link");
+    let current = window.location.pathname.split("/").pop() + window.location.hash;
+    if (current === "" || current === "/") {
+      current = "index.html#bluj";
+    }
+
+    links.forEach(link => {
+      const href = link.getAttribute("href");
+      if (href === current) {
+        link.classList.add("font-semibold", "underline", "text-gray-900");
+      } else {
+        link.classList.add("text-gray-600", "hover:text-gray-900");
+      }
+    });
+  });
+</script>
