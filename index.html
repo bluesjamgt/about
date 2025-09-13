@@ -1,78 +1,118 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bluz J｜個人創作站</title>
-  <meta name="description" content="Bluz J 的音樂、AI、IT 與文字空間。" />
+  <title>Blu J | Personal Site</title>
+  <meta name="description" content="Blu J's space for music, AI, Dev, and writing." />
   <link rel="icon" href="favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { font-family: "Noto Serif TC", serif; }
-    h1,h2,h3 { font-family: "Noto Sans TC", sans-serif; }
+    body { font-family: "Noto Serif", serif; }
+    h1,h2,h3 { font-family: "Noto Sans", sans-serif; }
+    /* Hover effect for gallery images */
+    .gallery-img {
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .gallery-img:hover {
+      transform: scale(1.08);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    }
   </style>
 </head>
 <body class="bg-white text-gray-800">
 
-  <!-- 導覽列 -->
+  <!-- Navbar -->
   <header class="border-b border-gray-200">
     <nav class="max-w-5xl mx-auto flex justify-between items-center px-4 py-4 text-sm">
-      <span class="font-bold text-lg">Bluz J</span>
+      <span class="font-bold text-lg">Blu J</span>
       <ul class="flex gap-6">
-        <li><a href="#" class="hover:underline">Bluz</a></li>
-        <li><a href="#music" class="hover:underline">Music</a></li>
+        <li><a href="#bluj" class="hover:underline">Blu J</a></li>
         <li><a href="#ai" class="hover:underline">AI</a></li>
-        <li><a href="#it" class="hover:underline">IT</a></li>
+        <li><a href="#dev" class="hover:underline">Dev</a></li>
+        <li><a href="#music" class="hover:underline">Music</a></li>
         <li><a href="#text" class="hover:underline">Text</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- Hero 區塊 -->
-  <section class="max-w-3xl mx-auto px-4 py-20 text-center">
-    <h1 class="text-4xl font-bold mb-4">「在音樂與文字之間，留下自己的聲音。」</h1>
-    <p class="text-gray-600 leading-relaxed">
-      Bluz J 的小空間。<br>
-      一些音樂片段、AI 練習、技術與文字紀錄。<br>
-      沒有喧囂，只是靜靜存在。
-    </p>
-  </section>
+  <!-- Blu J -->
+  <section id="bluj" class="max-w-5xl mx-auto px-4 py-16 border-b border-gray-200">
+    <h2 class="text-2xl font-semibold mb-6">Blu J</h2>
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+    <img src="https://plus.unsplash.com/premium_photo-1695658863911-2dfbe4cc49b4?q=80&w=700&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+     alt="Coffee cup" class="rounded shadow">
 
-  <!-- 圖文區塊 -->
-  <section id="music" class="max-w-5xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-10 items-center">
-    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1200&auto=format&fit=crop" 
-         alt="音樂" class="rounded shadow">
-    <div>
-      <h2 class="text-2xl font-semibold mb-3">🎶 Music</h2>
-      <p class="text-gray-600">吉他、編曲與 Ambient 練習。片段與完成曲，都是生活的聲音筆記。</p>
+      <div>
+        <p class="text-gray-600">Between music, AI, and words, I am still searching. This is a personal corner of reflections and creations.</p>
+      </div>
     </div>
   </section>
 
-  <section id="ai" class="max-w-5xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-10 items-center">
-    <div>
-      <h2 class="text-2xl font-semibold mb-3">🤖 AI</h2>
-      <p class="text-gray-600">AI 生成與程式研究，從語言到影像。紀錄每一次實驗。</p>
-    </div>
-    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop" 
-         alt="AI" class="rounded shadow">
-  </section>
-
-  <section id="text" class="max-w-5xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-10 items-center">
-    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop" 
-         alt="文字" class="rounded shadow">
-    <div>
-      <h2 class="text-2xl font-semibold mb-3">✍️ Text</h2>
-      <p class="text-gray-600">語言學、心理觀察與自省的片段。未必完整，但是真實。</p>
+  <!-- AI -->
+  <section id="ai" class="max-w-5xl mx-auto px-4 py-16 border-b border-gray-200">
+    <h2 class="text-2xl font-semibold mb-6">AI</h2>
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+      <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1000&auto=format&fit=crop" 
+           alt="AI abstract" class="rounded shadow">
+      <div>
+        <p class="text-gray-600">Exploring tools, automation, and creative experiments. Not loud, but deeply curious about what technology can shape.</p>
+      </div>
     </div>
   </section>
 
-  <!-- 頁尾 -->
+  <!-- Music -->
+  <section id="music" class="max-w-5xl mx-auto px-4 py-16 border-b border-gray-200">
+    <h2 class="text-2xl font-semibold mb-6">Music</h2>
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+      <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1000&auto=format&fit=crop" 
+           alt="Music" class="rounded shadow">
+      <div>
+        <p class="text-gray-600 mb-4">Guitar, composition, and ambient sketches. Music is where fragments become stories.</p>
+        <audio controls class="w-full">
+          <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/OrL4Y8kED5Ow4KyUz2jCMbclBiiRN6JS8pxXTjY9.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer with gallery -->
   <footer class="border-t border-gray-200 text-sm text-gray-500">
-    <div class="max-w-5xl mx-auto px-4 py-6 flex justify-between">
-      <p>© 2025 Bluz J</p>
-      <p><a href="mailto:contact@example.com" class="hover:underline">contact@example.com</a></p>
+    <div class="max-w-6xl mx-auto px-4 py-10">
+      <h3 class="text-lg font-semibold mb-6">Works & Collections</h3>
+      <div class="relative">
+        <button onclick="scrollGallery(-1)" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white border rounded-full shadow px-3 py-2 z-10">&#60;</button>
+        <div id="gallery" class="overflow-x-hidden flex gap-6 px-14 scroll-smooth">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1000&auto=format&fit=crop" alt="Gallery 1" class="gallery-img rounded shadow w-[720px] h-[480px] object-cover">
+          <img src="https://images.unsplash.com/photo-1495567720989-cebdbdd97913?q=80&w=1000&auto=format&fit=crop" alt="Gallery 2" class="gallery-img rounded shadow w-[720px] h-[480px] object-cover">
+          <img src="https://images.unsplash.com/photo-1487215078519-e21cc028cb29?q=80&w=1000&auto=format&fit=crop" alt="Gallery 3" class="gallery-img rounded shadow w-[720px] h-[480px] object-cover">
+          <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1000&auto=format&fit=crop" alt="Gallery 4" class="gallery-img rounded shadow w-[720px] h-[480px] object-cover">
+          <img src="https://images.unsplash.com/photo-1475724017904-b712052c192a?q=80&w=1000&auto=format&fit=crop" alt="Gallery 5" class="gallery-img rounded shadow w-[720px] h-[480px] object-cover">
+          <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1000&auto=format&fit=crop" alt="Gallery 7" class="gallery-img rounded shadow w-[720px] h-[480px] object-cover">
+        </div>
+        <button onclick="scrollGallery(1)" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white border rounded-full shadow px-3 py-2 z-10">&#62;</button>
+      </div>
+      <div class="flex justify-between mt-8">
+        <p>© 2025 Blu J</p>
+        <p><a href="mailto:contact@example.com" class="hover:underline">contact@example.com</a></p>
+      </div>
     </div>
   </footer>
+
+  <script>
+    let currentIndex = 0;
+    function scrollGallery(direction) {
+      const gallery = document.getElementById('gallery');
+      const items = gallery.querySelectorAll('img');
+      const total = items.length;
+      const scrollAmount = 800;
+      currentIndex = (currentIndex + direction + total) % total;
+      const target = items[currentIndex];
+      gallery.scrollTo({ left: target.offsetLeft - gallery.offsetLeft, behavior: 'smooth' });
+    }
+  </script>
 
 </body>
 </html>
