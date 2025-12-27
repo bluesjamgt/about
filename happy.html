@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bluz J｜個人創作站</title>
+  <meta name="description" content="Bluz J 的個人創作站，放著音樂、AI 實驗、與文字思索。" />
+  <link rel="icon" href="favicon.ico" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+  <!-- 導覽列 -->
+  <header class="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-slate-200">
+    <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2 font-semibold text-indigo-600">
+        <span class="text-lg font-bold">Bluz J</span>
+      </a>
+      <ul class="flex items-center gap-5 text-sm">
+        <li><a class="hover:text-indigo-600" href="#">首頁</a></li>
+        <li><a class="hover:text-indigo-600" href="#works">作品</a></li>
+        <li><a class="hover:text-indigo-600" href="#music">音樂</a></li>
+        <li><a class="hover:text-indigo-600" href="#about">關於</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero 區塊 -->
+  <section class="max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-2 gap-10 items-center">
+    <div>
+      <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">Bluz J</h1>
+      <p class="text-slate-600 mb-6 text-lg">
+        在音樂、AI 與文字之間探索自我。<br>
+        這裡是我存放作品與思索的角落。
+      </p>
+      <div class="flex items-center gap-3">
+        <a href="#music" class="px-5 py-3 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700">🎧 聽音樂</a>
+        <a href="#works" class="px-5 py-3 rounded-xl border border-slate-300 hover:bg-white">📂 看作品</a>
+      </div>
+    </div>
+    <div>
+      <img src="https://images.unsplash.com/photo-1503264116251-35a269479413?q=80&w=1200&auto=format&fit=crop"
+           alt="Bluz J illustration" class="rounded-3xl shadow-xl ring-1 ring-black/5">
+    </div>
+  </section>
+
+  <!-- 三個特色 -->
+  <section class="max-w-6xl mx-auto px-4 pb-16 grid md:grid-cols-3 gap-8">
+    <article class="bg-white rounded-2xl p-6 shadow-sm ring-1 ring-slate-200">
+      <h3 class="text-xl font-semibold mb-2">🎶 音樂創作</h3>
+      <p class="text-slate-600">吉他、編曲與錄音，偶爾的 Ambient 練習。</p>
+    </article>
+    <article class="bg-white rounded-2xl p-6 shadow-sm ring-1 ring-slate-200">
+      <h3 class="text-xl font-semibold mb-2">🤖 AI 與技術</h3>
+      <p class="text-slate-600">程式練習、AI 生成，數位實驗與好奇心。</p>
+    </article>
+    <article class="bg-white rounded-2xl p-6 shadow-sm ring-1 ring-slate-200">
+      <h3 class="text-xl font-semibold mb-2">✍️ 文字與思想</h3>
+      <p class="text-slate-600">語言學、心理觀察與自省的紀錄。</p>
+    </article>
+  </section>
+
+  <!-- 作品區塊 -->
+  <section id="works" class="max-w-6xl mx-auto px-4 pb-16">
+    <h2 class="text-2xl font-bold mb-6">📂 近期作品</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-white rounded-xl shadow ring-1 ring-slate-200 p-4">
+        <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1200&auto=format&fit=crop"
+             alt="音樂作品" class="rounded-lg mb-3">
+        <p class="font-semibold">Ambient Sketch 01</p>
+        <p class="text-sm text-slate-600">音樂實驗片段</p>
+      </div>
+      <div class="bg-white rounded-xl shadow ring-1 ring-slate-200 p-4">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop"
+             alt="文字作品" class="rounded-lg mb-3">
+        <p class="font-semibold">語言與陰影</p>
+        <p class="text-sm text-slate-600">文字筆記系列</p>
+      </div>
+      <div class="bg-white rounded-xl shadow ring-1 ring-slate-200 p-4">
+        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop"
+             alt="AI 作品" class="rounded-lg mb-3">
+        <p class="font-semibold">AI Portrait</p>
+        <p class="text-sm text-slate-600">生成實驗影像</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 關於我 -->
+  <section id="about" class="max-w-3xl mx-auto px-4 pb-16 text-center">
+    <h2 class="text-2xl font-bold mb-4">🌿 關於我</h2>
+    <p class="text-slate-600 leading-relaxed">
+      你好，我是 Bluz J。<br>
+      這個網站是一個小小的容器，放著我的音樂片段、AI 練習，以及一些不安與自省的文字。<br>
+      我不是專業藝術家，只是還想在這個世界留下自己的聲音。
+    </p>
+  </section>
+
+  <!-- 頁尾 -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-sm text-slate-500 flex flex-col md:flex-row justify-between gap-3">
+      <p>© 2025 Bluz J</p>
+      <p>聯絡我：<a class="underline hover:text-slate-700" href="mailto:contact@example.com">contact@example.com</a></p>
+    </div>
+  </footer>
+
+</body>
+</html>

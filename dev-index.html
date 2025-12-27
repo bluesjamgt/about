@@ -38,7 +38,7 @@
       setLang(savedLang);
     });
 
-    // --- 多語系設定 ---
+    // --- 多語系設定 (新增了 btn_view_ai) ---
     const translations = {
       en: {
         hero_title: "Blu J",
@@ -47,8 +47,8 @@
         sect_about_text: "Between music, AI, and words, I am still searching. This is a personal corner of reflections and creations.",
         sect_ai_title: "AI & Dev",
         sect_ai_text: "Exploring tools, automation, and creative experiments. Not loud, but deeply curious about what technology can shape.",
-        btn_view_project: "View Projects",
-        btn_view_ai: "View AI Works",
+        btn_view_project: "View Projects →",
+        btn_view_ai: "View AI Works",  // 新增
         sect_music_title: "Soundscape",
         sect_music_text: "Guitar, composition, and ambient sketches. Music is where fragments become stories.",
         footer_quote: "The world is a gallery of moments.",
@@ -61,8 +61,8 @@
         sect_about_text: "在音樂、AI 與文字之間，我仍在追尋。這裡是我存放思考碎片與創作的個人角落，一個安靜的數位棲身之所。",
         sect_ai_title: "AI 與開發",
         sect_ai_text: "探索自動化工具與生成式藝術的邊界。不喧嘩，但對科技能塑造的形狀保持著深度的格物致知。",
-        btn_view_project: "開發專案",
-        btn_view_ai: "AI 創作",
+        btn_view_project: "查看開發專案 →",
+        btn_view_ai: "瀏覽 AI 創作", // 新增
         sect_music_title: "聲景與旋律",
         sect_music_text: "吉他、編曲與環境音的素描。當語言失效時，音樂就是故事的載體。",
         footer_quote: "世界是一座瞬間的畫廊。",
@@ -75,8 +75,8 @@
         sect_about_text: "音楽、AI、そして言葉の間で、私はまだ探している。ここは私の思考と創作のための個人的なアーカイブ。",
         sect_ai_title: "AI と 開発",
         sect_ai_text: "ツール、自動化、そして創造的な実験。静かに、しかし深く、テクノロジーが描く形を探求している。",
-        btn_view_project: "Dev プロジェクト",
-        btn_view_ai: "AI アート",
+        btn_view_project: "Dev プロジェクト →",
+        btn_view_ai: "AI アートを見る", // 新增
         sect_music_title: "音の風景",
         sect_music_text: "ギター、作曲、アンビエント・スケッチ。言葉にならない感情は、ここで物語となる。",
         footer_quote: "世界は瞬間のギャラリーである。",
@@ -116,32 +116,21 @@
   </div>
 
   <main>
-    <section class="min-h-[60vh] flex flex-col justify-center items-center text-center px-4 pt-20 relative overflow-hidden">
-      
-      <div class="absolute inset-0 z-0 select-none pointer-events-none">
-        <img src="img/787343561280611_1694067413.jpg" 
-             alt="Hero Background" 
-             class="w-full h-full object-cover opacity-15">
-        <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-stone-50 to-transparent"></div>
-      </div>
-
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 z-0"></div>
-
+    <section class="min-h-[60vh] flex flex-col justify-center items-center text-center px-4 pt-20 relative">
       <div class="space-y-4 max-w-2xl relative z-10">
-        <h1 class="text-6xl md:text-8xl font-bold text-gray-900 tracking-tight" data-i18n="hero_title">
-          Blu J<span class="text-lg md:text-xl font-mono text-gray-400 font-normal align-top ml-2 opacity-60">v1.2</span>
-        </h1>
+        <h1 class="text-6xl md:text-8xl font-bold text-gray-900 tracking-tight" data-i18n="hero_title">Blu J</h1>
         <p class="text-xl md:text-2xl text-gray-600 serif italic" data-i18n="hero_desc">
           Between lines of code and waves of sound, I am weaving a digital soul.
         </p>
       </div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 -z-10"></div>
     </section>
 
-    <section id="bluj" class="py-20 max-w-5xl mx-auto px-6 relative z-10">
+    <section id="bluj" class="py-20 max-w-5xl mx-auto px-6">
       <div class="grid md:grid-cols-2 gap-10 items-center">
         <div class="relative rotate-2 hover:rotate-0 transition duration-500">
-           <img src="img\077949A0-02E2-44D0-A533-B6F8EB3753C4.jpg" 
-                class="rounded-xl shadow-lg w-full object-cover h-[600px]" alt="About">
+           <img src="https://plus.unsplash.com/premium_photo-1695658863911-2dfbe4cc49b4?q=80&w=700&auto=format&fit=crop" 
+                class="rounded-xl shadow-lg w-full object-cover h-[400px]" alt="About">
         </div>
         <div class="space-y-4">
           <h2 class="text-3xl font-bold" data-i18n="sect_about_title">Reflections</h2>
@@ -152,7 +141,7 @@
       </div>
     </section>
 
-    <section id="ai" class="py-20 bg-white relative z-10">
+    <section id="ai" class="py-20 bg-white">
       <div class="max-w-5xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-10 items-center">
           <div class="order-2 md:order-1 space-y-6">
@@ -162,9 +151,10 @@
             </p>
             
             <div class="flex flex-wrap gap-4">
-              <a href="dev.html" class="inline-block px-6 py-2 bg-gray-100 border border-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition" data-i18n="btn_view_project">
-                View Projects 
+              <a href="dev.html" class="inline-block px-6 py-2 border border-gray-800 rounded-full hover:bg-gray-800 hover:text-white transition" data-i18n="btn_view_project">
+                View Projects →
               </a>
+              
               <a href="ai.html" class="inline-block px-6 py-2 bg-gray-100 border border-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition" data-i18n="btn_view_ai">
                 View AI Works
               </a>
@@ -172,18 +162,18 @@
 
           </div>
           <div class="order-1 md:order-2 relative -rotate-2 hover:rotate-0 transition duration-500">
-             <img src="img/2025-12-27-192650-822434423568865-o.webp" 
-                  class="rounded-xl shadow-lg w-full object-cover h-[300px]" alt="AI">
+             <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1000&auto=format&fit=crop" 
+                  class="rounded-xl shadow-lg w-full object-cover h-[400px]" alt="AI">
           </div>
         </div>
       </div>
     </section>
 
-    <section id="music" class="py-20 bg-stone-50 relative z-10">
+    <section id="music" class="py-20 bg-stone-50">
       <div class="max-w-5xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-10 items-center">
           <div class="relative rotate-1 hover:rotate-0 transition duration-500">
-             <img src="img/48388802_2833742426639782_80953776548505190.jpg" 
+             <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1000&auto=format&fit=crop" 
                   class="rounded-xl shadow-lg w-full object-cover h-[400px]" alt="Music">
           </div>
           <div class="space-y-6">
@@ -204,25 +194,25 @@
 
   </main>
 
-  <footer class="bg-gray-900 text-white py-16 overflow-hidden relative z-10">
+  <footer class="bg-gray-900 text-white py-16 overflow-hidden relative">
     <div class="max-w-7xl mx-auto px-4 text-center mb-10">
       <h3 class="text-2xl font-serif italic text-gray-400" data-i18n="footer_quote">"The world is a gallery of moments."</h3>
     </div>
     <div class="relative w-full group max-w-6xl mx-auto">
       <button onclick="scrollGallery(-1)" class="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur text-white p-3 rounded-full transition">&#10094;</button>
       <div id="gallery" class="flex gap-6 overflow-x-auto no-scrollbar px-12 md:px-10 scroll-smooth pb-4 items-center">
-         <img src="img\483591732_29661157326804928_8909035304980.jpg" class="gallery-img shrink-0 w-[200px] h-[300px] object-cover rounded shadow-lg">
-         <img src="img\487314710_29840475338873125_210146699094583478.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
-         <img src="img\503385212_18334306345160927_52282287847.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
-         <img src="img\96935955_0.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
-         <img src="img\96935956_0.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">         
-         <img src="img\2025-12-27_192845.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+         <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600&fit=crop" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+         <img src="https://images.unsplash.com/photo-1495567720989-cebdbdd97913?q=80&w=600&fit=crop" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+         <img src="https://images.unsplash.com/photo-1487215078519-e21cc028cb29?q=80&w=600&fit=crop" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+         <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=600&fit=crop" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+         <img src="https://images.unsplash.com/photo-1475724017904-b712052c192a?q=80&w=600&fit=crop" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+         <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=600&fit=crop" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
       </div>
       <button onclick="scrollGallery(1)" class="absolute right-2 md:right-0 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur text-white p-3 rounded-full transition">&#10095;</button>
     </div>
-    <div class="text-center mt-12 text-gray-500 text-xs">
-      <span data-i18n="footer_copy">© 2025 Blu J | Built with code & soul.</span>
-      </div>
+    <div class="text-center mt-12 text-gray-500 text-xs" data-i18n="footer_copy">
+      © 2025 Blu J | Built with code & soul.
+    </div>
   </footer>
 </body>
 </html>
