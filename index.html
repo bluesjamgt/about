@@ -29,7 +29,7 @@
     /* 重置 Input */
     input[type=range] {
       -webkit-appearance: none;
-      background: transparent;
+      /* background: transparent;  <-- 已刪除 */
     }
     
     /* 進度條 (Seek) */
@@ -246,7 +246,7 @@
                 </button>
 
                 <div class="flex-1 flex items-center">
-                  <input type="range" id="seek-slider" value="0" max="100" class="seek-slider w-full h-1 rounded-lg appearance-none cursor-pointer block">
+                  <input type="range" id="seek-slider" value="0" max="100" class="seek-slider w-full h-1 bg-slate-300 rounded-lg appearance-none cursor-pointer block">
                 </div>
 
                 <div class="text-xs text-gray-400 font-mono w-9 text-right shrink-0" id="time-display">0:00</div>
@@ -255,7 +255,7 @@
                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-gray-400">
                     <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 001.5 12c0 2.485.586 4.815 1.632 6.845.199.39.49.668.893.842.82.355 1.77.106 2.309-.569l2.71-3.388c.84-.968 2.067-1.49 3.37-1.49h1.19a.75.75 0 000-1.5h-1.19c-.896 0-1.748.33-2.395.918l-1.678 2.098c-.22.274-.564.385-.89.243a8.27 8.27 0 01-1.082-4.275c0-1.62.46-3.13 1.258-4.444.15-.246.069-.548-.124-.741a.75.75 0 00-.53-.22H4.5c-.322 0-.626.208-.737.525A9.752 9.752 0 003 12c0 1.94.57 3.738 1.558 5.25.07.108.188.167.311.167h4.09l4.5 4.5c.945.945 2.56.276 2.56-1.06V4.06zM18.5 12a5.25 5.25 0 01-1.54 3.71.75.75 0 001.06 1.06 6.75 6.75 0 000-9.54.75.75 0 00-1.06 1.06A5.25 5.25 0 0118.5 12z" />
                   </svg>
-                  <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5" class="volume-slider w-16 h-1 rounded-lg appearance-none cursor-pointer">
+                  <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5" class="volume-slider w-16 h-1 bg-slate-300 rounded-lg appearance-none cursor-pointer">
                   <span id="vol-text" class="text-xs text-gray-500 font-mono w-8 text-right">50%</span>
                 </div>
               </div>
