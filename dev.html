@@ -5,19 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Blu J | Dev Projects</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    // 載入 navbar.html
-    async function loadInclude(id, file) {
-      const res = await fetch(file);
-      const html = await res.text();
-      document.getElementById(id).innerHTML = html;
-    }
-    window.onload = () => loadInclude("navbar","navbar.html");
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+
+  <script src="lang.js"></script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
 
   <div id="navbar"></div>
+
+  <div class="fixed top-24 right-4 z-50 flex flex-col gap-2 bg-white/80 backdrop-blur p-2 rounded-lg shadow-sm text-xs">
+    <button id="btn-en" onclick="setLang('en')" class="lang-btn hover:text-indigo-600 transition">EN</button>
+    <button id="btn-tw" onclick="setLang('tw')" class="lang-btn hover:text-indigo-600 transition">TW</button>
+    <button id="btn-jp" onclick="setLang('jp')" class="lang-btn hover:text-indigo-600 transition">JP</button>
+  </div>
 
   <main class="max-w-4xl mx-auto px-4 py-10 space-y-10">
 
@@ -25,18 +29,18 @@
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
           <img src="https://cdn-icons-png.flaticon.com/512/10307/10307908.png" alt="icon" class="w-10 h-10">
-          <h2 class="font-bold text-lg">yt-dlp-gui</h2>
+          <h2 class="font-bold text-lg" data-i18n="dev_p1_title">yt-dlp-gui</h2>
         </div>
         <a href="https://github.com/bluesjamgt/yt-dlp-gui" target="_blank" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 text-sm flex items-center gap-2">
            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
              <path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.355a.75.75 0 10-1.09 1.03l3.25 3.5a.75.75 0 001.09 0l3.25-3.5a.75.75 0 00-1.09-1.03l-2.955 3.009V2.75z" />
              <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" />
            </svg>
-            GitHub
+           <span data-i18n="btn_github">GitHub</span>
         </a>
       </div>
-      <p class="text-gray-600">A modern, cross-platform GUI wrapper for the powerful yt-dlp tool.</p>
-      <p class="text-gray-600">Download videos effortlessly with a clean, user-friendly interface.</p>
+      <p class="text-gray-600" data-i18n="dev_p1_desc1">A modern, cross-platform GUI wrapper for the powerful yt-dlp tool.</p>
+      <p class="text-gray-600" data-i18n="dev_p1_desc2">Download videos effortlessly with a clean, user-friendly interface.</p>
       <hr class="my-4">
 
       <div class="relative w-full aspect-video rounded-lg shadow overflow-hidden bg-gray-100">
@@ -48,12 +52,12 @@
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
           <img src="https://cdn-icons-png.flaticon.com/512/5968/5968350.png" alt="icon" class="w-10 h-10">
-          <h2 class="font-bold text-lg">Project Two</h2>
+          <h2 class="font-bold text-lg" data-i18n="dev_p2_title">Project Two</h2>
         </div>
-        <a href="https://github.com" target="_blank" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 text-sm">GitHub</a>
+        <a href="https://github.com" target="_blank" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 text-sm" data-i18n="btn_github">GitHub</a>
       </div>
-      <p class="text-gray-600">Feature A: Short technical explanation.</p>
-      <p class="text-gray-600">Feature B: More detail about its role or benefit.</p>
+      <p class="text-gray-600" data-i18n="dev_p2_desc1">Feature A: Short technical explanation.</p>
+      <p class="text-gray-600" data-i18n="dev_p2_desc2">Feature B: More detail about its role or benefit.</p>
       <hr class="my-4">
       <div class="relative w-full aspect-video rounded-lg shadow overflow-hidden bg-gray-100">
           <img src="https://images.unsplash.com/photo-1508780709619-79562169bc64?q=80&w=1200&auto=format&fit=crop" alt="screenshot" class="absolute inset-0 w-full h-full object-cover">
@@ -64,12 +68,12 @@
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
           <img src="https://cdn-icons-png.flaticon.com/512/5968/5968672.png" alt="icon" class="w-10 h-10">
-          <h2 class="font-bold text-lg">Project Three</h2>
+          <h2 class="font-bold text-lg" data-i18n="dev_p3_title">Project Three</h2>
         </div>
-        <a href="https://github.com" target="_blank" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 text-sm">GitHub</a>
+        <a href="https://github.com" target="_blank" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 text-sm" data-i18n="btn_github">GitHub</a>
       </div>
-      <p class="text-gray-600">Feature A: Key technology and purpose.</p>
-      <p class="text-gray-600">Feature B: Why it is useful or unique.</p>
+      <p class="text-gray-600" data-i18n="dev_p3_desc1">Feature A: Key technology and purpose.</p>
+      <p class="text-gray-600" data-i18n="dev_p3_desc2">Feature B: Why it is useful or unique.</p>
       <hr class="my-4">
       <div class="relative w-full aspect-video rounded-lg shadow overflow-hidden bg-gray-100">
          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop" alt="screenshot" class="absolute inset-0 w-full h-full object-cover">
@@ -78,7 +82,7 @@
 
   </main>
 
-  <footer class="border-t border-gray-200 text-center py-6 text-sm text-gray-500">
+  <footer class="border-t border-gray-200 text-center py-6 text-sm text-gray-500" data-i18n="footer_copy">
     © 2025 Blu J
   </footer>
 

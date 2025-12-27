@@ -7,81 +7,16 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
   
+  <script src="lang.js"></script>
+
   <style>
     body { font-family: 'Inter', sans-serif; }
     h1, h2, .serif { font-family: 'Noto Serif TC', serif; }
     
-    /* 藝廊 Grid 的圖片懸停效果 */
+    /* 藝廊 Grid 的圖片懸停效果 (此頁面專屬 CSS 保留) */
     .art-card:hover .art-overlay { opacity: 1; }
     .art-card:hover img { transform: scale(1.05); }
   </style>
-
-  <script>
-    // 1. 載入 Navbar
-    document.addEventListener('DOMContentLoaded', async () => {
-      const container = document.getElementById('navbar');
-      try {
-        const res = await fetch('navbar.html');
-        if (res.ok) {
-          const html = await res.text();
-          container.innerHTML = html;
-          // 確保 navbar 裡的 script 執行
-          container.querySelectorAll('script').forEach(s => eval(s.textContent));
-        }
-      } catch (e) { console.error("Navbar load failed", e); }
-      
-      // 2. 初始化語言 (讀取 localStorage，確保跟首頁選擇一致)
-      const savedLang = localStorage.getItem('site_lang') || 'en';
-      setLang(savedLang);
-    });
-
-    // 3. AI 頁面專屬的翻譯字典
-    const translations = {
-      en: {
-        page_title: "AI Experiments",
-        page_desc: "Visual synthesis, prompt engineering, and the latent space.",
-        cat_t2i: "Text to Image (T2I)",
-        cat_i2v: "Image to Video (I2V) / Motion",
-        prompt_label: "Prompt: ",
-        footer_copy: "© 2025 Blu J | AI Works"
-      },
-      tw: {
-        page_title: "AI 視覺實驗",
-        page_desc: "視覺合成、咒語工程 (Prompt Engineering) 與潛在空間的探索。",
-        cat_t2i: "文字生成圖像 (T2I)",
-        cat_i2v: "圖像轉影片 (I2V) / 動態視覺",
-        prompt_label: "咒語: ",
-        footer_copy: "© 2025 Blu J | AI 創作實驗室"
-      },
-      jp: {
-        page_title: "AI ビジュアル実験",
-        page_desc: "視覚合成、プロンプトエンジニアリング、そして潜在空間。",
-        cat_t2i: "テキストから画像へ (T2I)",
-        cat_i2v: "画像から動画へ (I2V) / モーション",
-        prompt_label: "プロンプト: ",
-        footer_copy: "© 2025 Blu J | AI アートワーク"
-      }
-    };
-
-    // 4. 切換語言函式 (包含按鈕樣式更新)
-    function setLang(lang) {
-      // 存入記憶體
-      localStorage.setItem('site_lang', lang);
-
-      // 更新按鈕樣式 (讓被選中的按鈕變粗體+底線)
-      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('font-bold', 'underline'));
-      document.getElementById('btn-' + lang)?.classList.add('font-bold', 'underline');
-
-      // 替換文字
-      const elements = document.querySelectorAll('[data-i18n]');
-      elements.forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[lang] && translations[lang][key]) {
-          el.innerText = translations[lang][key];
-        }
-      });
-    }
-  </script>
 </head>
 <body class="bg-stone-50 text-gray-800">
 
@@ -177,7 +112,7 @@
   </main>
 
   <footer class="border-t border-gray-200 text-center py-8 text-sm text-gray-400" data-i18n="footer_copy">
-    © 2025 Blu J | AI Works
+    © 2025 Blu J | Built with code & soul.
   </footer>
 
 </body>

@@ -8,6 +8,8 @@
   <link rel="icon" href="favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+  
+  <script src="lang.js"></script>
 
   <style>
     body { font-family: 'Inter', sans-serif; }
@@ -17,7 +19,7 @@
     .gallery-img { transition: transform 0.5s ease; }
     .gallery-img:hover { transform: scale(1.05); }
 
-    /* --- 音樂播放器樣式 v1.6 --- */
+    /* --- 音樂播放器樣式 --- */
     @keyframes marquee {
       0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
@@ -25,11 +27,8 @@
     .animate-marquee {
       animation: marquee 15s linear infinite;
     }
-    
-    /* 重置 Input */
     input[type=range] {
       -webkit-appearance: none;
-      /* background: transparent;  <-- 已刪除 */
     }
     
     /* 進度條 (Seek) */
@@ -41,8 +40,6 @@
       transition: transform 0.1s;
     }
     .seek-slider:hover::-webkit-slider-thumb { transform: scale(1.2); }
-    
-    /* v1.6 修改：軌道顏色加深 (#cbd5e1) */
     .seek-slider::-webkit-slider-runnable-track {
       width: 100%; height: 4px; border-radius: 2px;
       background: #cbd5e1; 
@@ -56,98 +53,11 @@
       cursor: pointer; margin-top: -3px;
     }
     .volume-slider:hover::-webkit-slider-thumb { background: #374151; }
-    
-    /* v1.6 修改：軌道顏色加深 (#cbd5e1) */
     .volume-slider::-webkit-slider-runnable-track {
       width: 100%; height: 4px; border-radius: 2px;
       background: #cbd5e1;
     }
   </style>
-
-  <script>
-    // 1. 載入 Navbar
-    document.addEventListener('DOMContentLoaded', async () => {
-      const container = document.getElementById('navbar');
-      try {
-        const res = await fetch('navbar.html');
-        if (res.ok) {
-          const html = await res.text();
-          container.innerHTML = html;
-          container.querySelectorAll('script').forEach(s => {
-            try { eval(s.textContent); } catch (e) { console.error(e); }
-          });
-        }
-      } catch (e) { console.error("Navbar load failed", e); }
-      
-      const savedLang = localStorage.getItem('site_lang') || 'en';
-      setLang(savedLang);
-    });
-
-    // --- 多語系設定 ---
-    const translations = {
-      en: {
-        hero_title: "Blu J",
-        hero_desc: "Between lines of code and waves of sound, I am weaving a digital soul.",
-        sect_about_title: "Reflections",
-        sect_about_text: "Between music, AI, and words, I am still searching. This is a personal corner of reflections and creations.",
-        sect_ai_title: "AI & Dev",
-        sect_ai_text: "Exploring tools, automation, and creative experiments. Not loud, but deeply curious about what technology can shape.",
-        btn_view_project: "View Projects",
-        btn_view_ai: "View AI Works",
-        sect_music_title: "Soundscape",
-        sect_music_text: "Guitar, composition, and ambient sketches. Music is where fragments become stories.",
-        footer_quote: "The world is a gallery of moments.",
-        footer_copy: "© 2025 Blu J | Built with code & soul."
-      },
-      tw: {
-        hero_title: "Blu J",
-        hero_desc: "在程式碼的行距與聲波的起伏之間，編織著數位的靈魂。",
-        sect_about_title: "關於與反思",
-        sect_about_text: "在音樂、AI 與文字之間，我仍在追尋。這裡是我存放思考碎片與創作的個人角落，一個安靜的數位棲身之所。",
-        sect_ai_title: "AI 與開發",
-        sect_ai_text: "探索自動化工具與生成式藝術的邊界。不喧嘩，但對科技能塑造的形狀保持著深度的格物致知。",
-        btn_view_project: "開發專案",
-        btn_view_ai: "AI 創作",
-        sect_music_title: "聲景與旋律",
-        sect_music_text: "吉他、編曲與環境音的素描。當語言失效時，音樂就是故事的載體。",
-        footer_quote: "世界是一座瞬間的畫廊。",
-        footer_copy: "© 2025 Blu J | 以代碼與靈魂鑄造"
-      },
-      jp: {
-        hero_title: "Blu J",
-        hero_desc: "コードの行間と音の波間で、デジタルの魂を紡いでいる。",
-        sect_about_title: "考察と記録",
-        sect_about_text: "音楽、AI、そして言葉の間で、私はまだ探している。ここは私の思考と創作のための個人的なアーカイブ。",
-        sect_ai_title: "AI と 開発",
-        sect_ai_text: "ツール、自動化、そして創造的な実験。静かに、しかし深く、テクノロジーが描く形を探求している。",
-        btn_view_project: "Dev プロジェクト",
-        btn_view_ai: "AI アート",
-        sect_music_title: "音の風景",
-        sect_music_text: "ギター、作曲、アンビエント・スケッチ。言葉にならない感情は、ここで物語となる。",
-        footer_quote: "世界は瞬間のギャラリーである。",
-        footer_copy: "© 2025 Blu J | 錬金術師の工房"
-      }
-    };
-
-    function setLang(lang) {
-      localStorage.setItem('site_lang', lang);
-      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('font-bold', 'underline'));
-      document.getElementById('btn-' + lang)?.classList.add('font-bold', 'underline');
-      const elements = document.querySelectorAll('[data-i18n]');
-      elements.forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[lang] && translations[lang][key]) {
-          el.innerText = translations[lang][key];
-        }
-      });
-    }
-
-    function scrollGallery(direction) {
-      const gallery = document.getElementById('gallery');
-      const scrollAmount = 300; 
-      gallery.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
-    }
-  </script>
 </head>
 <body class="bg-stone-50 text-gray-800 antialiased overflow-x-hidden">
 
@@ -170,7 +80,7 @@
       <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 z-0"></div>
       <div class="space-y-4 max-w-2xl relative z-10">
         <h1 class="text-6xl md:text-8xl font-bold text-gray-900 tracking-tight" data-i18n="hero_title">
-          Blu J<span class="text-lg md:text-xl font-mono text-gray-400 font-normal align-top ml-2 opacity-60">v1.6</span>
+          Blu J<span class="text-lg md:text-xl font-mono text-gray-400 font-normal align-top ml-2 opacity-60">v1.7</span>
         </h1>
         <p class="text-xl md:text-2xl text-gray-600 serif italic" data-i18n="hero_desc">
           Between lines of code and waves of sound, I am weaving a digital soul.
@@ -232,14 +142,12 @@
             </p>
             
             <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 select-none space-y-3">
-              
               <audio id="audio-player">
                 <source src="project/Gunpowder _01Prologue.m4a" type="audio/mpeg">
                 Your browser does not support the audio element.
               </audio>
 
               <div class="flex items-center gap-4">
-                
                 <button id="play-btn" class="w-10 h-10 flex items-center justify-center bg-gray-900 text-white rounded-full hover:bg-gray-700 transition shrink-0">
                   <svg id="icon-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 ml-0.5"><path fill-rule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clip-rule="evenodd" /></svg>
                   <svg id="icon-pause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 hidden"><path fill-rule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clip-rule="evenodd" /></svg>
@@ -265,9 +173,8 @@
                     🎵 Gunpowder - Prologue ...  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                  </div>
               </div>
-
             </div>
-            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -293,10 +200,11 @@
     </div>
     <div class="text-center mt-12 text-gray-500 text-xs">
       <span data-i18n="footer_copy">© 2025 Blu J | Built with code & soul.</span>
-      </div>
+    </div>
   </footer>
 
   <script>
+    // 音樂播放器專用腳本 (首頁限定)
     document.addEventListener('DOMContentLoaded', () => {
       const audio = document.getElementById('audio-player');
       const playBtn = document.getElementById('play-btn');
@@ -308,7 +216,6 @@
       const volText = document.getElementById('vol-text');
 
       if(audio && playBtn) {
-        
         // 1. 初始化音量
         audio.volume = 0.5;
         volumeSlider.value = 0.5;
@@ -339,7 +246,6 @@
           if (!audio.duration) return;
           const percent = (audio.currentTime / audio.duration) * 100;
           seekSlider.value = percent;
-          
           const mins = Math.floor(audio.currentTime / 60);
           const secs = Math.floor(audio.currentTime % 60);
           timeDisplay.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
