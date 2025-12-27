@@ -1,10 +1,10 @@
 /**
  * NINE OS Core Logic & Translations
- * Version: v1.8 (Final)
+ * Version: v1.9 (Auto-Detect Language)
  * Last Updated: 2025-12-27
  * * Update Log:
- * - Added Dev page translations (Project descriptions)
- * - Added global 'btn_github' translation
+ * - Added smart system language detection (Browser Language)
+ * - Logic: Saved Preference > System Language > Default (EN)
  */
 
 const translations = {
@@ -41,7 +41,7 @@ const translations = {
       cat_i2v: "Image to Video (I2V) / Motion",
       prompt_label: "Prompt: ",
 
-      // --- Dev Page (新增部分) ---
+      // --- Dev Page ---
       dev_p1_title: "yt-dlp-gui",
       dev_p1_desc1: "A modern, cross-platform GUI wrapper for the powerful yt-dlp tool.",
       dev_p1_desc2: "Download videos effortlessly with a clean, user-friendly interface.",
@@ -88,7 +88,7 @@ const translations = {
       cat_i2v: "圖像轉影片 (I2V) / 動態視覺",
       prompt_label: "咒語: ",
 
-      // --- Dev Page (新增部分) ---
+      // --- Dev Page ---
       dev_p1_title: "yt-dlp-gui",
       dev_p1_desc1: "強大的 yt-dlp 工具的現代化跨平台圖形介面封裝。",
       dev_p1_desc2: "透過簡潔友善的介面輕鬆下載影片。",
@@ -135,7 +135,7 @@ const translations = {
       cat_i2v: "画像から動画へ (I2V) / モーション",
       prompt_label: "プロンプト: ",
 
-      // --- Dev Page (新增部分) ---
+      // --- Dev Page ---
       dev_p1_title: "yt-dlp-gui",
       dev_p1_desc1: "強力な yt-dlp ツールのためのモダンなクロスプラットフォーム GUI ラッパー。",
       dev_p1_desc2: "クリーンで使いやすいインターフェースで動画を簡単にダウンロード。",
@@ -181,11 +181,36 @@ const translations = {
         gallery.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
     }
   }
+
+  /**
+   * [v1.9 新增] 偵測系統語言
+   * 邏輯：
+   * 1. 取得瀏覽器語言 (例如 "zh-TW", "en-US", "ja")
+   * 2. 轉小寫
+   * 3. 判斷包含字串
+   */
+  function detectSystemLang() {
+    const sysLang = navigator.language.toLowerCase();
+    
+    // 如果包含 'zh' (zh-TW, zh-CN, zh-HK) -> 回傳 tw
+    if (sysLang.includes('zh')) return 'tw';
+    
+    // 如果包含 'ja' -> 回傳 jp
+    if (sysLang.includes('ja')) return 'jp';
+    
+    // 其他情況 -> 回傳 en
+    return 'en';
+  }
   
   /**
    * 自動初始化
    */
   document.addEventListener('DOMContentLoaded', async () => {
+    // 決定要用什麼語言：
+    // 優先讀取 localStorage (使用者上次選的)
+    // 如果沒有，就呼叫 detectSystemLang() 自動偵測
+    const savedLang = localStorage.getItem('site_lang') || detectSystemLang();
+
     // 載入 Navbar
     const container = document.getElementById('navbar');
     if (container) {
@@ -194,13 +219,12 @@ const translations = {
           if (res.ok) {
             const html = await res.text();
             container.innerHTML = html;
-            const savedLang = localStorage.getItem('site_lang') || 'en';
+            // Navbar 載入後，立刻翻譯
             setLang(savedLang); 
           }
         } catch (e) { console.error("Navbar load failed", e); }
     }
     
-    // 初始化語言
-    const savedLang = localStorage.getItem('site_lang') || 'en';
+    // 初始化頁面內容
     setLang(savedLang);
   });
