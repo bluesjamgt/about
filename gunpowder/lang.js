@@ -16,9 +16,9 @@ const translations = {
         track_01_01: "Move On",
         track_01_02: "Fight",
 
-        album_02_title: "Greed", 
+        album_02_title: "The Greed", 
         track_02_01: "Prologue",
-        track_02_02: "Greed",
+        track_02_02: "The Greed",
         track_02_03: "Waiting is..",
         track_02_04: "Secret",
         track_02_05: "Waiting is.. (Acoustic)"
@@ -27,7 +27,7 @@ const translations = {
         // --- 現有內容 ---
         hero_slogan: "噪音即秩序。",
         news_title_1: "系統更新公告",
-        news_desc_1: "上線。",
+        news_desc_1: "平台設計彙整。",
         news_title_2: "首次公演情報",
         news_desc_2: "我們將噪音帶入城市，請確認演出時刻表。",
         btn_soldout: "完售",
@@ -35,15 +35,15 @@ const translations = {
         moment_desc: "「捕捉那個頻率。」",
         studio_desc: "煉金術發生的場所。一個關於聲音、創造與編織數位靈魂的空間。",
 
-        // --- 新增：專輯與曲目 (已移除編號) ---
+        // --- 新增：專輯與曲目 ---
         album_01_title: "MOVE ON and FIGHT",
         track_01_01: "Move On (前進)",
         track_01_02: "Fight (戰鬥)",
 
         album_02_title: "貪婪號",
-        track_02_01: "Prologue (序幕)",
+        track_02_01: "Prologue (序曲)",
         track_02_02: "貪婪號",
-        track_02_03: "Waiting is.. (等待是..)",
+        track_02_03: "Waiting is.. (等待的是..)",
         track_02_04: "Secret (秘密)",
         track_02_05: "Waiting is.. (不插電版)"
     },
@@ -64,9 +64,9 @@ const translations = {
         track_01_01: "Move On (前進)",
         track_01_02: "Fight (戦い)",
 
-        album_02_title: "Greed (貪欲)",
+        album_02_title: "The Greed (貪欲)",
         track_02_01: "Prologue (プロローグ)",
-        track_02_02: "Greed (貪欲号)",
+        track_02_02: "The Greed (貪欲号)",
         track_02_03: "Waiting is.. (待つことは..)",
         track_02_04: "Secret (秘密)",
         track_02_05: "Waiting is.. (Acoustic Ver.)"
