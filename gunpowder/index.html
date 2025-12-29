@@ -502,8 +502,11 @@
     });
 
     const volSlider = document.getElementById('volume-slider');
+    const volText = document.getElementById('vol-text');
     volSlider.addEventListener('input', (e) => {
-        audio.volume = e.target.value;
+        const val = e.target.value;
+        audio.volume = val;
+        if (volText) volText.innerText = Math.round(val * 100) + '%';
     });
     
     function formatTime(s) {
