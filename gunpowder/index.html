@@ -513,36 +513,55 @@
         return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
     }
     
-    // Gallery & Studio (Placeholder)
+    // Gallery & Studio Logic
     const mediaContainer = document.getElementById('media-container');
     const dotsContainer = document.getElementById('carousel-dots');
+    
     const mediaItems = [
         { type: 'youtube', src: 'g0xQiAFYTvE?si=fasHNBWNE9BjiMVi' },
         { type: 'youtube', src: '1G_UYDHWzl4?si=2ShrLaFmmVvpsclK' },
         { type: 'youtube', src: 'vAuyScU-mxw?si=hz1TNY8bC5aBPY87' },
         { type: 'image',   src: 'img/468427499_10162215791819826_84642753669693044.jpg' },
-        { type: 'image',   src: 'img/474264379_1008486487962987_284141295056.jpg' }
+        { type: 'image',   src: 'img/468464254_10162155362359826_28070920247.jpg' },
+        { type: 'image',   src: 'img/474264379_1008486487962987_284141295056.jpg' },
+        { type: 'image',   src: 'img/487314710_29840475338873125_210146699094583478.jpg' }
     ];
+
     let currentMediaIdx = 0;
+
     function renderMedia() {
         const item = mediaItems[currentMediaIdx];
         let htmlContent = '';
+
         if (item.type === 'youtube') {
-            htmlContent = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${item.src}?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="opacity-90 hover:opacity-100 transition duration-500"></iframe>`;
+            // ★ 修復重點：自動判斷網址連接符號 (? 或 &)
+            // 如果 src 裡已經有 '?' (代表有 si 參數)，後面就要用 '&rel=0'
+            // 如果沒有，才用 '?rel=0'
+            const symbol = item.src.includes('?') ? '&' : '?';
+            const embedUrl = `https://www.youtube.com/embed/${item.src}${symbol}rel=0`;
+
+            htmlContent = `<iframe width="100%" height="100%" src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="opacity-90 hover:opacity-100 transition duration-500"></iframe>`;
+        
         } else if (item.type === 'image') {
             htmlContent = `<img src="${item.src}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Moment">`;
         }
+
         mediaContainer.innerHTML = htmlContent;
+
+        // 更新圓點
         dotsContainer.innerHTML = mediaItems.map((_, idx) => `
             <div class="w-2 h-2 rounded-full transition-all duration-300 ${idx === currentMediaIdx ? 'bg-gray-900 w-6' : 'bg-gray-300'}" ></div>
         `).join('');
     }
+
     function changeMedia(direction) {
         currentMediaIdx += direction;
         if (currentMediaIdx < 0) currentMediaIdx = mediaItems.length - 1;
         if (currentMediaIdx >= mediaItems.length) currentMediaIdx = 0;
         renderMedia();
     }
+    
+    // 初始化
     renderMedia();
 
     function changeStudioImg(src) {
