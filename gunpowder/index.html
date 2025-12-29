@@ -22,54 +22,37 @@
       animation: marquee 15s linear infinite;
     }
 
-    /* --- 音樂播放器拉桿核心樣式 (Slider Core) --- */
+    /* --- 音樂播放器拉桿核心樣式 --- */
     input[type=range] {
-      -webkit-appearance: none; /* Chrome/Safari */
-      appearance: none;         /* 標準 */
-      background: transparent;  /* 背景透明，讓 Track 負責顏色 */
-      cursor: pointer;
-      width: 100%;
+      -webkit-appearance: none; appearance: none;
+      background: transparent; cursor: pointer; width: 100%;
     }
-
-    /* 1. 軌道 (Track) 設定 */
+    /* 軌道 */
     input[type=range]::-webkit-slider-runnable-track {
-      width: 100%;
-      height: 4px;              /* 軌道厚度 */
-      background: #4b5563;      /* 深灰色軌道 (Gray-600) */
-      border-radius: 2px;
+      width: 100%; height: 4px; background: #4b5563; border-radius: 2px;
     }
-    input[type=range]::-moz-range-track { /* Firefox */
-      width: 100%;
-      height: 4px;
-      background: #4b5563;
-      border-radius: 2px;
+    input[type=range]::-moz-range-track {
+      width: 100%; height: 4px; background: #4b5563; border-radius: 2px;
     }
-
-    /* 2. 圓點 (Thumb) 設定 */
+    /* 圓點 */
     input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      height: 12px;             /* 圓點大小 */
-      width: 12px;
-      border-radius: 50%;
-      background: #ffffff;      /* 純白圓點 */
-      margin-top: -4px;         /* ★ 垂直置中關鍵：(軌道高4 - 圓點高12) / 2 */
-      box-shadow: 0 0 4px rgba(0,0,0,0.5); /* 增加一點立體感 */
+      -webkit-appearance: none; height: 12px; width: 12px;
+      border-radius: 50%; background: #ffffff;
+      margin-top: -4px; box-shadow: 0 0 4px rgba(0,0,0,0.5);
       transition: transform 0.1s;
     }
-    input[type=range]::-moz-range-thumb { /* Firefox */
-      height: 12px;
-      width: 12px;
-      border: none;
-      border-radius: 50%;
-      background: #ffffff;
-      box-shadow: 0 0 4px rgba(0,0,0,0.5);
+    input[type=range]::-moz-range-thumb {
+      height: 12px; width: 12px; border: none; border-radius: 50%;
+      background: #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.5);
       transition: transform 0.1s;
     }
-
-    /* 3. 滑鼠互動 */
     input[type=range]:hover::-webkit-slider-thumb { transform: scale(1.3); }
     input[type=range]:hover::-moz-range-thumb { transform: scale(1.3); }
-</style>
+
+    /* 歌詞視窗動畫 */
+    .lyrics-enter { opacity: 0; transform: translateY(20px) scale(0.95); }
+    .lyrics-enter-active { opacity: 1; transform: translateY(0) scale(1); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+  </style>
 </head>
 <body class="bg-stone-50 text-gray-800 antialiased overflow-x-hidden pb-40 pt-20">
 
@@ -83,42 +66,38 @@
 
   <main>
     <section class="w-full relative overflow-hidden bg-stone-50">
-  
-  <div class="w-full h-full">
-    <img src="img/151129985_10159187669754826_3995551.jpg" 
-         class="w-full h-auto block opacity-25 grayscale transition-opacity duration-500" 
-         alt="Atmosphere">
-    
-    <div class="absolute inset-0 bg-gradient-to-t from-stone-50 via-stone-50/20 to-transparent"></div>
-  </div>
-
-  <div class="absolute inset-0 z-10 flex flex-col justify-center items-center text-center px-4">
-    <div class="space-y-4">
-      <h1 class="text-6xl md:text-9xl font-bold text-gray-900 tracking-tighter uppercase"></h1>
-      <p class="text-xl md:text-2xl text-gray-500 serif italic tracking-widest" data-i18n="hero_slogan">
-        Noise is the new order.
-      </p>
-    </div>
-  </div>
-
-</section>
+      <div class="w-full h-full">
+        <img src="img/151129985_10159187669754826_3995551.jpg" 
+             class="w-full h-auto block opacity-25 grayscale transition-opacity duration-500" 
+             alt="Atmosphere">
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-50 via-stone-50/20 to-transparent"></div>
+      </div>
+      <div class="absolute inset-0 z-10 flex flex-col justify-center items-center text-center px-4">
+        <div class="space-y-4">
+          <h1 class="text-6xl md:text-9xl font-bold text-gray-900 tracking-tighter uppercase"></h1>
+          <p class="text-xl md:text-2xl text-gray-500 serif italic tracking-widest" data-i18n="hero_slogan">
+            Noise is the new order.
+          </p>
+        </div>
+      </div>
+    </section>
 
     <section id="news" class="py-20 max-w-6xl mx-auto px-6">
       <div class="grid md:grid-cols-2 gap-16">
         <div>
           <h2 class="text-3xl font-bold mb-8 border-l-4 border-gray-900 pl-4">NEWS</h2>
           <div class="space-y-6">
-             <article class="group cursor-pointer">
+              <article class="group cursor-pointer">
                 <div class="text-xs text-gray-400 font-mono mb-1">2025.12.29</div>
                 <h3 class="serif text-lg text-gray-800 group-hover:text-indigo-600 transition" data-i18n="news_title_1">New System Update</h3>
                 <p class="text-sm text-gray-500 mt-2 line-clamp-2" data-i18n="news_desc_1">Site.</p>
-             </article>
-             <hr class="border-gray-200">
-             <article class="group cursor-pointer">
+              </article>
+              <hr class="border-gray-200">
+              <article class="group cursor-pointer">
                 <div class="text-xs text-gray-400 font-mono mb-1">2025.11.20</div>
                 <h3 class="serif text-lg text-gray-800 group-hover:text-indigo-600 transition" data-i18n="news_title_2">First Live Announcement</h3>
                 <p class="text-sm text-gray-500 mt-2 line-clamp-2" data-i18n="news_desc_2">We are bringing the noise to the city. Check the schedule.</p>
-             </article>
+              </article>
           </div>
         </div>
         <div id="live">
@@ -135,18 +114,6 @@
                 <td class="py-4 text-gray-600">Deeep Sound 深音創造<span class="block mt-1 text-xs text-gray-400 font-sans tracking-wide">Gibson Party (The Rock Chef feat.Saito)</span> </td>
                 <td class="py-4 text-right"><button class="bg-gray-900 text-white px-3 py-1 text-xs hover:bg-gray-700 transition" data-i18n="btn_ticket">TICKET</button></td>
               </tr>
-              <tr class="group hover:bg-gray-100 transition">
-                <td class="py-4 text-gray-500 font-mono">2017.02.25</td>
-                <td class="py-4 font-serif text-gray-900">Taipei</td>
-                <td class="py-4 text-gray-600">The Wall <span class="block mt-1 text-xs text-gray-400 font-sans tracking-wide">next 10 years</span> </td>
-                <td class="py-4 text-right"><button class="bg-gray-900 text-white px-3 py-1 text-xs hover:bg-gray-700 transition" data-i18n="btn_ticket">TICKET</button></td>
-              </tr>
-                <tr class="group hover:bg-gray-100 transition">
-                <td class="py-4 text-gray-500 font-mono">2016.10.16</td>
-                <td class="py-4 font-serif text-gray-900">Taipei</td>
-                <td class="py-4 text-gray-600">The Wall<span class="block mt-1 text-xs text-gray-400 font-sans tracking-wide">Multiple Paralyzer vol.2</span> </td>
-                <td class="py-4 text-right"><button class="bg-gray-900 text-white px-3 py-1 text-xs hover:bg-gray-700 transition" data-i18n="btn_ticket">TICKET</button></td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -160,25 +127,22 @@
           <div class="space-y-6">
             <div class="relative aspect-square bg-gray-100 overflow-hidden shadow-lg group cursor-pointer" 
                  onclick="playMusic('Move On', 'project/opus01-01.mp3', 'img/cover1.jpg', 'MOVE ON and FIGHT')">
-               <img src="img/cover1.jpg" 
-                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 grayscale group-hover:grayscale-0">
+               <img src="img/cover1.jpg" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 grayscale group-hover:grayscale-0">
                <div class="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/20 transition">
                  <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition transform translate-y-4 group-hover:translate-y-0 shadow-lg">
-                    <svg class="w-12 h-12 ml-1.5 text-gray-900" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
+                    <svg class="w-12 h-12 ml-1.5 text-gray-900" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </div>
                </div>
             </div>
             <div class="text-center md:text-left">
-               <h3 class="font-serif text-2xl font-bold text-gray-900">MOVE ON and FIGHT</h3>
+               <h3 class="font-serif text-2xl font-bold text-gray-900" data-i18n="album_01_title">MOVE ON and FIGHT</h3>
                <p class="text-xs text-gray-500 font-mono mt-1 mb-4">Single / Opus 01</p>
                <ul class="text-sm font-mono text-gray-600 space-y-2 border-t border-gray-200 pt-4">
                     <li class="flex justify-between hover:text-black cursor-pointer" onclick="playMusic('Move On', 'project/opus01-01.mp3', 'img/cover1.jpg', 'MOVE ON and FIGHT')">
-                        <span>01. Move On</span>
+                        <span data-i18n="track_01_01">01. Move On</span>
                     </li>
                     <li class="flex justify-between hover:text-black cursor-pointer" onclick="playMusic('Fight', 'project/opus01-02.mp3', 'img/cover1.jpg', 'MOVE ON and FIGHT')">
-                        <span>02. Fight</span>
+                        <span data-i18n="track_01_02">02. Fight</span>
                     </li>
                 </ul>
             </div>
@@ -186,34 +150,31 @@
           <div class="space-y-6">
              <div class="relative aspect-square bg-gray-100 overflow-hidden shadow-lg group cursor-pointer" 
                   onclick="playMusic('Greed', 'project/opus02-01.m4a', 'img/cover2.jpg', '貪婪號')">
-                <img src="img/cover2.jpg" 
-                     class="w-full h-full object-cover group-hover:scale-105 transition duration-700 grayscale group-hover:grayscale-0">
+                <img src="img/cover2.jpg" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 grayscale group-hover:grayscale-0">
                <div class="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/20 transition">
                  <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition transform translate-y-4 group-hover:translate-y-0 shadow-lg">
-                    <svg class="w-12 h-12 ml-1.5 text-gray-900" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
+                    <svg class="w-12 h-12 ml-1.5 text-gray-900" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </div>
                </div>
              </div>
              <div class="text-center md:text-left">
-                <h3 class="font-serif text-2xl font-bold text-gray-900">貪婪號</h3>
+                <h3 class="font-serif text-2xl font-bold text-gray-900" data-i18n="album_02_title">貪婪號</h3>
                 <p class="text-xs text-gray-500 font-mono mt-1 mb-4">EP / Opus 02</p>
                 <ul class="text-sm font-mono text-gray-600 space-y-2 border-t border-gray-200 pt-4">
                     <li class="flex justify-between hover:text-black cursor-pointer" onclick="playMusic('Prologue', 'project/opus02-01.m4a', 'img/cover2.jpg', '貪婪號')">
-                        <span>01. Prologue</span> 
+                        <span data-i18n="track_02_01">01. Prologue</span> 
                     </li>
                     <li class="flex justify-between hover:text-black cursor-pointer" onclick="playMusic('貪婪號', 'project/opus02-02.m4a', 'img/cover2.jpg', '貪婪號')">
-                        <span>02. 貪婪號</span> 
+                        <span data-i18n="track_02_02">02. 貪婪號</span> 
                     </li>
                     <li class="flex justify-between hover:text-black cursor-pointer" onclick="playMusic('Waiting is..', 'project/opus02-03.m4a', 'img/cover2.jpg', '貪婪號')">
-                        <span>03. Waiting is..</span> 
+                        <span data-i18n="track_02_03">03. Waiting is..</span> 
                     </li>
                     <li class="flex justify-between hover:text-black cursor-pointer" onclick="playMusic('Secret', 'project/opus02-04.m4a', 'img/cover2.jpg', '貪婪號')">
-                        <span>04. Secret</span> 
+                        <span data-i18n="track_02_04">04. Secret</span> 
                     </li>
                     <li class="flex justify-between hover:text-black cursor-pointer" onclick="playMusic('Waiting is.. Acoustic', 'project/opus02-05.m4a', 'img/cover2.jpg', '貪婪號')">
-                        <span>05. Waiting is.. Acoustic Version</span> 
+                        <span data-i18n="track_02_05">05. Waiting is.. Acoustic Version</span> 
                     </li>
                 </ul>
              </div>
@@ -222,172 +183,130 @@
       </div>
     </section>
 
-    <section id="moment" class="py-20 bg-stone-50">
-      <div class="max-w-4xl mx-auto px-6 text-center space-y-8">
-         <h2 class="text-3xl font-bold tracking-widest">MOMENT</h2>
-         <div class="relative group w-full aspect-video bg-black shadow-2xl overflow-hidden rounded-sm" id="media-container"></div>
-         
-         <div class="relative -mt-16 md:-mt-24 z-30 flex justify-between px-4 md:px-0 pointer-events-none h-0">
-             <button onclick="changeMedia(-1)" class="pointer-events-auto w-12 h-12 flex items-center justify-center text-white bg-black/20 hover:bg-black/50 backdrop-blur rounded-full transition transform hover:scale-110 border border-white/20">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-             </button>
-             <button onclick="changeMedia(1)" class="pointer-events-auto w-12 h-12 flex items-center justify-center text-white bg-black/20 hover:bg-black/50 backdrop-blur rounded-full transition transform hover:scale-110 border border-white/20">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-             </button>
-         </div>
-
-         <div class="flex justify-center gap-2 mt-8" id="carousel-dots"></div>
-         <p class="serif text-gray-600 italic mt-4" id="media-desc" data-i18n="moment_desc">"Capture the frequency."</p>
-      </div>
-    </section>
-
-    <section id="gunpowder" class="py-20 max-w-6xl mx-auto px-6">
-      <h2 class="text-3xl font-bold mb-8 border-l-4 border-gray-900 pl-4">GUNPOWDER</h2>
-      <div class="w-full space-y-6">
-         <div class="w-full aspect-[16/9] md:aspect-[16/8] bg-gray-200 overflow-hidden">
-             <img src="img/s2dfdga.jpg" 
-                  class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-1000" alt="Gunpowder Band">
-         </div>
-         <div class="flex flex-col md:flex-row justify-between items-center text-xs md:text-sm font-mono text-gray-600 tracking-widest border-t border-gray-200 pt-4 gap-4 md:gap-0">
-             <span class="hover:text-black transition cursor-default">VOCAL / JERRY</span>
-             <span class="hidden md:inline text-gray-300">|</span>
-             <span class="hover:text-black transition cursor-default">GUITAR / CHAOS</span>
-             <span class="hidden md:inline text-gray-300">|</span>
-             <span class="hover:text-black transition cursor-default">GUITAR / JAMES</span>
-             <span class="hidden md:inline text-gray-300">|</span>
-             <span class="hover:text-black transition cursor-default">BASS / SOULHACKER</span>
-         </div>
-      </div>
-    </section>
-
-    <section id="project" class="py-20 max-w-6xl mx-auto px-6 bg-white border-y border-gray-100">
-      <h2 class="text-3xl font-bold mb-8 border-l-4 border-gray-900 pl-4">THE ROCK CHEF <span class="text-sm font-sans font-normal text-gray-400 align-middle ml-2">(Project)</span></h2>
-      <div class="w-full space-y-6">
-         <div class="w-full aspect-[16/9] md:aspect-[16/8] bg-gray-200 overflow-hidden">
-             <img src="img/rcefgi4sgd.jpg" 
-                  class="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition duration-1000" alt="The Rock Cef">
-         </div>
-         <div class="flex flex-col md:flex-row justify-between items-center text-xs md:text-sm font-mono text-gray-600 tracking-widest border-t border-gray-200 pt-4 gap-4 md:gap-0">
-             <span class="hover:text-black transition cursor-default">GUITAR / CHAOS</span>
-             <span class="hidden md:inline text-gray-300">|</span>
-             <span class="hover:text-black transition cursor-default">GUITAR / JAMES</span>
-             <span class="hidden md:inline text-gray-300">|</span>
-             <span class="hover:text-black transition cursor-default">BASS / SOULHACKER</span>
-             <span class="hidden md:inline text-gray-300">|</span>
-             <span class="hover:text-black transition cursor-default">DRUM / YOYO</span>
-         </div>
-      </div>
-    </section>
-
-    <section id="studiohead" class="py-20 max-w-6xl mx-auto px-6 mb-20">
-      <div class="grid md:grid-cols-2 gap-12 items-start">
-          <div class="space-y-4">
-    
-    <div class="w-full bg-gray-100 overflow-hidden relative border border-gray-200 rounded-lg shadow-sm">
-        
-        <img id="studio-main-img" 
-             src="img/475439881_1044700957673164_741660.jpg" 
-             class="w-full h-auto object-cover transition-opacity duration-300 block" alt="Studio Main">
-    </div>
-
-    <div class="w-2/3 mt-2"> <div class="grid grid-cols-4 gap-3"> <div class="aspect-square cursor-pointer opacity-70 hover:opacity-100 transition rounded-md overflow-hidden border border-gray-200" 
-                 onclick="changeStudioImg('img/475439881_1044700957673164_741660.jpg')">
-                 <img src="img/475439881_1044700957673164_741660.jpg" class="w-full h-full object-cover" alt="Pic1">
-            </div>
-            
-            <div class="aspect-square cursor-pointer opacity-70 hover:opacity-100 transition rounded-md overflow-hidden border border-gray-200" 
-                 onclick="changeStudioImg('img/4300894569_451008840375715_739589.jpg')">
-                 <img src="img/4300894569_451008840375715_739589.jpg" class="w-full h-full object-cover" alt="Pic2">
-            </div>
-            
-            <div class="aspect-square cursor-pointer opacity-70 hover:opacity-100 transition rounded-md overflow-hidden border border-gray-200" 
-                 onclick="changeStudioImg('img/484932697_7551491898308479_6255450477.jpg')">
-                 <img src="img/484932697_7551491898308479_6255450477.jpg" class="w-full h-full object-cover" alt="Pic3">
-            </div>
-            
-            <div class="aspect-square cursor-pointer opacity-70 hover:opacity-100 transition rounded-md overflow-hidden border border-gray-200" 
-                 onclick="changeStudioImg('img/12679222_6043063293158_161.jpg')">
-                 <img src="img/12679222_6043063293158_161.jpg" class="w-full h-full object-cover" alt="Pic4">
-            </div>
-            
-        </div>
-    </div>
-</div>
-          <div class="space-y-8 flex flex-col justify-center h-full">
-              <div>
-                  <h2 class="text-3xl font-bold mb-4">STUDIO HEAD</h2>
-                  <p class="font-serif text-gray-600 italic leading-relaxed" data-i18n="studio_desc">
-                      Where the alchemy happens. A space for sound, creation, and digital soul weaving.
-                  </p>
-              </div>
-              <div class="space-y-4 border-t border-gray-200 pt-8">
-                  <div class="flex items-center gap-4">
-                      <a href="http://www.facebook.com/StudioHeadStudio/" class="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full hover:bg-gray-900 hover:text-white transition">
-                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
-                      </a>
-                  </div>
-                  <div class="text-sm font-mono text-gray-500">
-                      <p>Contact: <a href="mailto:chaoslatw@gmail.com" class="hover:text-gray-900 underline">chaoslatw@gmail.com</a></p>
-                  </div>
-              </div>
-          </div>
-      </div>
-    </section>
+    <section id="moment" class="py-20 bg-stone-50"><div class="max-w-4xl mx-auto px-6 text-center space-y-8"><h2 class="text-3xl font-bold tracking-widest">MOMENT</h2><div class="relative group w-full aspect-video bg-black shadow-2xl overflow-hidden rounded-sm" id="media-container"></div><div class="relative -mt-16 md:-mt-24 z-30 flex justify-between px-4 md:px-0 pointer-events-none h-0"><button onclick="changeMedia(-1)" class="pointer-events-auto w-12 h-12 flex items-center justify-center text-white bg-black/20 hover:bg-black/50 backdrop-blur rounded-full transition transform hover:scale-110 border border-white/20"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button><button onclick="changeMedia(1)" class="pointer-events-auto w-12 h-12 flex items-center justify-center text-white bg-black/20 hover:bg-black/50 backdrop-blur rounded-full transition transform hover:scale-110 border border-white/20"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button></div><div class="flex justify-center gap-2 mt-8" id="carousel-dots"></div><p class="serif text-gray-600 italic mt-4" id="media-desc" data-i18n="moment_desc">"Capture the frequency."</p></div></section>
+    <section id="gunpowder" class="py-20 max-w-6xl mx-auto px-6"><h2 class="text-3xl font-bold mb-8 border-l-4 border-gray-900 pl-4">GUNPOWDER</h2><div class="w-full space-y-6"><div class="w-full aspect-[16/9] md:aspect-[16/8] bg-gray-200 overflow-hidden"><img src="img/s2dfdga.jpg" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-1000" alt="Gunpowder Band"></div><div class="flex flex-col md:flex-row justify-between items-center text-xs md:text-sm font-mono text-gray-600 tracking-widest border-t border-gray-200 pt-4 gap-4 md:gap-0"><span class="hover:text-black transition cursor-default">VOCAL / JERRY</span><span class="hidden md:inline text-gray-300">|</span><span class="hover:text-black transition cursor-default">GUITAR / CHAOS</span><span class="hidden md:inline text-gray-300">|</span><span class="hover:text-black transition cursor-default">GUITAR / JAMES</span><span class="hidden md:inline text-gray-300">|</span><span class="hover:text-black transition cursor-default">BASS / SOULHACKER</span></div></div></section>
+    <section id="project" class="py-20 max-w-6xl mx-auto px-6 bg-white border-y border-gray-100"><h2 class="text-3xl font-bold mb-8 border-l-4 border-gray-900 pl-4">THE ROCK CHEF <span class="text-sm font-sans font-normal text-gray-400 align-middle ml-2">(Project)</span></h2><div class="w-full space-y-6"><div class="w-full aspect-[16/9] md:aspect-[16/8] bg-gray-200 overflow-hidden"><img src="img/rcefgi4sgd.jpg" class="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition duration-1000" alt="The Rock Cef"></div><div class="flex flex-col md:flex-row justify-between items-center text-xs md:text-sm font-mono text-gray-600 tracking-widest border-t border-gray-200 pt-4 gap-4 md:gap-0"><span class="hover:text-black transition cursor-default">GUITAR / CHAOS</span><span class="hidden md:inline text-gray-300">|</span><span class="hover:text-black transition cursor-default">GUITAR / JAMES</span><span class="hidden md:inline text-gray-300">|</span><span class="hover:text-black transition cursor-default">BASS / SOULHACKER</span><span class="hidden md:inline text-gray-300">|</span><span class="hover:text-black transition cursor-default">DRUM / YOYO</span></div></div></section>
+    <section id="studiohead" class="py-20 max-w-6xl mx-auto px-6 mb-20"><div class="grid md:grid-cols-2 gap-12 items-start"><div class="space-y-4"><div class="w-full bg-gray-100 overflow-hidden relative border border-gray-200 rounded-lg shadow-sm"><img id="studio-main-img" src="img/475439881_1044700957673164_741660.jpg" class="w-full h-auto object-cover transition-opacity duration-300 block" alt="Studio Main"></div><div class="w-2/3 mt-2"> <div class="grid grid-cols-4 gap-3"> <div class="aspect-square cursor-pointer opacity-70 hover:opacity-100 transition rounded-md overflow-hidden border border-gray-200" onclick="changeStudioImg('img/475439881_1044700957673164_741660.jpg')"><img src="img/475439881_1044700957673164_741660.jpg" class="w-full h-full object-cover" alt="Pic1"></div><div class="aspect-square cursor-pointer opacity-70 hover:opacity-100 transition rounded-md overflow-hidden border border-gray-200" onclick="changeStudioImg('img/4300894569_451008840375715_739589.jpg')"><img src="img/4300894569_451008840375715_739589.jpg" class="w-full h-full object-cover" alt="Pic2"></div><div class="aspect-square cursor-pointer opacity-70 hover:opacity-100 transition rounded-md overflow-hidden border border-gray-200" onclick="changeStudioImg('img/484932697_7551491898308479_6255450477.jpg')"><img src="img/484932697_7551491898308479_6255450477.jpg" class="w-full h-full object-cover" alt="Pic3"></div><div class="aspect-square cursor-pointer opacity-70 hover:opacity-100 transition rounded-md overflow-hidden border border-gray-200" onclick="changeStudioImg('img/12679222_6043063293158_161.jpg')"><img src="img/12679222_6043063293158_161.jpg" class="w-full h-full object-cover" alt="Pic4"></div></div></div></div><div class="space-y-8 flex flex-col justify-center h-full"><div><h2 class="text-3xl font-bold mb-4">STUDIO HEAD</h2><p class="font-serif text-gray-600 italic leading-relaxed" data-i18n="studio_desc">Where the alchemy happens. A space for sound, creation, and digital soul weaving.</p></div><div class="space-y-4 border-t border-gray-200 pt-8"><div class="flex items-center gap-4"><a href="http://www.facebook.com/StudioHeadStudio/" class="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full hover:bg-gray-900 hover:text-white transition"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg></a></div><div class="text-sm font-mono text-gray-500"><p>Contact: <a href="mailto:chaoslatw@gmail.com" class="hover:text-gray-900 underline">chaoslatw@gmail.com</a></p></div></div></div></div></section>
   </main>
+
+  <div id="lyrics-overlay" 
+       style="width: 400px; height: 500px;"
+       class="fixed bottom-28 right-4 md:right-8 bg-gray-900/95 backdrop-blur-xl border border-gray-700 rounded-lg shadow-2xl z-40 hidden flex flex-col transform transition-opacity duration-300 min-w-[300px] min-h-[200px]">
+      
+      <div id="lyrics-resizer" class="absolute top-0 left-0 w-6 h-6 cursor-nw-resize z-50 group flex items-start justify-start p-1">
+          <div class="w-2 h-2 border-l-2 border-t-2 border-gray-500 group-hover:border-white transition"></div>
+      </div>
+
+      <div class="flex items-center justify-between p-4 border-b border-gray-700 select-none cursor-default">
+          <span class="text-xs font-mono text-gray-400 tracking-widest uppercase pl-2">Lyrics</span>
+          <button onclick="toggleLyrics()" class="text-gray-400 hover:text-white transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+      </div>
+
+      <div id="lyrics-content" class="flex-1 p-8 overflow-y-auto text-base md:text-lg text-gray-300 font-serif leading-10 whitespace-pre-wrap text-center no-scrollbar select-text">
+          No lyrics available.
+      </div>
+  </div>
 
   <div id="music-bar" class="fixed bottom-0 left-0 w-full bg-gray-900 text-stone-50 shadow-2xl z-50 flex flex-col border-t border-gray-800">
     
-    <div class="h-24 w-full flex items-center px-4 md:px-8 gap-6">
-      
+    <div class="h-24 w-full flex items-center px-4 md:px-6 gap-4">
        <audio id="audio-player" src="project/opus02-01.m4a" preload="metadata"></audio>
 
-       <div class="w-16 h-16 bg-gray-800 flex-shrink-0 border border-gray-700 rounded overflow-hidden shadow-lg">
-           <img id="player-cover" 
-                src="img/cover2.jpg" 
-                class="w-full h-full object-cover opacity-90" alt="Cover">
+       <div class="w-1/3 flex items-center gap-4">
+           <div class="w-14 h-14 bg-gray-800 flex-shrink-0 border border-gray-700 rounded overflow-hidden shadow-lg hidden md:block">
+               <img id="player-cover" src="img/cover2.jpg" class="w-full h-full object-cover opacity-90" alt="Cover">
+           </div>
+           <div class="flex flex-col overflow-hidden">
+               <div id="track-name" class="font-serif font-bold text-sm md:text-base text-white truncate tracking-wide" data-i18n="track_02_01">Prologue</div>
+               <div id="track-album" class="font-mono text-[10px] md:text-xs text-gray-400 truncate mt-1 opacity-70" data-i18n="album_02_title">貪婪號</div>
+           </div>
        </div>
 
-       <div class="hidden md:flex flex-col justify-center w-48 border-r border-gray-800 pr-6 h-12">
-           <div id="track-name" class="font-serif font-bold text-base text-white truncate tracking-wider">貪婪號</div>
-           <div id="track-album" class="font-mono text-xs text-gray-400 truncate mt-1">Prologue</div>
-       </div>
-
-       <div class="flex-1 flex items-center gap-6">
-            <button id="play-btn" class="w-12 h-12 flex items-center justify-center border border-stone-50/30 rounded-full hover:bg-stone-50 hover:text-gray-900 transition shrink-0 group bg-gray-800/50 backdrop-blur-sm">
-               <svg id="icon-play" class="w-6 h-6 ml-0.5 group-hover:scale-110 transition" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-               <svg id="icon-pause" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-            </button>
-            
-            <div class="flex-1 flex items-center gap-4">
-                <span class="text-xs font-mono text-gray-400 w-10 text-right" id="curr-time">0:00</span>
-                <input type="range" id="seek-slider" value="0" max="100" class="w-full h-4 bg-transparent appearance-none cursor-pointer">
-                <span class="text-xs font-mono text-gray-400 w-10" id="dur-time">0:00</span>
-            </div>
-       </div>
-
-       <div class="hidden md:flex items-center gap-4 border-l border-gray-800 pl-6 h-12 w-64 ml-4">
-           <svg class="w-10 h-10 text-gray-400 hover:text-white transition cursor-pointer" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+       <div class="flex-1 flex flex-col justify-center max-w-xl mx-auto">
            
-           <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5" class="w-full h-4 bg-transparent appearance-none cursor-pointer">
+           <div class="flex items-center gap-3 w-full mb-1">
+               <span class="text-[10px] font-mono text-gray-500 w-8 text-right" id="curr-time">0:00</span>
+               <div class="flex-1 h-4 flex items-center group cursor-pointer">
+                   <input type="range" id="seek-slider" value="0" max="100" class="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer hover:h-1.5 transition-all">
+               </div>
+               <span class="text-[10px] font-mono text-gray-500 w-8" id="dur-time">0:00</span>
+           </div>
+
+           <div class="flex items-center justify-center gap-6 md:gap-8">
+               
+               <button id="btn-lyrics" onclick="toggleLyrics()" class="text-gray-500 hover:text-white transition" title="Lyrics">
+                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+               </button>
+
+               <button id="btn-prev" class="text-gray-400 hover:text-white transition">
+                   <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+               </button>
+
+               <button id="play-btn" class="w-8 h-8 flex items-center justify-center bg-white text-gray-900 rounded-full hover:scale-105 transition shadow-lg shadow-white/10">
+                   <svg id="icon-play" class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                   <svg id="icon-pause" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+               </button>
+
+               <button id="btn-next" class="text-gray-400 hover:text-white transition">
+                   <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+               </button>
+
+               <button id="btn-loop" class="relative w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white transition" title="Loop Mode">
+                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                   <span id="badge-loop-one" class="absolute top-1.5 right-1 text-[8px] font-bold bg-gray-900 rounded-full px-0.5 hidden">1</span>
+               </button>
+           </div>
+       </div>
+
+       <div class="hidden md:flex items-center justify-end gap-3 w-1/3">
+           <svg class="w-8 h-8 text-gray-500 hover:text-white transition cursor-pointer" fill="currentColor" viewBox="0 0 24 24">
+               <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+           </svg>
            
-           <span id="vol-text" class="text-xs font-mono text-gray-400 w-10 text-right">50%</span>
+           <div class="w-32 flex items-center">
+               <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5" 
+                      class="w-full h-6 bg-transparent appearance-none cursor-pointer">
+           </div>
+           
+           <span id="vol-text" class="text-[10px] font-mono text-gray-500 w-8 text-right">50%</span>
        </div>
     </div>
-
-   <div class="h-8 bg-gray-900 w-full flex items-center justify-center text-[14px] font-mono text-gray-300 tracking-[0.2em] uppercase border-t border-gray-800">
+    
+    <div class="h-8 bg-gray-900 w-full flex items-center justify-center text-[14px] font-mono text-gray-300 tracking-[0.2em] uppercase border-t border-gray-800">
    © 2025 GUNPOWDER
    </div>
-
-</div>
-
   </div>
 
   <script src="lang.js"></script>
+  <script src="lyrics.js"></script>
+  
   <script>
     fetch('navbar.html').then(r => r.text()).then(d => document.getElementById('navbar').innerHTML = d);
 
+    // --- 1. 定義播放列表 ---
+    const playlist = [
+        { title: 'Move On', file: 'project/opus01-01.mp3', cover: 'img/cover1.jpg', album: 'MOVE ON and FIGHT', id: 'track_01_01' },
+        { title: 'Fight',   file: 'project/opus01-02.mp3', cover: 'img/cover1.jpg', album: 'MOVE ON and FIGHT', id: 'track_01_02' },
+        { title: 'Prologue',     file: 'project/opus02-01.m4a', cover: 'img/cover2.jpg', album: '貪婪號', id: 'track_02_01' },
+        { title: '貪婪號',       file: 'project/opus02-02.m4a', cover: 'img/cover2.jpg', album: '貪婪號', id: 'track_02_02' },
+        { title: 'Waiting is..', file: 'project/opus02-03.m4a', cover: 'img/cover2.jpg', album: '貪婪號', id: 'track_02_03' },
+        { title: 'Secret',       file: 'project/opus02-04.m4a', cover: 'img/cover2.jpg', album: '貪婪號', id: 'track_02_04' },
+        { title: 'Waiting is.. Acoustic', file: 'project/opus02-05.m4a', cover: 'img/cover2.jpg', album: '貪婪號', id: 'track_02_05' }
+    ];
+
+    let currentTrackIndex = 2; // 預設 Prologue
+    // ★ 循環模式狀態： 0 = Off, 1 = All, 2 = One
+    let loopMode = 0; 
+
+    // DOM Elements
     const audio = document.getElementById('audio-player');
     const playBtn = document.getElementById('play-btn');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const btnLoop = document.getElementById('btn-loop');
+    const badgeLoopOne = document.getElementById('badge-loop-one'); // 新增
     const iconPlay = document.getElementById('icon-play');
     const iconPause = document.getElementById('icon-pause');
     const seekSlider = document.getElementById('seek-slider');
@@ -396,55 +315,183 @@
     const trackName = document.getElementById('track-name');
     const trackAlbum = document.getElementById('track-album');
     const playerCover = document.getElementById('player-cover');
-    const volSlider = document.getElementById('volume-slider');
-    const volText = document.getElementById('vol-text');
+    const lyricsOverlay = document.getElementById('lyrics-overlay');
+    const lyricsContent = document.getElementById('lyrics-content');
+    const btnLyrics = document.getElementById('btn-lyrics');
 
+    // --- 播放邏輯 ---
     function playMusic(title, filePath, coverUrl, albumName) {
-      if(filePath && audio.src !== filePath) audio.src = filePath;
-      trackName.innerText = title;
-      if(albumName) trackAlbum.innerText = albumName;
-      if(coverUrl) playerCover.src = coverUrl;
-      audio.play().then(() => updatePlayIcon(true)).catch(console.error);
+        const index = playlist.findIndex(t => t.file === filePath);
+        if (index !== -1) {
+            currentTrackIndex = index;
+            loadTrack(index);
+        } else {
+            console.warn("Direct play");
+            audio.src = filePath;
+            updatePlayerUI({ title, cover: coverUrl, album: albumName, file: filePath });
+            audio.play();
+            updatePlayIcon(true);
+            updateLyricsUI();
+        }
     }
 
+    function loadTrack(index) {
+        const track = playlist[index];
+        if (audio.src.indexOf(track.file) === -1) {
+            audio.src = track.file;
+        }
+        updatePlayerUI(track);
+        audio.play().then(() => updatePlayIcon(true)).catch(console.error);
+        updateLyricsUI();
+    }
+
+    function updatePlayerUI(track) {
+        trackName.innerText = track.title;
+        if (track.id) {
+             trackName.setAttribute('data-i18n', track.id);
+             const currentLang = localStorage.getItem('site_lang') || 'en';
+             if (window.translations && window.translations[currentLang] && window.translations[currentLang][track.id]) {
+                 trackName.innerText = window.translations[currentLang][track.id];
+             }
+        }
+        trackAlbum.innerText = track.album;
+        playerCover.src = track.cover;
+    }
+
+    // --- 事件綁定 ---
     playBtn.addEventListener('click', () => {
-      if(audio.paused) {
-         if(audio.src) audio.play();
-         updatePlayIcon(true);
-      } else {
-         audio.pause();
-         updatePlayIcon(false);
-      }
+        if (audio.paused) { audio.play(); updatePlayIcon(true); } 
+        else { audio.pause(); updatePlayIcon(false); }
+    });
+
+    btnPrev.addEventListener('click', () => {
+        currentTrackIndex--;
+        if (currentTrackIndex < 0) currentTrackIndex = playlist.length - 1;
+        loadTrack(currentTrackIndex);
+    });
+
+    btnNext.addEventListener('click', () => { playNextTrack(true); });
+
+    // 播放下一首 (forceLoop: 是否強制循環到第一首，手動點擊時為 true)
+    function playNextTrack(forceLoop = false) {
+        currentTrackIndex++;
+        
+        if (currentTrackIndex >= playlist.length) {
+            // 如果播到最後一首了
+            if (loopMode === 1 || forceLoop) {
+                // 如果是 全曲循環(1) 或 手動點擊(force)，則回到第一首
+                currentTrackIndex = 0;
+                loadTrack(currentTrackIndex);
+            } else {
+                // 否則(Off)，停止播放
+                currentTrackIndex = playlist.length - 1; // 停在最後一首
+                audio.pause();
+                updatePlayIcon(false);
+            }
+        } else {
+            // 還沒到最後，正常播下一首
+            loadTrack(currentTrackIndex);
+        }
+    }
+
+    // ★ 循環按鈕邏輯 (3段式切換)
+    btnLoop.addEventListener('click', () => {
+        loopMode = (loopMode + 1) % 3; // 0 -> 1 -> 2 -> 0
+        updateLoopUI();
+    });
+
+    // ★ 更新循環按鈕 UI (修正版：使用白色高亮)
+    function updateLoopUI() {
+        // 1. 重置樣式：先移除所有可能的顏色 class
+        btnLoop.classList.remove('text-white', 'text-gray-500');
+        // 預設隱藏小數字 1
+        badgeLoopOne.classList.add('hidden');
+
+        if (loopMode === 0) {
+            // --- 模式 0: Off ---
+            // 顯示灰色
+            btnLoop.classList.add('text-gray-500');
+        } else if (loopMode === 1) {
+            // --- 模式 1: 全曲循環 ---
+            // 顯示高亮白色
+            btnLoop.classList.add('text-white');
+        } else if (loopMode === 2) {
+            // --- 模式 2: 單曲循環 ---
+            // 顯示高亮白色，並顯示小數字 1
+            btnLoop.classList.add('text-white');
+            badgeLoopOne.classList.remove('hidden');
+        }
+    }
+
+    // ★ 歌曲結束時的行為
+    audio.addEventListener('ended', () => {
+        if (loopMode === 2) {
+            // Loop One: 重播當前
+            audio.currentTime = 0;
+            audio.play();
+        } else {
+            // Loop All 或 Off: 嘗試播下一首 (playNextTrack 內部會判斷 Off 是否要停)
+            playNextTrack(false);
+        }
+    });
+
+    // --- 其他邏輯 (歌詞、時間、音量...) ---
+    
+    // (這部分保持不變，為了完整性我還是列出來)
+    function toggleLyrics() {
+        if (lyricsOverlay.classList.contains('hidden')) {
+            lyricsOverlay.classList.remove('hidden');
+            btnLyrics.classList.add('text-white');
+            updateLyricsUI();
+            setTimeout(() => lyricsOverlay.classList.add('lyrics-enter-active'), 10);
+        } else {
+            lyricsOverlay.classList.remove('lyrics-enter-active');
+            setTimeout(() => lyricsOverlay.classList.add('hidden'), 300);
+            btnLyrics.classList.remove('text-white');
+        }
+    }
+
+    function updateLyricsUI() {
+        if (!window.getLyrics) return;
+        const currentFile = playlist[currentTrackIndex] ? playlist[currentTrackIndex].file : audio.src;
+        const currentLang = localStorage.getItem('site_lang') || 'en';
+        let text = getLyrics(currentFile, currentLang);
+        lyricsContent.innerText = text;
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setTimeout(updateLyricsUI, 50);
+        });
     });
 
     function updatePlayIcon(isPlaying) {
-      if(isPlaying) {
-        iconPlay.classList.add('hidden');
-        iconPause.classList.remove('hidden');
-        playerCover.style.opacity = "1";
-      } else {
-        iconPlay.classList.remove('hidden');
-        iconPause.classList.add('hidden');
-        playerCover.style.opacity = "0.7";
-      }
+        if(isPlaying) {
+            iconPlay.classList.add('hidden');
+            iconPause.classList.remove('hidden');
+            playerCover.style.opacity = "1";
+        } else {
+            iconPlay.classList.remove('hidden');
+            iconPause.classList.add('hidden');
+            playerCover.style.opacity = "0.7";
+        }
     }
 
     audio.addEventListener('timeupdate', () => {
-       const percent = (audio.currentTime / audio.duration) * 100;
-       seekSlider.value = percent || 0;
-       currTimeDisplay.innerText = formatTime(audio.currentTime);
-       if(!isNaN(audio.duration)) durTimeDisplay.innerText = formatTime(audio.duration);
+        const percent = (audio.currentTime / audio.duration) * 100;
+        seekSlider.value = percent || 0;
+        currTimeDisplay.innerText = formatTime(audio.currentTime);
+        if(!isNaN(audio.duration)) durTimeDisplay.innerText = formatTime(audio.duration);
     });
 
     seekSlider.addEventListener('input', () => {
-       if(!audio.duration) return;
-       audio.currentTime = (seekSlider.value / 100) * audio.duration;
+        if(!audio.duration) return;
+        audio.currentTime = (seekSlider.value / 100) * audio.duration;
     });
 
+    const volSlider = document.getElementById('volume-slider');
     volSlider.addEventListener('input', (e) => {
-       const val = e.target.value;
-       audio.volume = val;
-       volText.innerText = Math.round(val * 100) + '%';
+        audio.volume = e.target.value;
     });
     
     function formatTime(s) {
@@ -454,7 +501,7 @@
         return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
     }
     
-    // Gallery Logic (Added placeholders)
+    // Gallery & Studio (Placeholder)
     const mediaContainer = document.getElementById('media-container');
     const dotsContainer = document.getElementById('carousel-dots');
     const mediaItems = [
@@ -493,6 +540,51 @@
             mainImg.src = src;
             mainImg.style.opacity = 1;
         }, 150);
+    }
+
+    // --- 歌詞視窗縮放邏輯 (Resize Logic) ---
+    const resizer = document.getElementById('lyrics-resizer');
+    const overlay = document.getElementById('lyrics-overlay');
+
+    // 紀錄拖曳起始點
+    let startX, startY, startWidth, startHeight;
+
+    resizer.addEventListener('mousedown', initDrag, false);
+
+    function initDrag(e) {
+        // 1. 紀錄按下時的滑鼠位置
+        startX = e.clientX;
+        startY = e.clientY;
+        
+        // 2. 紀錄視窗當前的寬高 (使用 getComputedStyle 確保抓到精準數值)
+        startWidth = parseInt(document.defaultView.getComputedStyle(overlay).width, 10);
+        startHeight = parseInt(document.defaultView.getComputedStyle(overlay).height, 10);
+
+        // 3. 綁定移動與放開事件到 document (防止滑鼠移太快跑出視窗)
+        document.documentElement.addEventListener('mousemove', doDrag, false);
+        document.documentElement.addEventListener('mouseup', stopDrag, false);
+        
+        // 防止選取文字干擾
+        e.preventDefault(); 
+    }
+
+    function doDrag(e) {
+        // 計算滑鼠移動距離
+        // 因為是拉「左上角」，所以：
+        // 往左移 (clientX 變小) -> 寬度要變大
+        // 往上移 (clientY 變小) -> 高度要變大
+        const newWidth = startWidth + (startX - e.clientX);
+        const newHeight = startHeight + (startY - e.clientY);
+
+        // 寫入新的寬高
+        // (CSS min-width 會自動擋住縮太小的情況)
+        overlay.style.width = newWidth + 'px';
+        overlay.style.height = newHeight + 'px';
+    }
+
+    function stopDrag(e) {
+        document.documentElement.removeEventListener('mousemove', doDrag, false);
+        document.documentElement.removeEventListener('mouseup', stopDrag, false);
     }
   </script>
 </body>
