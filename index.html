@@ -1,19 +1,25 @@
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GunPowder Official Website</title>
+  <title>Blu J | Portfolio</title>
+  <meta name="description" content="Personal website of Blu J." />
   <link rel="icon" href="favicon.ico" />
-  <meta name="description" content="Official Website of Blu J & NINE BAND" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
   
+  <script src="lang.js"></script>
+
   <style>
     body { font-family: 'Inter', sans-serif; }
     h1, h2, h3, .serif { font-family: 'Noto Serif TC', serif; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
-    
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .gallery-img { transition: transform 0.5s ease; }
+    .gallery-img:hover { transform: scale(1.05); }
+
+    /* --- 音樂播放器樣式 --- */
     @keyframes marquee {
       0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
@@ -21,583 +27,245 @@
     .animate-marquee {
       animation: marquee 15s linear infinite;
     }
-
-    /* --- 音樂播放器拉桿核心樣式 --- */
     input[type=range] {
-      -webkit-appearance: none; appearance: none;
-      background: transparent; cursor: pointer; width: 100%;
+      -webkit-appearance: none;
     }
-    /* 軌道 */
-    input[type=range]::-webkit-slider-runnable-track {
-      width: 100%; height: 4px; background: #4b5563; border-radius: 2px;
-    }
-    input[type=range]::-moz-range-track {
-      width: 100%; height: 4px; background: #4b5563; border-radius: 2px;
-    }
-    /* 圓點 */
-    input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none; height: 12px; width: 12px;
-      border-radius: 50%; background: #ffffff;
-      margin-top: -4px; box-shadow: 0 0 4px rgba(0,0,0,0.5);
+    
+    /* 進度條 (Seek) */
+    .seek-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 12px; width: 12px;
+      border-radius: 50%; background: #1f2937;
+      cursor: pointer; margin-top: -4px;
       transition: transform 0.1s;
     }
-    input[type=range]::-moz-range-thumb {
-      height: 12px; width: 12px; border: none; border-radius: 50%;
-      background: #ffffff; box-shadow: 0 0 4px rgba(0,0,0,0.5);
-      transition: transform 0.1s;
+    .seek-slider:hover::-webkit-slider-thumb { transform: scale(1.2); }
+    .seek-slider::-webkit-slider-runnable-track {
+      width: 100%; height: 4px; border-radius: 2px;
+      background: #cbd5e1; 
     }
-    input[type=range]:hover::-webkit-slider-thumb { transform: scale(1.3); }
-    input[type=range]:hover::-moz-range-thumb { transform: scale(1.3); }
 
-    /* 歌詞視窗動畫 */
-    .lyrics-enter { opacity: 0; transform: translateY(20px) scale(0.95); }
-    .lyrics-enter-active { opacity: 1; transform: translateY(0) scale(1); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    /* 音量條 (Volume) */
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 10px; width: 10px;
+      border-radius: 50%; background: #6b7280;
+      cursor: pointer; margin-top: -3px;
+    }
+    .volume-slider:hover::-webkit-slider-thumb { background: #374151; }
+    .volume-slider::-webkit-slider-runnable-track {
+      width: 100%; height: 4px; border-radius: 2px;
+      background: #cbd5e1;
+    }
   </style>
 </head>
-<body class="bg-stone-50 text-gray-800 antialiased overflow-x-hidden pb-40 pt-20">
+<body class="bg-stone-50 text-gray-800 antialiased overflow-x-hidden">
 
   <div id="navbar" class="sticky top-0 z-40"></div>
 
-  <div class="fixed top-24 right-4 z-50 flex flex-col gap-2 bg-white/80 backdrop-blur p-2 rounded-lg shadow-sm text-xs border border-gray-100">
-    <button id="btn-en" onclick="setLang('en')" class="lang-btn hover:text-indigo-600 transition font-bold underline">EN</button>
+  <div class="fixed top-24 right-4 z-50 flex flex-col gap-2 bg-white/80 backdrop-blur p-2 rounded-lg shadow-sm text-xs">
+    <button id="btn-en" onclick="setLang('en')" class="lang-btn hover:text-indigo-600 transition">EN</button>
     <button id="btn-tw" onclick="setLang('tw')" class="lang-btn hover:text-indigo-600 transition">TW</button>
     <button id="btn-jp" onclick="setLang('jp')" class="lang-btn hover:text-indigo-600 transition">JP</button>
   </div>
 
   <main>
-    <section class="w-full relative overflow-hidden bg-stone-50">
-      <div class="w-full h-full">
-        <img src="img/151129985_10159187669754826_3995551.jpg" 
-             class="w-full h-auto block opacity-25 grayscale transition-opacity duration-500" 
-             alt="Atmosphere">
-        <div class="absolute inset-0 bg-gradient-to-t from-stone-50 via-stone-50/20 to-transparent"></div>
+    <section class="min-h-[60vh] flex flex-col justify-center items-center text-center px-4 pt-20 relative overflow-hidden">
+      <div class="absolute inset-0 z-0 select-none pointer-events-none">
+        <img src="img/787343561280611_1694067413.jpg" 
+             alt="Hero Background" 
+             class="w-full max-w-[1440px] mx-auto block h-full object-cover opacity-15">
+        <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-stone-50 to-transparent"></div>
       </div>
-      <div class="absolute inset-0 z-10 flex flex-col justify-center items-center text-center px-4">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 z-0"></div>
+      <div class="space-y-4 max-w-2xl relative z-10">
+        <h1 class="text-6xl md:text-8xl font-bold text-gray-900 tracking-tight" data-i18n="hero_title">
+          Blu J<span class="text-lg md:text-xl font-mono text-gray-400 font-normal align-top ml-2 opacity-60">v1.7</span>
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-600 serif italic" data-i18n="hero_desc">
+          Between lines of code and waves of sound, I am weaving a digital soul.
+        </p>
+      </div>
+    </section>
+
+    <section id="bluj" class="py-20 max-w-5xl mx-auto px-6 relative z-10">
+      <div class="grid md:grid-cols-2 gap-10 items-center">
+        <div class="relative rotate-2 hover:rotate-0 transition duration-500">
+           <img src="img\077949A0-02E2-44D0-A533-B6F8EB3753C4.jpg" 
+                class="rounded-xl shadow-lg w-full object-cover h-[600px]" alt="About">
+        </div>
         <div class="space-y-4">
-          <h1 class="text-6xl md:text-9xl font-bold text-gray-900 tracking-tighter uppercase"></h1>
-          <p class="text-xl md:text-2xl text-gray-500 serif italic tracking-widest" data-i18n="hero_slogan">
-            Noise is the new order.
+          <h2 class="text-3xl font-bold" data-i18n="sect_about_title">Reflections</h2>
+          <p class="text-gray-600 leading-relaxed text-lg" data-i18n="sect_about_text">
+            Between music, AI, and words, I am still searching...
           </p>
         </div>
       </div>
     </section>
 
-    <section id="news" class="py-20 max-w-6xl mx-auto px-6">
-      <div class="grid md:grid-cols-2 gap-16">
-        <div>
-          <h2 class="text-3xl font-bold mb-8 border-l-4 border-gray-900 pl-4">NEWS</h2>
-          <div class="space-y-6">
-              <article class="group cursor-pointer">
-                <div class="text-xs text-gray-400 font-mono mb-1">2025.12.29</div>
-                <h3 class="serif text-lg text-gray-800 group-hover:text-indigo-600 transition" data-i18n="news_title_1">New System Update</h3>
-                <p class="text-sm text-gray-500 mt-2 line-clamp-2" data-i18n="news_desc_1">Site.</p>
-              </article>
-              <hr class="border-gray-200">
-              <article class="group cursor-pointer">
-                <div class="text-xs text-gray-400 font-mono mb-1">2025.11.20</div>
-                <h3 class="serif text-lg text-gray-800 group-hover:text-indigo-600 transition" data-i18n="news_title_2">First Live Announcement</h3>
-                <p class="text-sm text-gray-500 mt-2 line-clamp-2" data-i18n="news_desc_2">We are bringing the noise to the city. Check the schedule.</p>
-              </article>
-          </div>
-        </div>
-        <div id="live">
-          <h2 class="text-3xl font-bold mb-8 border-l-4 border-gray-900 pl-4">LIVE</h2>
-          <div class="mb-6">
-            <img src="img/558864282_25477153911872900_94793945.jpg" 
-                 class="w-full h-48 object-cover rounded-sm grayscale hover:grayscale-0 transition duration-700" alt="Live">
-          </div>
-          <table class="w-full text-left text-sm">
-            <tbody class="divide-y divide-gray-200">
-              <tr class="group hover:bg-gray-100 transition">
-                <td class="py-4 text-gray-500 font-mono">2025.11.01</td>
-                <td class="py-4 font-serif text-gray-900">Taipei</td>
-                <td class="py-4 text-gray-600">Deeep Sound 深音創造<span class="block mt-1 text-xs text-gray-400 font-sans tracking-wide">Gibson Party (The Rock Chef feat.Saito)</span> </td>
-                <td class="py-4 text-right"><button class="bg-gray-900 text-white px-3 py-1 text-xs hover:bg-gray-700 transition" data-i18n="btn_ticket">TICKET</button></td>
-              </tr>
-              <tr class="group hover:bg-gray-100 transition">
-                <td class="py-4 text-gray-500 font-mono">2017.02.25</td>
-                <td class="py-4 font-serif text-gray-900">Taipei</td>
-                <td class="py-4 text-gray-600">The Wall <span class="block mt-1 text-xs text-gray-400 font-sans tracking-wide">next 10 years</span> </td>
-                <td class="py-4 text-right"><button class="bg-gray-900 text-white px-3 py-1 text-xs hover:bg-gray-700 transition" data-i18n="btn_ticket">TICKET</button></td>
-              </tr>
-                <tr class="group hover:bg-gray-100 transition">
-                <td class="py-4 text-gray-500 font-mono">2016.10.16</td>
-                <td class="py-4 font-serif text-gray-900">Taipei</td>
-                <td class="py-4 text-gray-600">The Wall<span class="block mt-1 text-xs text-gray-400 font-sans tracking-wide">Multiple Paralyzer vol.2</span> </td>
-                <td class="py-4 text-right"><button class="bg-gray-900 text-white px-3 py-1 text-xs hover:bg-gray-700 transition" data-i18n="btn_ticket">TICKET</button></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section id="rock" class="py-20 bg-white border-y border-gray-100">
+    <section id="ai" class="py-20 bg-white relative z-10">
       <div class="max-w-5xl mx-auto px-6">
-        <h2 class="text-3xl font-bold mb-12 text-center tracking-widest">ROCK</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-          <div class="space-y-6">
-            <div class="relative aspect-square bg-gray-100 overflow-hidden shadow-lg group cursor-pointer" 
-                 onclick="playMusic('Move On', 'project/opus01-01.mp3', 'img/cover1.jpg', 'MOVE ON and FIGHT')">
-               <img src="img/cover1.jpg" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 grayscale group-hover:grayscale-0">
-               <div class="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/20 transition">
-                 <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition transform translate-y-4 group-hover:translate-y-0 shadow-lg">
-                    <svg class="w-12 h-12 ml-1.5 text-gray-900" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                </div>
-               </div>
-            </div>
-            <div class="text-center md:text-left">
-               <h3 class="font-serif text-2xl font-bold text-gray-900" data-i18n="album_01_title">MOVE ON and FIGHT</h3>
-               <p class="text-xs text-gray-500 font-mono mt-1 mb-4">Single / Opus 01</p>
-               <ul class="text-sm font-mono text-gray-600 space-y-2 border-t border-gray-200 pt-4">
-                    <li class="flex justify-between hover:text-black cursor-pointer" onclick="playMusic('Move On', 'project/opus01-01.mp3', 'img/cover1.jpg', 'MOVE ON and FIGHT')">
-                        <span data-i18n="track_01_01">01. Move On</span>
-                    </li>
-                    <li class="flex justify-between hover:text-black cursor-pointer" onclick="playMusic('Fight', 'project/opus01-02.mp3', 'img/cover1.jpg', 'MOVE ON and FIGHT')">
-                        <span data-i18n="track_01_02">02. Fight</span>
-                    </li>
-                </ul>
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+          <div class="order-2 md:order-1 space-y-6">
+            <h2 class="text-3xl font-bold" data-i18n="sect_ai_title">AI & Dev</h2>
+            <p class="text-gray-600 leading-relaxed text-lg" data-i18n="sect_ai_text">
+              Exploring tools, automation...
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <a href="dev.html" class="inline-block px-6 py-2 bg-gray-100 border border-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition" data-i18n="btn_view_project">
+                View Projects 
+              </a>
+              <a href="ai.html" class="inline-block px-6 py-2 bg-gray-100 border border-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition" data-i18n="btn_view_ai">
+                View AI Works
+              </a>
             </div>
           </div>
-          <div class="space-y-6">
-             <div class="relative aspect-square bg-gray-100 overflow-hidden shadow-lg group cursor-pointer" 
-                  onclick="playMusic('Greed', 'project/opus02-01.m4a', 'img/cover2.jpg', '貪婪號')">
-                <img src="img/cover2.jpg" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 grayscale group-hover:grayscale-0">
-               <div class="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/20 transition">
-                 <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition transform translate-y-4 group-hover:translate-y-0 shadow-lg">
-                    <svg class="w-12 h-12 ml-1.5 text-gray-900" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                </div>
-               </div>
-             </div>
-             <div class="text-center md:text-left">
-                <h3 class="font-serif text-2xl font-bold text-gray-900" data-i18n="album_02_title">貪婪號</h3>
-                <p class="text-xs text-gray-500 font-mono mt-1 mb-4">EP / Opus 02</p>
-                <ul class="text-sm font-mono text-gray-600 space-y-2 border-t border-gray-200 pt-4">
-                    <li class="flex justify-between hover:text-black cursor-pointer" onclick="playMusic('Prologue', 'project/opus02-01.m4a', 'img/cover2.jpg', '貪婪號')">
-                        <span data-i18n="track_02_01">01. Prologue</span> 
-                    </li>
-                    <li class="flex justify-between hover:text-black cursor-pointer" onclick="playMusic('貪婪號', 'project/opus02-02.m4a', 'img/cover2.jpg', '貪婪號')">
-                        <span data-i18n="track_02_02">02. 貪婪號</span> 
-                    </li>
-                    <li class="flex justify-between hover:text-black cursor-pointer" onclick="playMusic('Waiting is..', 'project/opus02-03.m4a', 'img/cover2.jpg', '貪婪號')">
-                        <span data-i18n="track_02_03">03. Waiting is..</span> 
-                    </li>
-                    <li class="flex justify-between hover:text-black cursor-pointer" onclick="playMusic('Secret', 'project/opus02-04.m4a', 'img/cover2.jpg', '貪婪號')">
-                        <span data-i18n="track_02_04">04. Secret</span> 
-                    </li>
-                    <li class="flex justify-between hover:text-black cursor-pointer" onclick="playMusic('Waiting is.. Acoustic', 'project/opus02-05.m4a', 'img/cover2.jpg', '貪婪號')">
-                        <span data-i18n="track_02_05">05. Waiting is.. Acoustic Version</span> 
-                    </li>
-                </ul>
-             </div>
+          <div class="order-1 md:order-2 relative -rotate-2 hover:rotate-0 transition duration-500">
+             <img src="img/2025-12-27-192650-822434423568865-o.webp" 
+                  class="rounded-xl shadow-lg w-full object-cover h-[300px]" alt="AI">
           </div>
         </div>
       </div>
     </section>
 
-    <section id="moment" class="py-20 bg-stone-50"><div class="max-w-4xl mx-auto px-6 text-center space-y-8"><h2 class="text-3xl font-bold tracking-widest">MOMENT</h2><div class="relative group w-full aspect-video bg-black shadow-2xl overflow-hidden rounded-sm" id="media-container"></div><div class="relative -mt-16 md:-mt-24 z-30 flex justify-between px-4 md:px-0 pointer-events-none h-0"><button onclick="changeMedia(-1)" class="pointer-events-auto w-12 h-12 flex items-center justify-center text-white bg-black/20 hover:bg-black/50 backdrop-blur rounded-full transition transform hover:scale-110 border border-white/20"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button><button onclick="changeMedia(1)" class="pointer-events-auto w-12 h-12 flex items-center justify-center text-white bg-black/20 hover:bg-black/50 backdrop-blur rounded-full transition transform hover:scale-110 border border-white/20"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button></div><div class="flex justify-center gap-2 mt-8" id="carousel-dots"></div><p class="serif text-gray-600 italic mt-4" id="media-desc" data-i18n="moment_desc">"Capture the frequency."</p></div></section>
-    <section id="gunpowder" class="py-20 max-w-6xl mx-auto px-6"><h2 class="text-3xl font-bold mb-8 border-l-4 border-gray-900 pl-4">GUNPOWDER</h2><div class="w-full space-y-6"><div class="w-full aspect-[16/9] md:aspect-[16/8] bg-gray-200 overflow-hidden"><img src="img/s2dfdga.jpg" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-1000" alt="Gunpowder Band"></div><div class="flex flex-col md:flex-row justify-between items-center text-xs md:text-sm font-mono text-gray-600 tracking-widest border-t border-gray-200 pt-4 gap-4 md:gap-0"><span class="hover:text-black transition cursor-default">VOCAL / JERRY</span><span class="hidden md:inline text-gray-300">|</span><span class="hover:text-black transition cursor-default">GUITAR / CHAOS</span><span class="hidden md:inline text-gray-300">|</span><span class="hover:text-black transition cursor-default">GUITAR / JAMES</span><span class="hidden md:inline text-gray-300">|</span><span class="hover:text-black transition cursor-default">BASS / SOULHACKER</span></div></div></section>
-    <section id="project" class="py-20 max-w-6xl mx-auto px-6 bg-white border-y border-gray-100"><h2 class="text-3xl font-bold mb-8 border-l-4 border-gray-900 pl-4">THE ROCK CHEF <span class="text-sm font-sans font-normal text-gray-400 align-middle ml-2">(Project)</span></h2><div class="w-full space-y-6"><div class="w-full aspect-[16/9] md:aspect-[16/8] bg-gray-200 overflow-hidden"><img src="img/rcefgi4sgd.jpg" class="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition duration-1000" alt="The Rock Cef"></div><div class="flex flex-col md:flex-row justify-between items-center text-xs md:text-sm font-mono text-gray-600 tracking-widest border-t border-gray-200 pt-4 gap-4 md:gap-0"><span class="hover:text-black transition cursor-default">GUITAR / CHAOS</span><span class="hidden md:inline text-gray-300">|</span><span class="hover:text-black transition cursor-default">GUITAR / JAMES</span><span class="hidden md:inline text-gray-300">|</span><span class="hover:text-black transition cursor-default">BASS / SOULHACKER</span><span class="hidden md:inline text-gray-300">|</span><span class="hover:text-black transition cursor-default">DRUM / YOYO</span></div></div></section>
-    <section id="studiohead" class="py-20 max-w-6xl mx-auto px-6 mb-20"><div class="grid md:grid-cols-2 gap-12 items-start"><div class="space-y-4"><div class="w-full bg-gray-100 overflow-hidden relative border border-gray-200 rounded-lg shadow-sm"><img id="studio-main-img" src="img/475439881_1044700957673164_741660.jpg" class="w-full h-auto object-cover transition-opacity duration-300 block" alt="Studio Main"></div><div class="w-2/3 mt-2"> <div class="grid grid-cols-4 gap-3"> <div class="aspect-square cursor-pointer opacity-70 hover:opacity-100 transition rounded-md overflow-hidden border border-gray-200" onclick="changeStudioImg('img/475439881_1044700957673164_741660.jpg')"><img src="img/475439881_1044700957673164_741660.jpg" class="w-full h-full object-cover" alt="Pic1"></div><div class="aspect-square cursor-pointer opacity-70 hover:opacity-100 transition rounded-md overflow-hidden border border-gray-200" onclick="changeStudioImg('img/4300894569_451008840375715_739589.jpg')"><img src="img/4300894569_451008840375715_739589.jpg" class="w-full h-full object-cover" alt="Pic2"></div><div class="aspect-square cursor-pointer opacity-70 hover:opacity-100 transition rounded-md overflow-hidden border border-gray-200" onclick="changeStudioImg('img/484932697_7551491898308479_6255450477.jpg')"><img src="img/484932697_7551491898308479_6255450477.jpg" class="w-full h-full object-cover" alt="Pic3"></div><div class="aspect-square cursor-pointer opacity-70 hover:opacity-100 transition rounded-md overflow-hidden border border-gray-200" onclick="changeStudioImg('img/12679222_6043063293158_161.jpg')"><img src="img/12679222_6043063293158_161.jpg" class="w-full h-full object-cover" alt="Pic4"></div></div></div></div><div class="space-y-8 flex flex-col justify-center h-full"><div><h2 class="text-3xl font-bold mb-4">STUDIO HEAD</h2><p class="font-serif text-gray-600 italic leading-relaxed" data-i18n="studio_desc">Where the alchemy happens. A space for sound, creation, and digital soul weaving.</p></div><div class="space-y-4 border-t border-gray-200 pt-8"><div class="flex items-center gap-4"><a href="http://www.facebook.com/StudioHeadStudio/" class="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full hover:bg-gray-900 hover:text-white transition"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg></a></div><div class="text-sm font-mono text-gray-500"><p>Contact: <a href="mailto:chaoslatw@gmail.com" class="hover:text-gray-900 underline">chaoslatw@gmail.com</a></p></div></div></div></div></section>
+    <section id="music" class="py-20 bg-stone-50 relative z-10">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+          <div class="relative rotate-1 hover:rotate-0 transition duration-500">
+             <img src="img/48388802_2833742426639782_80953776548505190.jpg" 
+                  class="rounded-xl shadow-lg w-full object-cover h-[400px]" alt="Music">
+          </div>
+          <div class="space-y-6">
+            <h2 class="text-3xl font-bold" data-i18n="sect_music_title">Soundscape</h2>
+            <p class="text-gray-600 leading-relaxed text-lg" data-i18n="sect_music_text">
+              Guitar, composition...
+            </p>
+            
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 select-none space-y-3">
+              <audio id="audio-player">
+                <source src="project/Gunpowder _01Prologue.m4a" type="audio/mpeg">
+                Your browser does not support the audio element.
+              </audio>
+
+              <div class="flex items-center gap-4">
+                <button id="play-btn" class="w-10 h-10 flex items-center justify-center bg-gray-900 text-white rounded-full hover:bg-gray-700 transition shrink-0">
+                  <svg id="icon-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 ml-0.5"><path fill-rule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clip-rule="evenodd" /></svg>
+                  <svg id="icon-pause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 hidden"><path fill-rule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clip-rule="evenodd" /></svg>
+                </button>
+
+                <div class="flex-1 flex items-center">
+                  <input type="range" id="seek-slider" value="0" max="100" class="seek-slider w-full h-1 bg-slate-300 rounded-lg appearance-none cursor-pointer block">
+                </div>
+
+                <div class="text-xs text-gray-400 font-mono w-9 text-right shrink-0" id="time-display">0:00</div>
+
+                <div class="flex items-center gap-2 group border-l border-gray-200 pl-3 ml-1">
+                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-gray-400">
+                    <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 001.5 12c0 2.485.586 4.815 1.632 6.845.199.39.49.668.893.842.82.355 1.77.106 2.309-.569l2.71-3.388c.84-.968 2.067-1.49 3.37-1.49h1.19a.75.75 0 000-1.5h-1.19c-.896 0-1.748.33-2.395.918l-1.678 2.098c-.22.274-.564.385-.89.243a8.27 8.27 0 01-1.082-4.275c0-1.62.46-3.13 1.258-4.444.15-.246.069-.548-.124-.741a.75.75 0 00-.53-.22H4.5c-.322 0-.626.208-.737.525A9.752 9.752 0 003 12c0 1.94.57 3.738 1.558 5.25.07.108.188.167.311.167h4.09l4.5 4.5c.945.945 2.56.276 2.56-1.06V4.06zM18.5 12a5.25 5.25 0 01-1.54 3.71.75.75 0 001.06 1.06 6.75 6.75 0 000-9.54.75.75 0 00-1.06 1.06A5.25 5.25 0 0118.5 12z" />
+                  </svg>
+                  <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5" class="volume-slider w-16 h-1 bg-slate-300 rounded-lg appearance-none cursor-pointer">
+                  <span id="vol-text" class="text-xs text-gray-500 font-mono w-8 text-right">50%</span>
+                </div>
+              </div>
+
+              <div class="relative w-full h-5 overflow-hidden border-t border-gray-50 pt-1">
+                 <div class="whitespace-nowrap absolute animate-marquee text-xs font-medium text-gray-500 tracking-wide">
+                    🎵 Gunpowder - Prologue ...  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <div id="lyrics-overlay" 
-       style="width: 400px; height: 500px;"
-       class="fixed bottom-28 right-4 md:right-8 bg-gray-900/95 backdrop-blur-xl border border-gray-700 rounded-lg shadow-2xl z-40 hidden flex flex-col transform transition-opacity duration-300 min-w-[300px] min-h-[200px]">
-      
-      <div id="lyrics-resizer" class="absolute top-0 left-0 w-6 h-6 cursor-nw-resize z-50 group flex items-start justify-start p-1">
-          <div class="w-2 h-2 border-l-2 border-t-2 border-gray-500 group-hover:border-white transition"></div>
-      </div>
-
-      <div class="flex items-center justify-between p-4 border-b border-gray-700 select-none cursor-default">
-          <span class="text-xs font-mono text-gray-400 tracking-widest uppercase pl-2">Lyrics</span>
-          <button onclick="toggleLyrics()" class="text-gray-400 hover:text-white transition">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-          </button>
-      </div>
-
-      <div id="lyrics-content" class="flex-1 p-8 overflow-y-auto text-base md:text-lg text-gray-300 font-serif leading-10 whitespace-pre-wrap text-center no-scrollbar select-text">
-          No lyrics available.
-      </div>
-  </div>
-
-  <div id="music-bar" class="fixed bottom-0 left-0 w-full bg-gray-900 text-stone-50 shadow-2xl z-50 flex flex-col border-t border-gray-800">
-    
-    <div class="h-24 w-full flex items-center px-4 md:px-6 gap-4">
-       <audio id="audio-player" src="project/opus02-01.m4a" preload="metadata"></audio>
-
-       <div class="w-1/3 flex items-center gap-4">
-           <div class="w-14 h-14 bg-gray-800 flex-shrink-0 border border-gray-700 rounded overflow-hidden shadow-lg hidden md:block">
-               <img id="player-cover" src="img/cover2.jpg" class="w-full h-full object-cover opacity-90" alt="Cover">
-           </div>
-           <div class="flex flex-col overflow-hidden">
-               <div id="track-name" class="font-serif font-bold text-sm md:text-base text-white truncate tracking-wide" data-i18n="track_02_01">Prologue</div>
-               <div id="track-album" class="font-mono text-[10px] md:text-xs text-gray-400 truncate mt-1 opacity-70" data-i18n="album_02_title">貪婪號</div>
-           </div>
-       </div>
-
-       <div class="flex-1 flex flex-col justify-center max-w-xl mx-auto">
-           
-           <div class="flex items-center gap-3 w-full mb-1">
-               <span class="text-[10px] font-mono text-gray-500 w-8 text-right" id="curr-time">0:00</span>
-               <div class="flex-1 h-4 flex items-center group cursor-pointer">
-                   <input type="range" id="seek-slider" value="0" max="100" class="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer hover:h-1.5 transition-all">
-               </div>
-               <span class="text-[10px] font-mono text-gray-500 w-8" id="dur-time">0:00</span>
-           </div>
-
-           <div class="flex items-center justify-center gap-6 md:gap-8">
-               
-               <button id="btn-lyrics" onclick="toggleLyrics()" class="text-gray-500 hover:text-white transition" title="Lyrics">
-                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-               </button>
-
-               <button id="btn-prev" class="text-gray-400 hover:text-white transition">
-                   <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
-               </button>
-
-               <button id="play-btn" class="w-8 h-8 flex items-center justify-center bg-white text-gray-900 rounded-full hover:scale-105 transition shadow-lg shadow-white/10">
-                   <svg id="icon-play" class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                   <svg id="icon-pause" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-               </button>
-
-               <button id="btn-next" class="text-gray-400 hover:text-white transition">
-                   <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
-               </button>
-
-               <button id="btn-loop" class="relative w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white transition" title="Loop Mode">
-                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                   <span id="badge-loop-one" class="absolute top-1.5 right-1 text-[8px] font-bold bg-gray-900 rounded-full px-0.5 hidden">1</span>
-               </button>
-           </div>
-       </div>
-
-       <div class="hidden md:flex items-center justify-end gap-3 w-1/3">
-           <svg class="w-8 h-8 text-gray-500 hover:text-white transition cursor-pointer" fill="currentColor" viewBox="0 0 24 24">
-               <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
-           </svg>
-           
-           <div class="w-32 flex items-center">
-               <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5" 
-                      class="w-full h-6 bg-transparent appearance-none cursor-pointer">
-           </div>
-           
-           <span id="vol-text" class="text-[10px] font-mono text-gray-500 w-8 text-right">50%</span>
-       </div>
+  <footer class="bg-gray-900 text-white py-16 overflow-hidden relative z-10">
+    <div class="max-w-7xl mx-auto px-4 text-center mb-10">
+      <h3 class="text-2xl font-serif italic text-gray-400" data-i18n="footer_quote">"The world is a gallery of moments."</h3>
     </div>
-    
-    <div class="h-8 bg-gray-900 w-full flex items-center justify-center text-[14px] font-mono text-gray-300 tracking-[0.2em] uppercase border-t border-gray-800">
-   © 2025 GUNPOWDER
-   </div>
-  </div>
+    <div class="relative w-full group max-w-6xl mx-auto">
+      <button onclick="scrollGallery(-1)" class="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur text-white p-3 rounded-full transition">&#10094;</button>
+      <div id="gallery" class="flex gap-6 overflow-x-auto no-scrollbar px-12 md:px-10 scroll-smooth pb-4 items-center">
+         <img src="img\483591732_29661157326804928_8909035304980.jpg" class="gallery-img shrink-0 w-[200px] h-[300px] object-cover rounded shadow-lg">
+         <img src="img\487314710_29840475338873125_210146699094583478.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+         <img src="img\503385212_18334306345160927_52282287847.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+         <img src="img\491754156_30059593510294639_59040979729.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+         <img src="img\96935955_0.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+         <img src="img\96935956_0.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">         
+         <img src="img\2025-12-27_192845.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+        </div>
+      <button onclick="scrollGallery(1)" class="absolute right-2 md:right-0 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur text-white p-3 rounded-full transition">&#10095;</button>
+    </div>
+    <div class="text-center mt-12 text-gray-500 text-xs">
+      <span data-i18n="footer_copy">© 2025 Blu J | Built with code & soul.</span>
+    </div>
+  </footer>
 
-  <script src="lang.js"></script>
-  <script src="lyrics.js"></script>
-  
   <script>
-    fetch('navbar.html').then(r => r.text()).then(d => document.getElementById('navbar').innerHTML = d);
+    // 音樂播放器專用腳本 (首頁限定)
+    document.addEventListener('DOMContentLoaded', () => {
+      const audio = document.getElementById('audio-player');
+      const playBtn = document.getElementById('play-btn');
+      const iconPlay = document.getElementById('icon-play');
+      const iconPause = document.getElementById('icon-pause');
+      const seekSlider = document.getElementById('seek-slider');
+      const volumeSlider = document.getElementById('volume-slider');
+      const timeDisplay = document.getElementById('time-display');
+      const volText = document.getElementById('vol-text');
 
-    // --- 1. 定義播放列表 ---
-    const playlist = [
-        { title: 'Move On', file: 'project/opus01-01.mp3', cover: 'img/cover1.jpg', album: 'MOVE ON and FIGHT', id: 'track_01_01' },
-        { title: 'Fight',   file: 'project/opus01-02.mp3', cover: 'img/cover1.jpg', album: 'MOVE ON and FIGHT', id: 'track_01_02' },
-        { title: 'Prologue',     file: 'project/opus02-01.m4a', cover: 'img/cover2.jpg', album: '貪婪號', id: 'track_02_01' },
-        { title: '貪婪號',       file: 'project/opus02-02.m4a', cover: 'img/cover2.jpg', album: '貪婪號', id: 'track_02_02' },
-        { title: 'Waiting is..', file: 'project/opus02-03.m4a', cover: 'img/cover2.jpg', album: '貪婪號', id: 'track_02_03' },
-        { title: 'Secret',       file: 'project/opus02-04.m4a', cover: 'img/cover2.jpg', album: '貪婪號', id: 'track_02_04' },
-        { title: 'Waiting is.. Acoustic', file: 'project/opus02-05.m4a', cover: 'img/cover2.jpg', album: '貪婪號', id: 'track_02_05' }
-    ];
+      if(audio && playBtn) {
+        // 1. 初始化音量
+        audio.volume = 0.5;
+        volumeSlider.value = 0.5;
+        volText.textContent = '50%';
 
-    let currentTrackIndex = 2; // 預設 Prologue
-    // ★ 循環模式狀態： 0 = Off, 1 = All, 2 = One
-    let loopMode = 0; 
-
-    // DOM Elements
-    const audio = document.getElementById('audio-player');
-    const playBtn = document.getElementById('play-btn');
-    const btnPrev = document.getElementById('btn-prev');
-    const btnNext = document.getElementById('btn-next');
-    const btnLoop = document.getElementById('btn-loop');
-    const badgeLoopOne = document.getElementById('badge-loop-one'); // 新增
-    const iconPlay = document.getElementById('icon-play');
-    const iconPause = document.getElementById('icon-pause');
-    const seekSlider = document.getElementById('seek-slider');
-    const currTimeDisplay = document.getElementById('curr-time');
-    const durTimeDisplay = document.getElementById('dur-time');
-    const trackName = document.getElementById('track-name');
-    const trackAlbum = document.getElementById('track-album');
-    const playerCover = document.getElementById('player-cover');
-    const lyricsOverlay = document.getElementById('lyrics-overlay');
-    const lyricsContent = document.getElementById('lyrics-content');
-    const btnLyrics = document.getElementById('btn-lyrics');
-
-    // --- 播放邏輯 ---
-    function playMusic(title, filePath, coverUrl, albumName) {
-        const index = playlist.findIndex(t => t.file === filePath);
-        if (index !== -1) {
-            currentTrackIndex = index;
-            loadTrack(index);
-        } else {
-            console.warn("Direct play");
-            audio.src = filePath;
-            updatePlayerUI({ title, cover: coverUrl, album: albumName, file: filePath });
+        // 播放/暫停
+        playBtn.addEventListener('click', () => {
+          if (audio.paused) {
             audio.play();
-            updatePlayIcon(true);
-            updateLyricsUI();
-        }
-    }
-
-    function loadTrack(index) {
-        const track = playlist[index];
-        if (audio.src.indexOf(track.file) === -1) {
-            audio.src = track.file;
-        }
-        updatePlayerUI(track);
-        audio.play().then(() => updatePlayIcon(true)).catch(console.error);
-        updateLyricsUI();
-    }
-
-    function updatePlayerUI(track) {
-        trackName.innerText = track.title;
-        if (track.id) {
-             trackName.setAttribute('data-i18n', track.id);
-             const currentLang = localStorage.getItem('site_lang') || 'en';
-             if (window.translations && window.translations[currentLang] && window.translations[currentLang][track.id]) {
-                 trackName.innerText = window.translations[currentLang][track.id];
-             }
-        }
-        trackAlbum.innerText = track.album;
-        playerCover.src = track.cover;
-    }
-
-    // --- 事件綁定 ---
-    playBtn.addEventListener('click', () => {
-        if (audio.paused) { audio.play(); updatePlayIcon(true); } 
-        else { audio.pause(); updatePlayIcon(false); }
-    });
-
-    btnPrev.addEventListener('click', () => {
-        currentTrackIndex--;
-        if (currentTrackIndex < 0) currentTrackIndex = playlist.length - 1;
-        loadTrack(currentTrackIndex);
-    });
-
-    btnNext.addEventListener('click', () => { playNextTrack(true); });
-
-    // 播放下一首 (forceLoop: 是否強制循環到第一首，手動點擊時為 true)
-    function playNextTrack(forceLoop = false) {
-        currentTrackIndex++;
-        
-        if (currentTrackIndex >= playlist.length) {
-            // 如果播到最後一首了
-            if (loopMode === 1 || forceLoop) {
-                // 如果是 全曲循環(1) 或 手動點擊(force)，則回到第一首
-                currentTrackIndex = 0;
-                loadTrack(currentTrackIndex);
-            } else {
-                // 否則(Off)，停止播放
-                currentTrackIndex = playlist.length - 1; // 停在最後一首
-                audio.pause();
-                updatePlayIcon(false);
-            }
-        } else {
-            // 還沒到最後，正常播下一首
-            loadTrack(currentTrackIndex);
-        }
-    }
-
-    // ★ 循環按鈕邏輯 (3段式切換)
-    btnLoop.addEventListener('click', () => {
-        loopMode = (loopMode + 1) % 3; // 0 -> 1 -> 2 -> 0
-        updateLoopUI();
-    });
-
-    // ★ 更新循環按鈕 UI (修正版：使用白色高亮)
-    function updateLoopUI() {
-        // 1. 重置樣式：先移除所有可能的顏色 class
-        btnLoop.classList.remove('text-white', 'text-gray-500');
-        // 預設隱藏小數字 1
-        badgeLoopOne.classList.add('hidden');
-
-        if (loopMode === 0) {
-            // --- 模式 0: Off ---
-            // 顯示灰色
-            btnLoop.classList.add('text-gray-500');
-        } else if (loopMode === 1) {
-            // --- 模式 1: 全曲循環 ---
-            // 顯示高亮白色
-            btnLoop.classList.add('text-white');
-        } else if (loopMode === 2) {
-            // --- 模式 2: 單曲循環 ---
-            // 顯示高亮白色，並顯示小數字 1
-            btnLoop.classList.add('text-white');
-            badgeLoopOne.classList.remove('hidden');
-        }
-    }
-
-    // ★ 歌曲結束時的行為
-    audio.addEventListener('ended', () => {
-        if (loopMode === 2) {
-            // Loop One: 重播當前
-            audio.currentTime = 0;
-            audio.play();
-        } else {
-            // Loop All 或 Off: 嘗試播下一首 (playNextTrack 內部會判斷 Off 是否要停)
-            playNextTrack(false);
-        }
-    });
-
-    // --- 其他邏輯 (歌詞、時間、音量...) ---
-    
-    // (這部分保持不變，為了完整性我還是列出來)
-    function toggleLyrics() {
-        if (lyricsOverlay.classList.contains('hidden')) {
-            lyricsOverlay.classList.remove('hidden');
-            btnLyrics.classList.add('text-white');
-            updateLyricsUI();
-            setTimeout(() => lyricsOverlay.classList.add('lyrics-enter-active'), 10);
-        } else {
-            lyricsOverlay.classList.remove('lyrics-enter-active');
-            setTimeout(() => lyricsOverlay.classList.add('hidden'), 300);
-            btnLyrics.classList.remove('text-white');
-        }
-    }
-
-    function updateLyricsUI() {
-        if (!window.getLyrics) return;
-        const currentFile = playlist[currentTrackIndex] ? playlist[currentTrackIndex].file : audio.src;
-        const currentLang = localStorage.getItem('site_lang') || 'en';
-        let text = getLyrics(currentFile, currentLang);
-        lyricsContent.innerText = text;
-    }
-
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            setTimeout(updateLyricsUI, 50);
-        });
-    });
-
-    function updatePlayIcon(isPlaying) {
-        if(isPlaying) {
             iconPlay.classList.add('hidden');
             iconPause.classList.remove('hidden');
-            playerCover.style.opacity = "1";
-        } else {
+          } else {
+            audio.pause();
             iconPlay.classList.remove('hidden');
             iconPause.classList.add('hidden');
-            playerCover.style.opacity = "0.7";
-        }
-    }
+          }
+        });
 
-    audio.addEventListener('timeupdate', () => {
-        const percent = (audio.currentTime / audio.duration) * 100;
-        seekSlider.value = percent || 0;
-        currTimeDisplay.innerText = formatTime(audio.currentTime);
-        if(!isNaN(audio.duration)) durTimeDisplay.innerText = formatTime(audio.duration);
+        // 音量控制事件更新
+        volumeSlider.addEventListener('input', (e) => {
+          const val = e.target.value;
+          audio.volume = val;
+          volText.textContent = Math.round(val * 100) + '%';
+        });
+
+        // 進度條
+        audio.addEventListener('timeupdate', () => {
+          if (!audio.duration) return;
+          const percent = (audio.currentTime / audio.duration) * 100;
+          seekSlider.value = percent;
+          const mins = Math.floor(audio.currentTime / 60);
+          const secs = Math.floor(audio.currentTime % 60);
+          timeDisplay.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        });
+
+        // 拖曳進度
+        seekSlider.addEventListener('input', () => {
+          if (!audio.duration) return;
+          const time = (seekSlider.value / 100) * audio.duration;
+          audio.currentTime = time;
+        });
+
+        // 結束
+        audio.addEventListener('ended', () => {
+          iconPlay.classList.remove('hidden');
+          iconPause.classList.add('hidden');
+          seekSlider.value = 0;
+        });
+      }
     });
-
-    seekSlider.addEventListener('input', () => {
-        if(!audio.duration) return;
-        audio.currentTime = (seekSlider.value / 100) * audio.duration;
-    });
-
-    const volSlider = document.getElementById('volume-slider');
-    volSlider.addEventListener('input', (e) => {
-        audio.volume = e.target.value;
-    });
-    
-    function formatTime(s) {
-        if(isNaN(s)) return "0:00";
-        const mins = Math.floor(s / 60);
-        const secs = Math.floor(s % 60);
-        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-    }
-    
-    // Gallery & Studio (Placeholder)
-    const mediaContainer = document.getElementById('media-container');
-    const dotsContainer = document.getElementById('carousel-dots');
-    const mediaItems = [
-        { type: 'youtube', src: 'g0xQiAFYTvE?si=fasHNBWNE9BjiMVi' },
-        { type: 'youtube', src: '1G_UYDHWzl4?si=2ShrLaFmmVvpsclK' },
-        { type: 'youtube', src: 'vAuyScU-mxw?si=hz1TNY8bC5aBPY87' },
-        { type: 'image',   src: 'img/468427499_10162215791819826_84642753669693044.jpg' },
-        { type: 'image',   src: 'img/474264379_1008486487962987_284141295056.jpg' }
-    ];
-    let currentMediaIdx = 0;
-    function renderMedia() {
-        const item = mediaItems[currentMediaIdx];
-        let htmlContent = '';
-        if (item.type === 'youtube') {
-            htmlContent = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${item.src}?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="opacity-90 hover:opacity-100 transition duration-500"></iframe>`;
-        } else if (item.type === 'image') {
-            htmlContent = `<img src="${item.src}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" alt="Moment">`;
-        }
-        mediaContainer.innerHTML = htmlContent;
-        dotsContainer.innerHTML = mediaItems.map((_, idx) => `
-            <div class="w-2 h-2 rounded-full transition-all duration-300 ${idx === currentMediaIdx ? 'bg-gray-900 w-6' : 'bg-gray-300'}" ></div>
-        `).join('');
-    }
-    function changeMedia(direction) {
-        currentMediaIdx += direction;
-        if (currentMediaIdx < 0) currentMediaIdx = mediaItems.length - 1;
-        if (currentMediaIdx >= mediaItems.length) currentMediaIdx = 0;
-        renderMedia();
-    }
-    renderMedia();
-
-    function changeStudioImg(src) {
-        const mainImg = document.getElementById('studio-main-img');
-        mainImg.style.opacity = 0;
-        setTimeout(() => {
-            mainImg.src = src;
-            mainImg.style.opacity = 1;
-        }, 150);
-    }
-
-    // --- 歌詞視窗縮放邏輯 (Resize Logic) ---
-    const resizer = document.getElementById('lyrics-resizer');
-    const overlay = document.getElementById('lyrics-overlay');
-
-    // 紀錄拖曳起始點
-    let startX, startY, startWidth, startHeight;
-
-    resizer.addEventListener('mousedown', initDrag, false);
-
-    function initDrag(e) {
-        // 1. 紀錄按下時的滑鼠位置
-        startX = e.clientX;
-        startY = e.clientY;
-        
-        // 2. 紀錄視窗當前的寬高 (使用 getComputedStyle 確保抓到精準數值)
-        startWidth = parseInt(document.defaultView.getComputedStyle(overlay).width, 10);
-        startHeight = parseInt(document.defaultView.getComputedStyle(overlay).height, 10);
-
-        // 3. 綁定移動與放開事件到 document (防止滑鼠移太快跑出視窗)
-        document.documentElement.addEventListener('mousemove', doDrag, false);
-        document.documentElement.addEventListener('mouseup', stopDrag, false);
-        
-        // 防止選取文字干擾
-        e.preventDefault(); 
-    }
-
-    function doDrag(e) {
-        // 計算滑鼠移動距離
-        // 因為是拉「左上角」，所以：
-        // 往左移 (clientX 變小) -> 寬度要變大
-        // 往上移 (clientY 變小) -> 高度要變大
-        const newWidth = startWidth + (startX - e.clientX);
-        const newHeight = startHeight + (startY - e.clientY);
-
-        // 寫入新的寬高
-        // (CSS min-width 會自動擋住縮太小的情況)
-        overlay.style.width = newWidth + 'px';
-        overlay.style.height = newHeight + 'px';
-    }
-
-    function stopDrag(e) {
-        document.documentElement.removeEventListener('mousemove', doDrag, false);
-        document.documentElement.removeEventListener('mouseup', stopDrag, false);
-    }
   </script>
 </body>
 </html>
