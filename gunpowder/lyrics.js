@@ -8,86 +8,87 @@ const lyricsData = {
         tw: `Move On
 
         黑霧來襲 散不去 阻斷思緒
-金錢蒙蔽 的眼睛 就要窒息
-失去能力 的羽翼 卻判我死刑
-鮮血四溢 灼熱的心 仍鮮明
+        金錢蒙蔽 的眼睛 就要窒息
+        失去能力 的羽翼 卻判我死刑
+        鮮血四溢 灼熱的心 仍鮮明
 
-生而為何 就算死又如何 在這世界 我留下什麼
-在那一天 末日來臨之前 我用生命 烙上宣言
+        生而為何 就算死又如何 在這世界 我留下什麼
+        在那一天 末日來臨之前 我用生命 烙上宣言
 
-Hey~Yeah~
-Don't tell me it's just a dream
-這音符 是靈魂的證明
-Don't tell me it's just a dream
-這旋律 是燃燒的生命
+        Hey~Yeah~
+        Don't tell me it's just a dream
+        這音符 是靈魂的證明
+        Don't tell me it's just a dream
+        這旋律 是燃燒的生命
 
-唇齒傲氣 風不息 吹散幻影
-指尖華麗 熱情無盡 仍堅定
+        唇齒傲氣 風不息 吹散幻影
+        指尖華麗 熱情無盡 仍堅定
 
-生而為何 就算死又如何 在這世界我留下什麼
-在那一天 末日來臨之前 我用生命烙上宣言
+        生而為何 就算死又如何 在這世界我留下什麼
+        在那一天 末日來臨之前 我用生命烙上宣言
 
-Hey~Yeah~
-Don't tell me it's just a dream
-這音符 是靈魂的證明
-Don't tell me it's just a dream
-這旋律 是燃燒的生命
+        Hey~Yeah~
+        Don't tell me it's just a dream
+        這音符 是靈魂的證明
+        Don't tell me it's just a dream
+        這旋律 是燃燒的生命
 
-Don't tell me it's just a dream
-徬徨疑怯拋卸 疾飛行
-Don't tell me it's just a dream
-困惑煩憂退卻 向前進
+        Don't tell me it's just a dream
+        徬徨疑怯拋卸 疾飛行
+        Don't tell me it's just a dream
+        困惑煩憂退卻 向前進
 
-Don't tell me it's just a dream
-這音符 是靈魂的證明
-Don't tell me it's just a dream
-這旋律 是燃燒的生命
+        Don't tell me it's just a dream
+        這音符 是靈魂的證明
+        Don't tell me it's just a dream
+        這旋律 是燃燒的生命
 
-Don't tell me it's just a dream
-徬徨疑怯拋卸 疾飛行
-Don't tell me it's just a dream
-困惑煩憂退卻 向前進`,
+        Don't tell me it's just a dream
+        徬徨疑怯拋卸 疾飛行
+        Don't tell me it's just a dream
+        困惑煩憂退卻 向前進`,
 
-        en: `Black mist strikes, lingering, blocking my thoughts
-Eyes blinded by money, suffocating
-Wings lost their power, sentencing me to death
-Blood spills, the burning heart remains vivid
+        en: `
+            Black mist strikes, lingering, blocking my thoughts
+            Eyes blinded by money, suffocating
+            Wings lost their power, sentencing me to death
+            Blood spills, the burning heart remains vivid
 
-Why was I born? So what if I die? What do I leave in this world?
-On that day, before the apocalypse, I brand my manifesto with my life
+            Why was I born? So what if I die? What do I leave in this world?
+            On that day, before the apocalypse, I brand my manifesto with my life
 
-Hey~Yeah~
-Don't tell me it's just a dream
-These notes are the proof of my soul
-Don't tell me it's just a dream
-This melody is a burning life
+            Hey~Yeah~
+            Don't tell me it's just a dream
+            These notes are the proof of my soul
+            Don't tell me it's just a dream
+            This melody is a burning life
 
-Arrogance on lips, wind never stops, blowing away illusions
-Fingertips magnificent, passion endless, still determined
+            Arrogance on lips, wind never stops, blowing away illusions
+            Fingertips magnificent, passion endless, still determined
 
-Why was I born? So what if I die? What do I leave in this world?
-On that day, before the apocalypse, I brand my manifesto with my life
+            Why was I born? So what if I die? What do I leave in this world?
+            On that day, before the apocalypse, I brand my manifesto with my life
 
-Hey~Yeah~
-Don't tell me it's just a dream
-These notes are the proof of my soul
-Don't tell me it's just a dream
-This melody is a burning life
+            Hey~Yeah~
+            Don't tell me it's just a dream
+            These notes are the proof of my soul
+            Don't tell me it's just a dream
+            This melody is a burning life
 
-Don't tell me it's just a dream
-Cast away hesitation and fear, fly fast
-Don't tell me it's just a dream
-Retreat from confusion and worry, move forward
+            Don't tell me it's just a dream
+            Cast away hesitation and fear, fly fast
+            Don't tell me it's just a dream
+            Retreat from confusion and worry, move forward
 
-Don't tell me it's just a dream
-These notes are the proof of my soul
-Don't tell me it's just a dream
-This melody is a burning life
+            Don't tell me it's just a dream
+            These notes are the proof of my soul
+            Don't tell me it's just a dream
+            This melody is a burning life
 
-Don't tell me it's just a dream
-Cast away hesitation and fear, fly fast
-Don't tell me it's just a dream
-Retreat from confusion and worry, move forward`,
+            Don't tell me it's just a dream
+            Cast away hesitation and fear, fly fast
+            Don't tell me it's just a dream
+            Retreat from confusion and worry, move forward`,
 
         jp: `
             黒い霧が襲う、晴れぬまま、思考を遮る
