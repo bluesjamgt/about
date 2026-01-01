@@ -1,10 +1,10 @@
 /**
  * NINE OS Core Logic & Translations
- * Version: v1.9 (Auto-Detect Language)
- * Last Updated: 2025-12-27
+ * Version: v1.11 (Content Alignment)
+ * Last Updated: 2025-12-29
  * * Update Log:
- * - Added smart system language detection (Browser Language)
- * - Logic: Saved Preference > System Language > Default (EN)
+ * - Unified Footer format across all languages (Minimalist style).
+ * - Synchronized Index page content based on the latest TW version.
  */
 
 const translations = {
@@ -17,22 +17,26 @@ const translations = {
       nav_music: "Music",
       nav_notes: "Notes",
   
-      // --- Footer (Global) ---
-      footer_quote: "The world is a gallery of moments.",
-      footer_copy: "© 2025 Blu J | Built with code & soul.",
+      // --- Footer (Unified) ---
+      footer_quote: "Moments",
+      footer_copy: "© 2025 Blu J ",
       btn_github: "GitHub", 
   
-      // --- Index Page ---
+      // --- Index Page (Aligned with TW) ---
       hero_title: "Blu J",
-      hero_desc: "Between lines of code and waves of sound, I am weaving a digital soul.",
-      sect_about_title: "Reflections",
-      sect_about_text: "Between music, AI, and words, I am still searching. This is a personal corner of reflections and creations.",
+      hero_desc: "A personal corner where analog and digital, technology and humanities coexist.",
+      
+      sect_about_title: "Life & Spirits", 
+      sect_about_text: "Standing at the intersection of diverse fields: software & hardware development, sound creation, coffee & spirits, and American-Japanese culture.",
+      
       sect_ai_title: "AI & Dev",
-      sect_ai_text: "Exploring tools, automation, and creative experiments. Not loud, but deeply curious about what technology can shape.",
+      sect_ai_text: "Evolving with the times, exploring tools in all forms. From independent LLM deployment to platform implementation, fulfilling creative purposes and solving problems.",
+      
       btn_view_project: "View Projects",
       btn_view_ai: "View AI Works",
-      sect_music_title: "Soundscape",
-      sect_music_text: "Guitar, composition, and ambient sketches. Music is where fragments become stories.",
+      
+      sect_music_title: "Sound & Space", 
+      sect_music_text: "Within the space of sound creation: guitar, arrangement, teaching, and bands. Performing in LiveHouses and music festivals.",
   
       // --- AI Page ---
       page_title: "AI Experiments",
@@ -65,21 +69,25 @@ const translations = {
       nav_notes: "筆記",
   
       // --- Footer ---
-      footer_quote: "世界是一座瞬間的畫廊。",
-      footer_copy: "© 2025 Blu J | 以代碼與靈魂鑄造",
+      footer_quote: "Moments",
+      footer_copy: "© 2025 Blu J ",
       btn_github: "GitHub",
   
       // --- Index Page ---
       hero_title: "Blu J",
-      hero_desc: "在程式碼的行距與聲波的起伏之間，編織著數位的靈魂。",
-      sect_about_title: "關於與反思",
-      sect_about_text: "在音樂、AI 與文字之間，我仍在追尋。這裡是我存放思考碎片與創作的個人角落，一個安靜的數位棲身之所。",
+      hero_desc: "類比與數位間、科技與人文間，多領域並存的個人角落。",
+      
+      sect_about_title: "人與酒",
+      sect_about_text: "駐足於多領域間，軟硬體專案開發、聲音創作、酒與咖啡、美日文化。",
+      
       sect_ai_title: "AI 與開發",
-      sect_ai_text: "探索自動化工具與生成式藝術的邊界。不喧嘩，但對科技能塑造的形狀保持著深度的格物致知。",
+      sect_ai_text: "隨著時代與時俱進，探索各種形式工具，AI、LLM的獨立部屬與平台實作運用，完成自己各種事物的「創造目的」，解決問題。",
+      
       btn_view_project: "開發專案",
       btn_view_ai: "AI 創作",
-      sect_music_title: "聲景與旋律",
-      sect_music_text: "吉他、編曲與環境音的素描。當語言失效時，音樂就是故事的載體。",
+      
+      sect_music_title: "聲音與空間",
+      sect_music_text: "在聲音創造的空間裡，吉他、編曲、教學與樂團，參與LiveHouse與音樂祭演出。",
   
       // --- AI Page ---
       page_title: "AI 視覺實驗",
@@ -112,21 +120,25 @@ const translations = {
       nav_notes: "ノート",
   
       // --- Footer ---
-      footer_quote: "世界は瞬間のギャラリーである。",
-      footer_copy: "© 2025 Blu J | 錬金術師の工房",
+      footer_quote: "Moments",
+      footer_copy: "© 2025 Blu J ",
       btn_github: "GitHub",
   
-      // --- Index Page ---
+      // --- Index Page (Aligned with TW) ---
       hero_title: "Blu J",
-      hero_desc: "コードの行間と音の波間で、デジタルの魂を紡いでいる。",
-      sect_about_title: "考察と記録",
-      sect_about_text: "音楽、AI、そして言葉の間で、私はまだ探している。ここは私の思考と創作のための個人的なアーカイブ。",
+      hero_desc: "アナログとデジタル、テクノロジーと人文が共存する個人的なスペース。",
+      
+      sect_about_title: "人と酒", // 人與酒
+      sect_about_text: "多領域の狭間に立つ。ソフトウェア・ハードウェア開発、サウンドクリエイション、酒とコーヒー、そして米日文化。",
+      
       sect_ai_title: "AI と 開発",
-      sect_ai_text: "ツール、自動化、そして創造的な実験。静かに、しかし深く、テクノロジーが描く形を探求している。",
+      sect_ai_text: "時代と共に進化し、あらゆるツールを探求する。AIやLLMの独自展開からプラットフォーム実装まで、「創造の目的」を達成し、問題を解決するために。",
+      
       btn_view_project: "Dev プロジェクト",
       btn_view_ai: "AI アート",
-      sect_music_title: "音の風景",
-      sect_music_text: "ギター、作曲、アンビエント・スケッチ。言葉にならない感情は、ここで物語となる。",
+      
+      sect_music_title: "音と空間", // 聲音與空間
+      sect_music_text: "音を創る空間の中で。ギター、アレンジ、教育、そしてバンド活動。ライブハウスや音楽フェスへの出演。",
   
       // --- AI Page ---
       page_title: "AI ビジュアル実験",
@@ -183,11 +195,7 @@ const translations = {
   }
 
   /**
-   * [v1.9 新增] 偵測系統語言
-   * 邏輯：
-   * 1. 取得瀏覽器語言 (例如 "zh-TW", "en-US", "ja")
-   * 2. 轉小寫
-   * 3. 判斷包含字串
+   * 偵測系統語言
    */
   function detectSystemLang() {
     const sysLang = navigator.language.toLowerCase();
