@@ -13,11 +13,11 @@
     body { font-family: 'Inter', sans-serif; }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body class="bg-gray-50 text-gray-800 font-sans pb-20">
 
   <div id="navbar"></div>
 
-  <div class="fixed top-24 right-4 z-50 flex flex-col gap-2 bg-white/80 backdrop-blur p-2 rounded-lg shadow-sm text-xs">
+  <div class="fixed top-24 right-4 z-50 flex flex-col gap-2 bg-white/80 backdrop-blur p-2 rounded-lg shadow-sm text-xs border border-gray-100">
     <button id="btn-en" onclick="setLang('en')" class="lang-btn hover:text-indigo-600 transition">EN</button>
     <button id="btn-tw" onclick="setLang('tw')" class="lang-btn hover:text-indigo-600 transition">TW</button>
     <button id="btn-jp" onclick="setLang('jp')" class="lang-btn hover:text-indigo-600 transition">JP</button>
@@ -28,7 +28,7 @@
     <div class="bg-white rounded-xl shadow p-6 space-y-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <img src="https://cdn-icons-png.flaticon.com/512/10307/10307908.png" alt="icon" class="w-10 h-10">
+          <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="icon" class="w-10 h-10">
           <h2 class="font-bold text-lg" data-i18n="dev_p1_title">yt-dlp-gui</h2>
         </div>
         <a href="https://github.com/bluesjamgt/yt-dlp-gui" target="_blank" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 text-sm flex items-center gap-2">
@@ -42,49 +42,75 @@
       <p class="text-gray-600" data-i18n="dev_p1_desc1">A modern, cross-platform GUI wrapper for the powerful yt-dlp tool.</p>
       <p class="text-gray-600" data-i18n="dev_p1_desc2">Download videos effortlessly with a clean, user-friendly interface.</p>
       <hr class="my-4">
-
       <div class="relative w-full aspect-video rounded-lg shadow overflow-hidden bg-gray-100">
-        <img src="https://raw.githubusercontent.com/bluesjamgt/yt-dlp-gui/main/preview.jpg" alt="yt-dlp-gui screenshot" class="absolute inset-0 w-full h-full object-contain">
+        <img src=".\img\dev\ytdlp-1.jpg" alt="yt-dlp-gui screenshot" class="absolute inset-0 w-full h-full object-contain">
       </div>
     </div>
 
     <div class="bg-white rounded-xl shadow p-6 space-y-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <img src="https://cdn-icons-png.flaticon.com/512/5968/5968350.png" alt="icon" class="w-10 h-10">
-          <h2 class="font-bold text-lg" data-i18n="dev_p2_title">Project Two</h2>
+          <img src="https://cdn-icons-png.flaticon.com/512/3767/3767084.png" alt="icon" class="w-10 h-10">
+          <h2 class="font-bold text-lg" data-i18n="dev_p2_title">FileProsApp</h2>
         </div>
-        <a href="https://github.com" target="_blank" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 text-sm" data-i18n="btn_github">GitHub</a>
+        <a href="#" target="_blank" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 text-sm" data-i18n="btn_github">GitHub</a>
       </div>
-      <p class="text-gray-600" data-i18n="dev_p2_desc1">Feature A: Short technical explanation.</p>
-      <p class="text-gray-600" data-i18n="dev_p2_desc2">Feature B: More detail about its role or benefit.</p>
+      <p class="text-gray-600" data-i18n="dev_p2_desc1">Automated file organization tool based on Python.</p>
+      <p class="text-gray-600" data-i18n="dev_p2_desc2">Intelligently sort chaos into order with one click.</p>
       <hr class="my-4">
       <div class="relative w-full aspect-video rounded-lg shadow overflow-hidden bg-gray-100">
-          <img src="https://images.unsplash.com/photo-1508780709619-79562169bc64?q=80&w=1200&auto=format&fit=crop" alt="screenshot" class="absolute inset-0 w-full h-full object-cover">
+          <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=1200&auto=format&fit=crop" alt="screenshot" class="absolute inset-0 w-full h-full object-cover">
       </div>
     </div>
 
     <div class="bg-white rounded-xl shadow p-6 space-y-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <img src="https://cdn-icons-png.flaticon.com/512/5968/5968672.png" alt="icon" class="w-10 h-10">
-          <h2 class="font-bold text-lg" data-i18n="dev_p3_title">Project Three</h2>
+          <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" alt="icon" class="w-10 h-10">
+          <h2 class="font-bold text-lg" data-i18n="dev_p3_title">ChatBot Base in Dify</h2>
         </div>
-        <a href="https://github.com" target="_blank" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 text-sm" data-i18n="btn_github">GitHub</a>
+        <a href="#" target="_blank" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+            <span data-i18n="btn_chat">Let's Chat</span>
+        </a>
       </div>
-      <p class="text-gray-600" data-i18n="dev_p3_desc1">Feature A: Key technology and purpose.</p>
-      <p class="text-gray-600" data-i18n="dev_p3_desc2">Feature B: Why it is useful or unique.</p>
+      <p class="text-gray-600" data-i18n="dev_p3_desc1">RAG Precision Data Integration.</p>
+      <p class="text-gray-600" data-i18n="dev_p3_desc2">An intelligent Chat Agent designed for smart interactions.</p>
       <hr class="my-4">
       <div class="relative w-full aspect-video rounded-lg shadow overflow-hidden bg-gray-100">
-         <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop" alt="screenshot" class="absolute inset-0 w-full h-full object-cover">
+         <img src="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=1200&auto=format&fit=crop" alt="screenshot" class="absolute inset-0 w-full h-full object-cover">
       </div>
     </div>
+
+    <div class="bg-white rounded-xl shadow p-6 space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <img src="https://cdn-icons-png.flaticon.com/512/2970/2970785.png" alt="icon" class="w-10 h-10">
+            <h2 class="font-bold text-lg" data-i18n="dev_p4_title">Brand Page Design</h2>
+          </div>
+          <a href="#" target="_blank" class="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-700 text-sm flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+              <span data-i18n="btn_view">View</span>
+          </a>
+        </div>
+        <p class="text-gray-600" data-i18n="dev_p4_desc1">Modern aesthetic UI/UX implementation.</p>
+        <p class="text-gray-600" data-i18n="dev_p4_desc2">Responsive design for GunPowder & Personal Branding.</p>
+        <hr class="my-4">
+        <div class="relative w-full aspect-video rounded-lg shadow overflow-hidden bg-gray-100">
+           <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=1200&auto=format&fit=crop" alt="screenshot" class="absolute inset-0 w-full h-full object-cover">
+        </div>
+      </div>
 
   </main>
 
   <footer class="border-t border-gray-200 text-center py-6 text-sm text-gray-500" data-i18n="footer_copy">
     © 2025 Blu J
   </footer>
+
+  <script>
+    // 載入 Navbar
+    fetch('navbar.html').then(r => r.text()).then(d => document.getElementById('navbar').innerHTML = d);
+  </script>
 
 </body>
 </html>
