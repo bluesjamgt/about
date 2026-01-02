@@ -3,108 +3,185 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Blu J | AI Gallery</title>
+  <title>Blu J | AI Lab 2026</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
   
   <script src="lang.js"></script>
 
   <style>
     body { font-family: 'Inter', sans-serif; }
-    h1, h2, .serif { font-family: 'Noto Serif TC', serif; }
+    h1, h2, h3, .serif { font-family: 'Noto Serif TC', serif; }
+    /* 新增：技術參數用的單寬字體 */
+    .mono { font-family: 'JetBrains Mono', monospace; }
     
-    /* 藝廊 Grid 的圖片懸停效果 (此頁面專屬 CSS 保留) */
+    /* 藝廊 Grid 的圖片懸停效果 (保留) */
     .art-card:hover .art-overlay { opacity: 1; }
     .art-card:hover img { transform: scale(1.05); }
   </style>
 </head>
-<body class="bg-stone-50 text-gray-800">
+<body class="bg-stone-50 text-gray-800 antialiased">
 
   <div id="navbar" class="sticky top-0 z-50"></div>
 
-  <div class="fixed top-24 right-4 z-50 flex flex-col gap-2 bg-white/80 backdrop-blur p-2 rounded-lg shadow-sm text-xs">
+  <div class="fixed top-24 right-4 z-50 flex flex-col gap-2 bg-white/80 backdrop-blur p-2 rounded-lg shadow-sm text-xs border border-gray-100">
     <button id="btn-en" onclick="setLang('en')" class="lang-btn hover:text-indigo-600 transition">EN</button>
     <button id="btn-tw" onclick="setLang('tw')" class="lang-btn hover:text-indigo-600 transition">TW</button>
     <button id="btn-jp" onclick="setLang('jp')" class="lang-btn hover:text-indigo-600 transition">JP</button>
   </div>
 
-  <main class="max-w-7xl mx-auto px-4 py-16 space-y-20">
+  <main class="max-w-7xl mx-auto px-4 py-16 space-y-24">
     
     <header class="text-center space-y-4 max-w-2xl mx-auto pt-10">
-      <h1 class="text-4xl md:text-5xl font-bold" data-i18n="page_title">AI Experiments</h1>
+      <h1 class="text-4xl md:text-5xl font-bold" data-i18n="page_title">AI Lab / Workbench</h1>
       <p class="text-lg text-gray-500 serif italic" data-i18n="page_desc">
-        Visual synthesis, prompt engineering, and the latent space.
+        Controlling chaos. Bridging analog inputs with digital latent space.
       </p>
     </header>
 
     <section>
-      <div class="flex items-center gap-4 mb-8">
-        <h2 class="text-2xl font-bold" data-i18n="cat_t2i">Text to Image (T2I)</h2>
+      <div class="flex items-center gap-4 mb-10">
+        <div class="flex flex-col">
+            <h2 class="text-2xl font-bold">Structural Alchemy</h2>
+            <span class="text-xs text-gray-500 mono mt-1">/// ControlNet & Structure Guidance</span>
+        </div>
         <div class="h-[1px] bg-gray-300 flex-1"></div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="space-y-16">
         
-        <div class="art-card group relative rounded-xl overflow-hidden shadow-lg aspect-square cursor-pointer">
-          <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=800&auto=format&fit=crop" 
-               class="w-full h-full object-cover transition duration-700" alt="AI Art 1">
-          <div class="art-overlay absolute inset-0 bg-black/70 opacity-0 transition duration-300 flex items-center justify-center p-6 text-white text-sm">
-            <p><span class="font-bold text-indigo-300" data-i18n="prompt_label">Prompt: </span>Cyberpunk city, neon lights, rain, reflection, detailed, 8k...</p>
-          </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div class="lg:col-span-5 space-y-3">
+                <span class="text-xs font-bold text-gray-400 tracking-wider uppercase">Input (Analog Base)</span>
+                <div class="aspect-[4/3] rounded-xl overflow-hidden border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center relative">
+                    <img src="https://images.unsplash.com/photo-1554189097-ffe88e998a2b?q=80&w=800&auto=format&fit=crop&sat=-100" class="w-full h-full object-cover opacity-60 grayscale" alt="Input Sketch">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="bg-white/80 backdrop-blur px-3 py-1 rounded text-xs font-mono text-gray-600">Canny / Lineart</span>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 leading-relaxed">
+                    Rough structure guidance derived from architectural sketches. Defining the composition boundaries.
+                </p>
+            </div>
+
+            <div class="lg:col-span-1 flex justify-center items-center lg:h-[300px] py-4 lg:py-0 text-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 rotate-90 lg:rotate-0">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                </svg>                  
+            </div>
+
+            <div class="lg:col-span-6 space-y-3">
+                <span class="text-xs font-bold text-indigo-500 tracking-wider uppercase">Output (Digital Construct)</span>
+                <div class="aspect-[4/3] rounded-xl overflow-hidden shadow-lg relative group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover transition duration-700 group-hover:scale-105" alt="AI Output">
+                </div>
+                
+                <div class="pt-2">
+                    <div class="flex flex-wrap gap-2 items-center text-[10px] md:text-xs font-mono text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <span class="px-2 py-1 bg-gray-200 rounded text-gray-700">Model: Juggernaut XL</span>
+                        <span class="px-2 py-1 bg-gray-200 rounded text-gray-700">Steps: 45</span>
+                        <span>CFG: 7.0</span>
+                        <span class="text-gray-400">|</span>
+                        <span>Seed: 849201...</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="art-card group relative rounded-xl overflow-hidden shadow-lg aspect-[3/4]">
-          <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" 
-               class="w-full h-full object-cover transition duration-700" alt="AI Art 2">
-          <div class="art-overlay absolute inset-0 bg-black/70 opacity-0 transition duration-300 flex items-center justify-center p-6 text-white text-sm">
-             <p><span class="font-bold text-indigo-300" data-i18n="prompt_label">Prompt: </span>Abstract fluid forms, liquid metal, iridescent colors, 3d render...</p>
-          </div>
-        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+             <div class="lg:col-span-5 space-y-3">
+                <span class="text-xs font-bold text-gray-400 tracking-wider uppercase">Input (Depth Data)</span>
+                <div class="aspect-[3/4] rounded-xl overflow-hidden border-2 border-dashed border-gray-200 bg-gray-900 flex items-center justify-center relative">
+                    <img src="https://images.unsplash.com/photo-1518640165980-d3e0e2aa6c1e?q=80&w=800&auto=format&fit=crop&blur=50" class="w-full h-full object-cover opacity-50 invert" alt="Input Depth">
+                     <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="bg-black/50 text-white backdrop-blur px-3 py-1 rounded text-xs font-mono">Depth Map</span>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 leading-relaxed">
+                    Using depth information to anchor the subject within a complex, neon-lit environment.
+                </p>
+            </div>
 
-        <div class="art-card group relative rounded-xl overflow-hidden shadow-lg aspect-square">
-          <img src="https://images.unsplash.com/photo-1615796153625-1e4e463a5665?q=80&w=800&auto=format&fit=crop" 
-               class="w-full h-full object-cover transition duration-700" alt="AI Art 3">
-          <div class="art-overlay absolute inset-0 bg-black/70 opacity-0 transition duration-300 flex items-center justify-center p-6 text-white text-sm">
-             <p><span class="font-bold text-indigo-300" data-i18n="prompt_label">Prompt: </span>Surreal landscape, floating islands, dreamlike atmosphere...</p>
-          </div>
+            <div class="lg:col-span-1 flex justify-center items-center lg:h-[400px] py-4 lg:py-0 text-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 rotate-90 lg:rotate-0"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" /></svg>                  
+            </div>
+
+            <div class="lg:col-span-6 space-y-3">
+                <span class="text-xs font-bold text-indigo-500 tracking-wider uppercase">Output (Final Render)</span>
+                <div class="aspect-[3/4] rounded-xl overflow-hidden shadow-lg relative group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover transition duration-700 group-hover:scale-105" alt="AI Output">
+                </div>
+                 <div class="pt-2">
+                    <div class="flex flex-wrap gap-2 items-center text-[10px] md:text-xs font-mono text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <span class="px-2 py-1 bg-gray-200 rounded text-gray-700">Model: CyberRealistic V4</span>
+                        <span>CN: Depth+Canny</span>
+                        <span class="text-gray-400">|</span>
+                        <span>Prompt: Cyberpunk city, neon rain...</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
       </div>
     </section>
 
     <section>
-      <div class="flex items-center gap-4 mb-8">
-        <h2 class="text-2xl font-bold" data-i18n="cat_i2v">Image to Video (I2V) / Motion</h2>
+      <div class="flex items-center gap-4 mb-10">
+         <div class="flex flex-col">
+            <h2 class="text-2xl font-bold" data-i18n="cat_i2v">Latent Motion & Sound</h2>
+            <span class="text-xs text-gray-500 mono mt-1">/// Audio-Reactive / Gen-2 / AnimateDiff</span>
+        </div>
         <div class="h-[1px] bg-gray-300 flex-1"></div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 space-y-3">
-          <div class="relative w-full aspect-video bg-gray-900 rounded-lg overflow-hidden group cursor-pointer">
-            <img src="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition">
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="w-12 h-12 bg-white/20 backdrop-blur rounded-full flex items-center justify-center group-hover:bg-white/40 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white"><path fill-rule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clip-rule="evenodd" /></svg>
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-4 group hover:border-indigo-100 transition duration-300">
+          <div class="relative w-full aspect-video bg-gray-900 rounded-xl overflow-hidden cursor-pointer">
+            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition duration-700">
+            <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition">
+              <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-indigo-600/80 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-white ml-1"><path fill-rule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clip-rule="evenodd" /></svg>
               </div>
             </div>
+            <div class="absolute bottom-3 left-3 px-2 py-1 bg-black/50 backdrop-blur text-[10px] text-white font-mono rounded flex items-center gap-2">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                </span>
+                Audio Reactive
+            </div>
           </div>
-          <h3 class="font-bold text-lg">Morphing Reality</h3>
-          <p class="text-sm text-gray-500">Stable Video Diffusion experiment. Input image transformed into a 4s loop.</p>
+          <div>
+              <h3 class="font-bold text-lg serif">Sonic Fluidity</h3>
+              <p class="text-sm text-gray-500 mt-1">Deforum hybrid motion reacting to guitar feedback loops.</p>
+              <div class="mt-3 flex gap-2 text-[10px] font-mono text-gray-400">
+                  <span class="border border-gray-200 px-2 py-0.5 rounded">FPS: 24</span>
+                  <span class="border border-gray-200 px-2 py-0.5 rounded">Strength: 0.65</span>
+              </div>
+          </div>
         </div>
 
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 space-y-3">
-          <div class="relative w-full aspect-video bg-gray-900 rounded-lg overflow-hidden group cursor-pointer">
-            <img src="https://images.unsplash.com/photo-1614726365723-49faaa568a32?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition">
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="w-12 h-12 bg-white/20 backdrop-blur rounded-full flex items-center justify-center group-hover:bg-white/40 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white"><path fill-rule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clip-rule="evenodd" /></svg>
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-4 group hover:border-indigo-100 transition duration-300">
+            <div class="relative w-full aspect-video bg-gray-900 rounded-xl overflow-hidden cursor-pointer">
+              <img src="https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition duration-700">
+              <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition">
+                <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-indigo-600/80 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-white ml-1"><path fill-rule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clip-rule="evenodd" /></svg>
+                </div>
+              </div>
+               <div class="absolute bottom-3 left-3 px-2 py-1 bg-black/50 backdrop-blur text-[10px] text-white font-mono rounded">
+                  Gen-2 Motion
               </div>
             </div>
+            <div>
+                <h3 class="font-bold text-lg serif">Morphing Dreams</h3>
+                <p class="text-sm text-gray-500 mt-1">Stable Video Diffusion (SVD) image-to-video experiment.</p>
+                 <div class="mt-3 flex gap-2 text-[10px] font-mono text-gray-400">
+                    <span class="border border-gray-200 px-2 py-0.5 rounded">Motion Bucket: 127</span>
+                </div>
+            </div>
           </div>
-          <h3 class="font-bold text-lg">Particle Flow</h3>
-          <p class="text-sm text-gray-500">Deforum animation reacting to audio input.</p>
-        </div>
 
       </div>
     </section>
