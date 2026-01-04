@@ -58,8 +58,8 @@ const translations = {
       
       // P2: FileProsApp
       dev_p2_title: "FileProsApp",
-      dev_p2_desc1: "Automated file organization tool.",
-      dev_p2_desc2: "Intelligently sort chaos into order with one click.",
+      dev_p2_desc1: "Universal batch file management tool.",
+      dev_p2_desc2: "Advanced batch renaming, directory sorting, and naming configuration. Features image optimization, aspect ratio control, and format conversion. Efficiently compresses bloated files to free up disk space, ensuring safety with secure log deletion protocols.",
 
       // P3: ChatBot Base
       dev_p3_title: "ChatBot Base in Dify",
@@ -121,8 +121,8 @@ const translations = {
       
       // P2
       dev_p2_title: "FileProsApp (檔案整理職人)",
-      dev_p2_desc1: "自動化檔案整理工具。",
-      dev_p2_desc2: "一鍵將混亂的資料夾分類歸檔，重拾秩序。",
+      dev_p2_desc1: "批次萬能檔案整理工具。",
+      dev_p2_desc2: "檔案與目錄編及排序命名設定彙整、影像品質優化、比例設定與格式轉換功能、有效壓縮過度肥大檔案清理磁碟空間。Log安全刪除與防護機制。",
 
       // P3
       dev_p3_title: "ChatBot Base in Dify",
@@ -184,8 +184,9 @@ const translations = {
       
       // P2
       dev_p2_title: "FileProsApp (ファイル整理職人)",
-      dev_p2_desc1: "自動ファイル整理ツール。",
-      dev_p2_desc2: "ワンクリックで混沌としたフォルダを秩序あるものへ。",
+      dev_p2_desc1: "万能な一括ファイル整理ツール。",
+
+      dev_p2_desc2: "ファイルとディレクトリの編集、並べ替え、命名設定を一括管理。画像の画質最適化、比率設定、フォーマット変換に加え、肥大化したファイルを効率的に圧縮してディスク領域を解放。ログの安全削除と保護機能も完備しています。",
 
       // P3
       dev_p3_title: "ChatBot Base in Dify",

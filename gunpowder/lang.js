@@ -1,7 +1,7 @@
 const translations = {
     en: {
         // --- 現有內容 ---
-        hero_slogan: "Noise is the new order.",
+        hero_slogan: "",
         news_title_1: "New System Update",
         news_desc_1: "Site.",
         news_title_2: "First Live Announcement",
@@ -25,7 +25,7 @@ const translations = {
     },
     tw: {
         // --- 現有內容 ---
-        hero_slogan: "城市裡躁動著",
+        hero_slogan: "",
         news_title_1: "系統更新公告",
         news_desc_1: "平台設計彙整。",
         news_title_2: "首次公告",
@@ -52,7 +52,7 @@ const translations = {
     },
     jp: {
         // --- 現有內容 ---
-        hero_slogan: "ノイズは秩序なり。",
+        hero_slogan: "",
         news_title_1: "システム更新",
         news_desc_1: "デジタルソウルの統合が完了しました。起動。",
         news_title_2: "初ライブ告知",
