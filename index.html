@@ -120,11 +120,21 @@
               </a>
             </div>
           </div>
-          <div class="order-1 md:order-2 relative -rotate-2 hover:rotate-0 transition duration-500">
-             <img src="img/2025-12-27-192650-822434423568865-o.webp" 
-                  class="rounded-xl shadow-lg w-full object-cover h-[300px]" alt="AI">
+          
+          <div id="photo-stack" class="order-1 md:order-2 relative w-full h-[300px] cursor-pointer group select-none perspective-1000" onclick="toggleStack()">
+              
+              <img id="stack-img-1" src="img/2025-12-27-192650-822434423568865-o.webp" 
+                   class="stack-card absolute inset-0 w-full h-full object-cover rounded-xl shadow-xl border-[1px] border-white transition-all duration-500 ease-out z-20 rotate-0 scale-100 brightness-100 group-hover:-translate-y-1">
+
+              <img id="stack-img-2" src="img/2025-12-27_192845.jpg" 
+                   class="stack-card absolute inset-0 w-full h-full object-cover rounded-xl shadow-md border-[1px] border-white transition-all duration-500 ease-out z-10 rotate-6 translate-x-12 translate-y-6 scale-100 brightness-75">
+
+              <div class="absolute bottom-4 right-4 z-40 bg-black/60 text-white text-[10px] px-3 py-1 rounded-full backdrop-blur pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                  <span>Swap</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+              </div>
           </div>
-        </div>
+          </div>
       </div>
     </section>
 
@@ -170,7 +180,7 @@
 
               <div class="relative w-full h-5 overflow-hidden border-t border-gray-50 pt-1">
                  <div class="whitespace-nowrap absolute animate-marquee text-xs font-medium text-gray-500 tracking-wide">
-                    🎵 Gunpowder - Prologue ...  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   🎵 Gunpowder - Prologue ...  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                  </div>
               </div>
             </div>
@@ -193,7 +203,7 @@
          <img src="img\503385212_18334306345160927_52282287847.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
          <img src="img\491754156_30059593510294639_59040979729.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
          <img src="img\96935955_0.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
-         <img src="img\96935956_0.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">         
+         <img src="img\96935956_0.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">        
          <img src="img\2025-12-27_192845.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
         </div>
       <button onclick="scrollGallery(1)" class="absolute right-2 md:right-0 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur text-white p-3 rounded-full transition">&#10095;</button>
@@ -227,7 +237,7 @@
   </footer>
 
   <script>
-    // 音樂播放器專用腳本 (首頁限定)
+    // 1. 音樂播放器邏輯
     document.addEventListener('DOMContentLoaded', () => {
       const audio = document.getElementById('audio-player');
       const playBtn = document.getElementById('play-btn');
@@ -239,12 +249,10 @@
       const volText = document.getElementById('vol-text');
 
       if(audio && playBtn) {
-        // 1. 初始化音量
         audio.volume = 0.5;
         volumeSlider.value = 0.5;
         volText.textContent = '50%';
 
-        // 播放/暫停
         playBtn.addEventListener('click', () => {
           if (audio.paused) {
             audio.play();
@@ -257,14 +265,12 @@
           }
         });
 
-        // 音量控制事件更新
         volumeSlider.addEventListener('input', (e) => {
           const val = e.target.value;
           audio.volume = val;
           volText.textContent = Math.round(val * 100) + '%';
         });
 
-        // 進度條
         audio.addEventListener('timeupdate', () => {
           if (!audio.duration) return;
           const percent = (audio.currentTime / audio.duration) * 100;
@@ -274,14 +280,12 @@
           timeDisplay.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
         });
 
-        // 拖曳進度
         seekSlider.addEventListener('input', () => {
           if (!audio.duration) return;
           const time = (seekSlider.value / 100) * audio.duration;
           audio.currentTime = time;
         });
 
-        // 結束
         audio.addEventListener('ended', () => {
           iconPlay.classList.remove('hidden');
           iconPause.classList.add('hidden');
@@ -289,6 +293,32 @@
         });
       }
     });
+
+    // 2. ✨ 雙圖輪播邏輯 (2-Image Shuffle)
+    let isSwapped = false;
+
+    function toggleStack() {
+        const img1 = document.getElementById('stack-img-1');
+        const img2 = document.getElementById('stack-img-2');
+
+        // 定義樣式常量
+        // Top: 正中、亮、有陰影
+        const topStyle = "z-20 rotate-0 translate-x-0 translate-y-0 scale-100 brightness-100 shadow-xl group-hover:-translate-y-1";
+        // Bottom: 歪斜、暗、稍微位移
+        const bottomStyle = "z-10 rotate-6 translate-x-10 translate-y-6 scale-100 brightness-75 shadow-md";
+
+        isSwapped = !isSwapped;
+
+        if (isSwapped) {
+            // 交換狀態：圖2變上面，圖1變下面
+            img2.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[3px] border-white transition-all duration-500 ease-out ${topStyle}`;
+            img1.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[3px] border-white transition-all duration-500 ease-out ${bottomStyle}`;
+        } else {
+            // 恢復原狀：圖1在上面，圖2在下面
+            img1.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[3px] border-white transition-all duration-500 ease-out ${topStyle}`;
+            img2.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[3px] border-white transition-all duration-500 ease-out ${bottomStyle}`;
+        }
+    }
   </script>
 </body>
 </html>
