@@ -32,7 +32,7 @@ const translations = {
       hero_desc: "A personal corner where analog and digital, technology and humanities coexist.",
       
       sect_about_title: "Life & Spirits", 
-      sect_about_text: "Standing at the intersection of diverse fields: software & hardware development, sound creation, coffee & spirits, and American-Japanese culture.",
+      sect_about_text: "Standing at the intersection of diverse fields: software & hardware development, sound creation, coffee & spirits, and American / Japanese arts & cultures.",
       
       sect_ai_title: "AI & Dev",
       sect_ai_text: "Evolving with the times, exploring tools in all forms. From independent LLM deployment to platform implementation, fulfilling creative purposes and solving problems.",
@@ -95,7 +95,7 @@ const translations = {
       hero_desc: "類比與數位間、科技與人文間，多領域並存的個人角落。",
       
       sect_about_title: "人與酒",
-      sect_about_text: "駐足於多領域間，軟硬體專案開發、聲音創作、酒與咖啡、美日文化。",
+      sect_about_text: "駐足於多領域間，軟硬體專案開發、聲音創作、酒與咖啡、關注美/日藝文文化。",
       
       sect_ai_title: "AI 與開發",
       sect_ai_text: "隨著時代與時俱進，探索各種形式工具，AI、LLM的獨立部屬與平台實作運用，完成自己各種事物的「創造目的」，解決問題。",
@@ -158,7 +158,7 @@ const translations = {
       hero_desc: "アナログとデジタル、テクノロジーと人文が共存する個人的なスペース。",
       
       sect_about_title: "人と酒", 
-      sect_about_text: "多領域の狭間に立つ。ソフトウェア・ハードウェア開発、サウンドクリエイション、酒とコーヒー、そして米日文化。",
+      sect_about_text: "多領域の狭間に立つ。ソフトウェア・ハードウェア開発、サウンドクリエイション、酒とコーヒー、そして米国と日本の芸術文化。",
       
       sect_ai_title: "AI と 開発",
       sect_ai_text: "時代と共に進化し、あらゆるツールを探求する。AIやLLMの独自展開からプラットフォーム実装まで、「創造の目的」を達成し、問題を解決するために。",
