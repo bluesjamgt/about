@@ -130,10 +130,10 @@
           <div id="photo-stack" class="order-1 md:order-2 relative w-full h-[300px] cursor-pointer group select-none perspective-1000" onclick="toggleStack()">
               
               <img id="stack-img-1" src="img/2025-12-27-192650-822434423568865-o.webp" 
-                   class="stack-card absolute inset-0 w-full h-full object-cover rounded-xl shadow-xl border-[1px] border-white transition-all duration-500 ease-out z-20 rotate-0 scale-100 brightness-100 group-hover:-translate-y-1">
+                   class="stack-card absolute inset-0 w-full h-full object-cover rounded-xl shadow-xl border-[0.1px] border-white transition-all duration-500 ease-out z-20 rotate-0 scale-100 brightness-100 group-hover:-translate-y-1">
 
               <img id="stack-img-2" src="img/2025-12-27_192845.jpg" 
-                   class="stack-card absolute inset-0 w-full h-full object-cover rounded-xl shadow-md border-[1px] border-white transition-all duration-500 ease-out z-10 rotate-6 translate-x-12 translate-y-6 scale-100 brightness-75">
+                   class="stack-card absolute inset-0 w-full h-full object-cover rounded-xl shadow-md border-[0.1px] border-white transition-all duration-500 ease-out z-10 rotate-6 translate-x-12 translate-y-6 scale-100 brightness-75">
 
               <div class="absolute bottom-4 right-4 z-40 bg-black/60 text-white text-[10px] px-3 py-1 rounded-full backdrop-blur pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
                   <span>Swap</span>
@@ -317,12 +317,12 @@
 
         if (isSwapped) {
             // 交換狀態：圖2變上面，圖1變下面
-            img2.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[3px] border-white transition-all duration-500 ease-out ${topStyle}`;
-            img1.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[3px] border-white transition-all duration-500 ease-out ${bottomStyle}`;
+            img2.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[0.1px] border-white transition-all duration-500 ease-out ${topStyle}`;
+            img1.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[0.1px] border-white transition-all duration-500 ease-out ${bottomStyle}`;
         } else {
             // 恢復原狀：圖1在上面，圖2在下面
-            img1.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[3px] border-white transition-all duration-500 ease-out ${topStyle}`;
-            img2.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[3px] border-white transition-all duration-500 ease-out ${bottomStyle}`;
+            img1.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[0.1px] border-white transition-all duration-500 ease-out ${topStyle}`;
+            img2.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[0.1px] border-white transition-all duration-500 ease-out ${bottomStyle}`;
         }
     }
   </script>
