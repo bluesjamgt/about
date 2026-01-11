@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NINE OS - Direct Diff (Git Style)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsdiff/5.1.0/diff.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- NINE OS: 白晝主題變數 --- */
+        :root {
+            --bg-main: #ffffff;
+            --bg-sidebar: #f6f8fa;
+            --border-color: #d1d5da;
+            --text-main: #24292e;
+            --text-muted: #586069;
+            --accent-color: #0366d6;
+            
+            /* Git 風格差異色 */
+            --diff-add-bg: #e6ffed;
+            --diff-add-text: #22863a;
+            --diff-del-bg: #ffeef0;
+            --diff-del-text: #cb2431;
+            
+            --gutter-bg: #f6f8fa;
+            --gutter-text: #babbbd;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        /* --- 側邊欄 (S/L 記憶核心) --- */
+        .sidebar {
+            width: 220px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .clear-btn {
+            background: none; border: 1px solid var(--border-color); font-size: 10px; padding: 2px 6px; cursor: pointer; border-radius: 3px;
+        }
+        .clear-btn:hover { background: #fff; color: var(--diff-del-text); border-color: var(--diff-del-text); }
+
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .history-item {
+            padding: 8px;
+            margin-bottom: 5px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+        }
+        .history-item:hover { border-color: var(--accent-color); }
+        .history-item .time { font-size: 10px; color: var(--text-muted); }
+        .history-item .title { font-size: 11px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+        .history-item .del-btn { position: absolute; top: 5px; right: 5px; font-size: 12px; color: #999; display: none; }
+        .history-item:hover .del-btn { display: block; }
+
+        /* --- 主工作區 --- */
+        .main-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* 頂部輸入區 (直接顯示) */
+        .input-area {
+            height: 25%; /* 佔據 25% 高度 */
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            background: var(--bg-sidebar);
+        }
+
+        .input-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            border-right: 1px solid var(--border-color);
+            position: relative;
+        }
+        .input-box:last-child { border-right: none; }
+
+        .input-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            padding: 5px 10px;
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .label-badge {
+            display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+        }
+
+        textarea {
+            flex: 1;
+            border: none;
+            resize: none;
+            padding: 10px;
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+            outline: none;
+            background: #fafbfc;
+        }
+        textarea:focus { background: #fff; }
+
+        /* 底部結果區 */
+        .diff-area {
+            flex: 1; /* 佔據剩餘高度 */
+            display: flex;
+            overflow: hidden;
+            background: var(--bg-main);
+        }
+
+        .diff-pane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .diff-pane.left { border-right: 1px solid var(--border-color); }
+
+        .diff-scroll-container {
+            flex: 1;
+            overflow: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* Diff 顯示細節 */
+        .diff-line { display: flex; width: 100%; }
+        
+        .line-num {
+            width: 40px;
+            min-width: 40px;
+            text-align: right;
+            padding-right: 8px;
+            color: var(--gutter-text);
+            background: var(--gutter-bg);
+            border-right: 1px solid var(--border-color);
+            user-select: none;
+            padding-top: 2px;
+        }
+        
+        .line-marker {
+            width: 20px;
+            min-width: 20px;
+            text-align: center;
+            user-select: none;
+            padding-top: 2px;
+        }
+        
+        .line-content {
+            flex: 1;
+            padding-left: 5px;
+            white-space: pre-wrap; /* 自動換行 */
+            word-break: break-all;
+            padding-top: 2px;
+        }
+
+        /* 顏色 */
+        .diff-add { background: var(--diff-add-bg); }
+        .diff-add .line-marker { color: var(--diff-add-text); }
+        .diff-del { background: var(--diff-del-bg); }
+        .diff-del .line-marker { color: var(--diff-del-text); }
+        .diff-empty { background: var(--gutter-bg); border-right: 1px solid var(--border-color); } /* 空行 */
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <span>History (S/L)</span>
+            <button class="clear-btn" onclick="clearAll()">Clear</button>
+        </div>
+        <ul class="history-list" id="historyList"></ul>
+    </div>
+
+    <div class="main-area">
+        
+        <div class="input-area">
+            <div class="input-box">
+                <div class="input-label">
+                    <span class="label-badge" style="background:#cb2431;"></span>
+                    ORIGINAL (舊版本)
+                </div>
+                <textarea id="oldInput" placeholder="貼上舊程式碼... (Paste Original Code)"></textarea>
+            </div>
+            <div class="input-box">
+                <div class="input-label">
+                    <span class="label-badge" style="background:#22863a;"></span>
+                    MODIFIED (新版本)
+                </div>
+                <textarea id="newInput" placeholder="貼上新程式碼... (Paste Modified Code)"></textarea>
+            </div>
+        </div>
+
+        <div class="diff-area">
+            <div class="diff-pane left">
+                <div class="diff-scroll-container" id="viewLeft">
+                    <div style="padding:20px; color:#999; text-align:center;">等待輸入...</div>
+                </div>
+            </div>
+            <div class="diff-pane">
+                <div class="diff-scroll-container" id="viewRight">
+                    <div style="padding:20px; color:#999; text-align:center;">等待輸入...</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const oldInput = document.getElementById('oldInput');
+        const newInput = document.getElementById('newInput');
+        const viewLeft = document.getElementById('viewLeft');
+        const viewRight = document.getElementById('viewRight');
+        const historyList = document.getElementById('historyList');
+
+        let typingTimer;
+        
+        // 監聽輸入 (防抖動 300ms)
+        function handleInput() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                renderDiff();
+                saveState();
+            }, 300);
+        }
+
+        oldInput.addEventListener('input', handleInput);
+        newInput.addEventListener('input', handleInput);
+
+        // 同步滾動
+        viewLeft.onscroll = function() { viewRight.scrollTop = this.scrollTop; };
+        viewRight.onscroll = function() { viewLeft.scrollTop = this.scrollTop; };
+
+        // 核心渲染邏輯
+        function renderDiff() {
+            const oldText = oldInput.value;
+            const newText = newInput.value;
+
+            if (!oldText && !newText) {
+                viewLeft.innerHTML = '<div style="padding:20px; color:#999; text-align:center;">等待輸入...</div>';
+                viewRight.innerHTML = '<div style="padding:20px; color:#999; text-align:center;">等待輸入...</div>';
+                return;
+            }
+
+            const diff = Diff.diffLines(oldText, newText);
+            let htmlLeft = '';
+            let htmlRight = '';
+            let lineL = 1;
+            let lineR = 1;
+
+            diff.forEach((part) => {
+                // 處理結尾換行問題
+                let lines = part.value.split('\n');
+                if (lines[lines.length - 1] === '') lines.pop();
+
+                lines.forEach((line) => {
+                    const safeLine = escapeHtml(line) || ' '; // 保留空行高度
+
+                    if (part.added) {
+                        // 新增：右邊顯示，左邊空
+                        htmlLeft += createEmptyRow();
+                        htmlRight += createRow(lineR++, '+', safeLine, 'diff-add');
+                    } else if (part.removed) {
+                        // 刪除：左邊顯示，右邊空
+                        htmlLeft += createRow(lineL++, '-', safeLine, 'diff-del');
+                        htmlRight += createEmptyRow();
+                    } else {
+                        // 相同
+                        htmlLeft += createRow(lineL++, ' ', safeLine, '');
+                        htmlRight += createRow(lineR++, ' ', safeLine, '');
+                    }
+                });
+            });
+
+            viewLeft.innerHTML = htmlLeft;
+            viewRight.innerHTML = htmlRight;
+        }
+
+        function createRow(num, marker, content, className) {
+            return `
+                <div class="diff-line ${className}">
+                    <div class="line-num">${num}</div>
+                    <div class="line-marker">${marker}</div>
+                    <div class="line-content">${content}</div>
+                </div>`;
+        }
+
+        function createEmptyRow() {
+            return `
+                <div class="diff-line diff-empty">
+                    <div class="line-num"></div>
+                    <div class="line-marker"></div>
+                    <div class="line-content"></div>
+                </div>`;
+        }
+
+        // --- S/L 存檔邏輯 ---
+        function saveState() {
+            const oldVal = oldInput.value;
+            const newVal = newInput.value;
+            if (!oldVal && !newVal) return;
+
+            // 讀取舊資料
+            let savedData = JSON.parse(localStorage.getItem('nine_diff_v4') || '[]');
+            
+            // 避免重複存檔：如果跟最新的一筆一模一樣，就不存
+            if (savedData.length > 0) {
+                if (savedData[0].old === oldVal && savedData[0].new === newVal) return;
+            }
+
+            const timestamp = new Date().toLocaleString('zh-TW', { hour12: false, month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' });
+            let title = (newVal || oldVal).trim().substring(0, 25) || 'Code Snippet';
+
+            savedData.unshift({ id: Date.now(), time: timestamp, title: title, old: oldVal, new: newVal });
+            if (savedData.length > 20) savedData.pop();
+
+            localStorage.setItem('nine_diff_v4', JSON.stringify(savedData));
+            renderHistory();
+        }
+
+        function loadState(id) {
+            const savedData = JSON.parse(localStorage.getItem('nine_diff_v4') || '[]');
+            const item = savedData.find(x => x.id === id);
+            if (item) {
+                oldInput.value = item.old;
+                newInput.value = item.new;
+                renderDiff();
+            }
+        }
+
+        function deleteState(e, id) {
+            e.stopPropagation();
+            let savedData = JSON.parse(localStorage.getItem('nine_diff_v4') || '[]');
+            savedData = savedData.filter(x => x.id !== id);
+            localStorage.setItem('nine_diff_v4', JSON.stringify(savedData));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const savedData = JSON.parse(localStorage.getItem('nine_diff_v4') || '[]');
+            historyList.innerHTML = savedData.map(item => `
+                <li class="history-item" onclick="loadState(${item.id})">
+                    <div class="time">${item.time}</div>
+                    <div class="title">${escapeHtml(item.title)}</div>
+                    <span class="del-btn" onclick="deleteState(event, ${item.id})">×</span>
+                </li>
+            `).join('');
+        }
+
+        function clearAll() {
+            localStorage.removeItem('nine_diff_v4');
+            renderHistory();
+            oldInput.value = '';
+            newInput.value = '';
+            renderDiff();
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        // 初始化
+        window.onload = function() {
+            renderHistory();
+            // 自動載入最後一次工作狀態
+            const savedData = JSON.parse(localStorage.getItem('nine_diff_v4') || '[]');
+            if (savedData.length > 0) {
+                loadState(savedData[0].id);
+            }
+        };
+
+    </script>
+</body>
+</html>
