@@ -235,9 +235,9 @@ const rawTranslations = {
     jp: "モダンなUI/UX実装。"
   },
   dev_p4_desc2: {
-    en: "Responsive design for GunPowder & Personal Branding.",
-    tw: "GunPowder 樂團與個人品牌的響應式網頁設計。",
-    jp: "GunPowderバンドと個人ブランドのためのレスポンシブデザイン。"
+    en: "Responsive web design for Band Portfolio & Personal Branding.",
+    tw: "樂團作品頁面與個人品牌的響應式網頁設計。",
+    jp: "バンド作品ページと個人ブランドのためのレスポンシブWebデザイン。"
   }
 };
 
