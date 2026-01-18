@@ -168,7 +168,7 @@ const rawTranslations = {
   },
   dev_p0_desc2: {
     en: "Distinguished from generic online tools, this is a local-native stem separation workstation built for ultimate fidelity. It integrates the Demucs AI model with a custom Mini-DAW engine to precisely isolate vocals, drums, bass, and guitars without any cloud uploads. Featuring smart beat detection and a familiar real-time mixing interface, it is an essential tool for musicians to deconstruct and analyze audio with zero compromise.",
-    tw: "有別於線上與DAW的分軌工具，注重極致音質的本機端音樂分軌工具、能做到人聲分離、吉他、貝斯、鼓組、其他樂器單獨抽離，與智慧節拍偵測產生。擺脫線上工具的頻率綁定，整合 Demucs AI 模型與專業級 Mini-DAW 播放引擎，無需上傳雲端，利用本機算力即可精準分離人聲與樂器。具備DAW風格介面、即時混音控制，是音樂人拆解分析的超實用工具。",
+    tw: "不用綁線上服務與DAW介面化的分軌工具，注重音質還原的音樂分軌工具、人聲分離、吉他、貝斯、鼓組、其他樂器單獨抽離，與智慧節拍偵測產生。擺脫線上工具的頻率綁定，整合 Demucs AI 模型與專業級 Mini-DAW 播放引擎，無需上傳雲端，利用本機算力即可精準分離人聲與樂器。具備DAW風格介面、即時混音控制，是音樂人拆解分析的超實用工具。",
     jp: "一般的なオンラインツールとは一線を画す、究極の音質を追求したローカル完結型のAI音源分離ツールです。Demucs AIとMini-DAWエンジンを統合し、クラウドにアップロードすることなく、ボーカル、ギター、ベース、ドラムを高精度に分離。スマートなBPM検出機能とリアルタイム・ミキシング可能なDAW風UIを備え、楽曲構造を深く分析したいミュージシャンのための強力なソリューションです。"
   },
 
@@ -219,7 +219,7 @@ const rawTranslations = {
   },
   dev_p3_desc2: {
     en: "Intelligent Chat Agent designed for smart interactions.",
-    tw: "智慧化 Chat Agent，打造更聰明的對話體驗。",
+    tw: "智慧化 Chat Agent，知識庫化精準對話體驗。",
     jp: "スマートな対話のためのインテリジェントChat Agent。"
   },
 
@@ -231,7 +231,7 @@ const rawTranslations = {
   },
   dev_p4_desc1: {
     en: "Modern aesthetic UI/UX implementation.",
-    tw: "現代美學 UI/UX 實作。",
+    tw: "現代風格 UI/UX 實作。",
     jp: "モダンなUI/UX実装。"
   },
   dev_p4_desc2: {
