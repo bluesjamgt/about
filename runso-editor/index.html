@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>runso/ Editor | v2.0-Alpha (Modularized)</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="brand">runso/ <span>Editor</span> <span class="version-tag">v2.0-Alpha</span></div>
+        <div class="header-center">
+            <input type="text" id="meta-title" placeholder="歌曲名稱" value="告訴我也好 (Tell me)">
+            <input type="text" id="meta-artist" placeholder="藝人" value="Runner's Blue">
+            <input type="text" id="meta-key" placeholder="Key" value="A">
+            <input type="text" id="meta-bpm" placeholder="BPM" value="120">
+        </div>
+        <div class="actions">
+            <button onclick="UI.toggleSidebar()" id="toggle-sidebar-btn">➡️ 面板</button>
+            <div class="divider"></div>
+            <button onclick="Storage.newProject()">📄 開新</button>
+            <button onclick="Storage.openManager()">📂 列表</button>
+            <button class="btn-dark" onclick="Storage.saveProject()">💾 儲存</button>
+            <button onclick="Storage.saveAsNew()">📑 另存新檔</button>
+            <div class="divider"></div>
+            <button class="btn-accent" onclick="window.print()">🖨️ 匯出 PDF</button>
+        </div>
+    </header>
+
+    <div class="workspace">
+        <div class="main-canvas">
+            <nav class="tabs">
+                <div class="tab" onclick="UI.switchView(1)">1. 貼上歌詞 (Raw)</div>
+                <div class="tab active" onclick="UI.switchView(2)">2. 和弦譜編輯 (Arrange)</div>
+                <div class="tab" onclick="UI.switchView(3)">3. 註釋譜編輯 (Ruby Sheet)</div>
+                <div class="tab" onclick="UI.switchView(4)">4. 純和弦 (Lead Sheet)</div>
+            </nav>
+
+            <div id="print-header">
+                <div class="print-meta-right">
+                    <div id="print-key-text">Key: A</div>
+                    <div id="print-bpm-text">BPM: 120</div>
+                </div>
+                <h1 class="print-title" id="print-title-text">告訴我也好 (Tell me)</h1>
+                <div class="print-artist" id="print-artist-text">Runner's Blue</div>
+            </div>
+
+            <div id="view-raw" class="view-panel">
+                <div style="margin-bottom: 12px; color: var(--muted); font-size: 0.9rem;">
+                    💡 語法：和弦 `[和弦|拍|段|X|Y]`，字典標記 `{文字|解釋}`。
+                </div>
+                <textarea id="raw-lyrics-textarea" placeholder="在這裡貼上資料..."></textarea>
+            </div>
+
+            <div id="view-arrange" class="view-panel active">
+                <div class="editor-toolbar">
+                    <button class="btn-insert" onclick="Interaction.insertChord()" title="快捷鍵: Ctrl+K">➕ 插入和弦</button>
+                    <button class="btn-ruby" onclick="Interaction.insertRuby()" title="反白歌詞後使用。快捷鍵: Ctrl+J">🉐
+                        標記字典</button>
+                    <span class="shortcut-hint">(Ctrl+K 加和弦 / 畫布支援 Tab 鍵對齊排版)</span>
+
+                    <label
+                        style="margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; color: var(--primary); cursor: pointer;">
+                        <input type="checkbox" id="toggle-hide-chords"> 👁️ 隱藏和弦 (純歌詞)
+                    </label>
+                </div>
+                <div id="editor-canvas" contenteditable="true" spellcheck="false"
+                    onclick="Interaction.handleCanvasClick(event)"></div>
+            </div>
+
+            <div id="view-ruby" class="view-panel">
+                <div class="empty-state" style="margin-top: 100px;">
+                    <h2 style="color: #d97706;">🚧 註釋譜閱讀模式 (開發中)</h2>
+                    <p>未來的小字模閱讀專屬位置，將提供不含和弦的純淨歌詞與注音排版。</p>
+                </div>
+            </div>
+
+            <div id="view-leadsheet" class="view-panel">
+                <div id="leadsheet-canvas"></div>
+            </div>
+        </div>
+
+        <aside class="sidebar" id="app-sidebar">
+            <div class="sidebar-section" id="inspector-section">
+                <h3 id="inspector-title">🎯 屬性編輯</h3>
+                <div id="inspector-empty" class="empty-state">請在畫布上點選藍色「和弦」<br>或反白多個進行「批次編輯」。</div>
+
+                <div id="inspector-chord-form" style="display: none;">
+                    <div class="form-group" id="group-chord-name"><label>和弦文字 (Chord)</label><input type="text"
+                            id="prop-chord" placeholder="例: C#m7"></div>
+                    <div class="form-group" id="group-chord-move"><label>節點對齊 (Snap)</label>
+                        <div style="display: flex; gap: 8px;"><button class="move-btn"
+                                onclick="Inspector.moveChord(-1)">⬅️ 左移</button><button class="move-btn"
+                                onclick="Inspector.moveChord(1)">右移 ➡️</button></div>
+                    </div>
+                    <div class="form-group"><label>個體 X 軸微調 (X-Offset)</label>
+                        <div class="range-group" style="margin:0;"><input type="range" id="prop-x-offset" min="-50"
+                                max="50" step="1" value="0"><span class="range-val" id="val-x-offset">0px</span></div>
+                    </div>
+                    <div class="form-group"><label>個體 Y 軸微調 (Y-Offset)</label>
+                        <div class="range-group" style="margin:0;"><input type="range" id="prop-y-offset" min="-30"
+                                max="30" step="1" value="0"><span class="range-val" id="val-y-offset">0px</span></div>
+                    </div>
+                    <div class="form-group" id="group-chord-beats"><label>拍子長度 (Beats)</label><select id="prop-beats">
+                            <option value="">無</option>
+                            <option value="4">4 拍 (1小節)</option>
+                            <option value="2">2 拍 (半小節)</option>
+                            <option value="1">1 拍</option>
+                        </select></div>
+                    <div class="form-group" id="group-chord-section"><label>標記為新段落 (Section)</label><input type="text"
+                            id="prop-section" placeholder="例: Intro, Verse 1"></div>
+                    <div id="group-batch-actions" style="display: none; margin-top: 16px;"><button class="confirm-btn"
+                            onclick="Interaction.clearActiveState()">✅ 完成編輯</button><button class="danger-btn"
+                            style="margin-top:4px;" onclick="Interaction.clearActiveState()">❌ 取消選取</button></div>
+                    <button class="danger-btn" id="btn-delete-chord" onclick="Inspector.removeActiveElement()">🗑️
+                        刪除和弦</button>
+                </div>
+
+                <div id="inspector-ruby-form" style="display: none;">
+                    <div class="form-group"><label>目標文字 (Base Text)</label><input type="text" id="prop-ruby-base"
+                            disabled style="background:#eee; color:#666;"></div>
+                    <div class="form-group"><label>字典解釋 (Dictionary Meaning)</label><input type="text" id="prop-ruby-rt"
+                            placeholder="輸入解釋或注音..."></div>
+                    <button class="danger-btn" onclick="Inspector.removeActiveElement()">🗑️ 解除字典標記</button>
+                </div>
+            </div>
+
+            <div class="sidebar-section" id="dict-section">
+                <h3>📖 本曲註解字典</h3>
+                <div class="dict-list" id="dict-list-container"></div>
+            </div>
+
+            <div class="sidebar-section" id="layout-section">
+                <h3>🎛️ 版面與列印設定</h3>
+                <div style="font-size:0.75rem; color:var(--muted); margin-bottom:8px; font-weight:600;">字體與排版</div>
+                <div class="range-group"><label>和弦字體</label><input type="range" id="ui-chord-size" min="0.6" max="1.5"
+                        step="0.05" value="1"><span class="range-val" id="val-chord-size">1</span></div>
+                <div class="range-group"><label>歌詞字體</label><input type="range" id="ui-lyric-size" min="0.8" max="2"
+                        step="0.05" value="1.15"><span class="range-val" id="val-lyric-size">1.15</span></div>
+                <div class="range-group"><label>行距間距</label><input type="range" id="ui-line-height" min="1.5" max="4"
+                        step="0.1" value="2.8"><span class="range-val" id="val-line-height">2.8</span></div>
+
+                <div style="border-top:1px dashed var(--border); margin: 12px 0 8px 0; padding-top: 8px;">
+                    <div style="font-size:0.75rem; color:var(--muted); margin-bottom:8px; font-weight:600;">全域位置與邊界
+                    </div>
+                    <div class="range-group"><label>和弦全域 X</label><input type="range" id="ui-global-x" min="-20"
+                            max="20" step="1" value="0"><span class="range-val" id="val-global-x">0</span></div>
+                    <div class="range-group"><label>和弦全域 Y</label><input type="range" id="ui-global-y" min="-20"
+                            max="20" step="1" value="0"><span class="range-val" id="val-global-y">0</span></div>
+                    <div class="range-group"><label>畫布邊距</label><input type="range" id="ui-canvas-pad" min="0" max="20"
+                            step="1" value="10"><span class="range-val" id="val-canvas-pad">10%</span></div>
+                </div>
+                <label class="toggle-group"><input type="checkbox" id="ui-columns"> 開啟雙排格式 (A4列印)</label>
+            </div>
+        </aside>
+    </div>
+
+    <div id="project-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📂 Session Manager</h2><button class="close-btn" onclick="Storage.closeManager()">&times;</button>
+            </div>
+            <div class="manager-toolbar">
+                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input type="checkbox"
+                        id="select-all-projects" onchange="Storage.toggleSelectAll(this.checked)"> 全選</label>
+                <button onclick="Storage.exportSelected()">📤 匯出選取 (.json)</button>
+                <label class="file-btn">📥 匯入專案<input type="file" accept=".json,.txt"
+                        onchange="Storage.importFile(event)"></label>
+            </div>
+            <div id="project-list-container"></div>
+        </div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+
+</html>
