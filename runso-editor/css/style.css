@@ -281,7 +281,8 @@ header {
     color: var(--muted);
 }
 
-#editor-canvas {
+#editor-canvas,
+#ruby-canvas {
     white-space: pre-wrap;
     outline: none;
     font-size: var(--dyn-lyric-size);
@@ -294,16 +295,17 @@ header {
     tab-size: 6;
 }
 
-#editor-canvas div {
+#editor-canvas div,
+#ruby-canvas div {
     min-height: 1em;
 }
 
 /* ✨ 純歌詞模式魔法：隱藏和弦並壓縮行距 */
-#editor-canvas.hide-chords .chord-widget {
+.hide-chords .chord-widget {
     display: none !important;
 }
 
-#editor-canvas.hide-chords {
+.hide-chords {
     line-height: 1.8 !important;
 }
 
