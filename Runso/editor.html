@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>runso/ Editor | v1.7.03291000 (Session Sync & Transfer)</title>
+    <style>
+        /* ==========================================
+           [CSS-1] 全域與變數
+           ========================================== */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary: #0070f3;
+            --bg: #ffffff;
+            --text: #37352f;
+            --muted: #787774;
+            --border: #ededed;
+            --hover: #f7f7f5;
+
+            --dyn-chord-size: 1rem;
+            --dyn-lyric-size: 1.15rem;
+            --dyn-line-height: 2.8;
+            --dyn-columns: 1;
+
+            --dyn-chord-global-x: 0px;
+            --dyn-chord-global-y: 0px;
+            --dyn-canvas-padding: 10%;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ==========================================
+           [CSS-2] 頂部導覽與 Layout
+           ========================================== */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px;
+            border-bottom: 1px solid var(--border);
+            background: #fafafa;
+        }
+
+        .brand {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .version-tag {
+            font-size: 0.7rem;
+            color: #aaa;
+            font-weight: normal;
+            margin-left: 4px;
+        }
+
+        .meta-inputs {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .meta-inputs input {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        #meta-title {
+            width: 180px;
+            font-weight: 600;
+        }
+
+        #meta-artist {
+            width: 120px;
+        }
+
+        #meta-key {
+            width: 50px;
+            text-align: center;
+        }
+
+        #meta-bpm {
+            width: 60px;
+            text-align: center;
+        }
+
+        .actions button {
+            padding: 6px 12px;
+            margin-left: 6px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            background: white;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .actions button:hover {
+            background: var(--hover);
+        }
+
+        .toggle-btn {
+            background-color: #f1f1ef !important;
+            color: #333 !important;
+            border: none !important;
+        }
+
+        .save-btn {
+            background-color: #2ea44f !important;
+            color: white !important;
+            border: none !important;
+        }
+
+        .print-btn {
+            background-color: var(--primary) !important;
+            color: white !important;
+            border: none !important;
+        }
+
+        .workspace {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .main-canvas {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            background: #fbfbfa;
+            padding: 0 var(--dyn-canvas-padding);
+            align-items: center;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            color: var(--muted);
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--text);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .view-panel {
+            display: none;
+            padding: 32px var(--dyn-canvas-padding);
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .view-panel.active {
+            display: block;
+        }
+
+        /* ==========================================
+           [CSS-3] 畫布與編輯器
+           ========================================== */
+        #raw-lyrics-textarea {
+            width: 100%;
+            height: 70vh;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-family: monospace;
+            resize: none;
+            line-height: 1.6;
+            outline: none;
+        }
+
+        #raw-lyrics-textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px #d6e8ff;
+        }
+
+        .editor-toolbar {
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            border-bottom: 1px dashed var(--border);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            position: sticky;
+            top: -32px;
+            background: white;
+            z-index: 10;
+        }
+
+        .btn-insert,
+        .btn-ruby {
+            padding: 6px 16px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-weight: 600;
+            border: 1px solid;
+        }
+
+        .btn-insert {
+            background: #e5f1ff;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-insert:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-ruby {
+            background: #fff4e5;
+            color: #d97706;
+            border-color: #d97706;
+        }
+
+        .btn-ruby:hover {
+            background: #d97706;
+            color: white;
+        }
+
+        .shortcut-hint {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        #editor-canvas {
+            white-space: pre-wrap;
+            outline: none;
+            font-size: var(--dyn-lyric-size);
+            line-height: var(--dyn-line-height);
+            column-count: var(--dyn-columns);
+            column-gap: 60px;
+            min-height: 50vh;
+            padding-bottom: 80px;
+            letter-spacing: 0.5px;
+            tab-size: 6;
+        }
+
+        #editor-canvas div {
+            min-height: 1em;
+        }
+
+        .lyric-ruby {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px dotted transparent;
+        }
+
+        .lyric-ruby:hover {
+            border-bottom-color: #d97706;
+        }
+
+        .lyric-ruby.editing {
+            background-color: rgba(217, 119, 6, 0.1);
+            border-bottom: 1px dashed #d97706;
+            border-radius: 2px;
+        }
+
+        .chord-widget {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            position: relative;
+            overflow: visible;
+            vertical-align: baseline;
+            user-select: none;
+        }
+
+        .chord-val {
+            position: absolute;
+            bottom: calc(100% + var(--dyn-chord-global-y));
+            left: var(--dyn-chord-global-x);
+            transform: translateX(-50%);
+            min-width: 1ch;
+            display: inline-block;
+            font-size: var(--dyn-chord-size);
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+            white-space: nowrap;
+            cursor: text;
+            padding: 0 4px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            z-index: 5;
+        }
+
+        .chord-val:empty::before {
+            content: "+";
+            color: #ccc;
+            font-weight: 400;
+            font-size: 1rem;
+        }
+
+        .chord-val:focus,
+        .chord-val.editing,
+        .chord-val.batch-selected {
+            outline: none;
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 2px #d6e8ff;
+            z-index: 10;
+        }
+
+        .chord-val.batch-selected {
+            background: #e5f1ff;
+        }
+
+        /* ==========================================
+           [CSS-4] 側邊欄與屬性面板
+           ========================================== */
+        .sidebar {
+            flex: 0 0 340px;
+            border-left: 1px solid var(--border);
+            background: #fafafa;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            flex: 0 0 0;
+            width: 0;
+            border: none;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        .sidebar-section {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-section h3 {
+            margin-top: 0;
+            font-size: 0.95rem;
+            color: #333;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #inspector-section {
+            flex: 0 0 auto;
+            overflow-y: auto;
+            max-height: 55%;
+        }
+
+        #dict-section {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: white;
+        }
+
+        #dict-list-container {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        #layout-section {
+            flex: 0 0 auto;
+            background: #fafafa;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .form-group input[type="text"],
+        .form-group select {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .empty-state {
+            color: var(--muted);
+            font-size: 0.85rem;
+            text-align: center;
+            line-height: 1.6;
+            padding: 20px 0;
+        }
+
+        .move-btn {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #333;
+        }
+
+        .move-btn:hover {
+            background: var(--hover);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .danger-btn {
+            background: none;
+            border: 1px solid #ffbcbc !important;
+            color: #d73a49;
+            width: 100%;
+            padding: 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .danger-btn:hover {
+            background: #fff0f0 !important;
+        }
+
+        .confirm-btn {
+            background: var(--primary);
+            border: none;
+            color: white;
+            width: 100%;
+            padding: 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .confirm-btn:hover {
+            background: #005bb5;
+        }
+
+        .range-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .range-group label {
+            width: 70px;
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin: 0;
+        }
+
+        .range-group input[type=range] {
+            flex: 1;
+        }
+
+        .range-val {
+            font-size: 0.7rem;
+            color: var(--primary);
+            width: 35px;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .dict-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+
+        .dict-item:last-child {
+            border-bottom: none;
+        }
+
+        .dict-base {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .dict-rt {
+            color: #d97706;
+        }
+
+        /* ==========================================
+           [CSS-5] 專案管理 Modal (升級版) & 列印
+           ========================================== */
+        #leadsheet-canvas {
+            column-count: var(--dyn-columns);
+            column-gap: 60px;
+        }
+
+        .section-block {
+            margin-bottom: 32px;
+            break-inside: avoid;
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 6px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .chord-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 24px;
+            font-size: calc(var(--dyn-chord-size) * 1.3);
+            font-weight: 600;
+            font-family: monospace;
+            color: var(--text);
+        }
+
+        .chord-item {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            min-width: 50px;
+        }
+
+        .beat-badge {
+            font-size: 0.75rem;
+            color: white;
+            background: #a1a19f;
+            padding: 2px 7px;
+            border-radius: 12px;
+            font-weight: 400;
+        }
+
+        #project-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ✨ Modal 寬度拓寬以容納行內編輯器 */
+        .modal-content {
+            background: white;
+            width: 850px;
+            max-width: 95vw;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+            flex: 0 0 auto;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--muted);
+        }
+
+        /* ✨ 專案管理工具列 */
+        .manager-toolbar {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px dashed var(--border);
+            flex: 0 0 auto;
+        }
+
+        .manager-toolbar button,
+        .manager-toolbar label.file-btn {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .manager-toolbar button:hover,
+        .manager-toolbar label.file-btn:hover {
+            background: var(--hover);
+        }
+
+        .file-btn input[type="file"] {
+            display: none;
+        }
+
+        #project-list-container {
+            overflow-y: auto;
+            flex: 1;
+            padding-right: 4px;
+        }
+
+        .project-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            background: #fafafa;
+        }
+
+        .project-info {
+            flex: 1;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* 行內編輯框 */
+        .project-info input {
+            padding: 6px 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-family: inherit;
+        }
+
+        .project-info input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .project-actions button {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            background: white;
+            font-weight: 500;
+        }
+
+        .project-actions .btn-load {
+            background: #111;
+            color: white;
+            border: none;
+        }
+
+        .project-actions .btn-del {
+            color: #d73a49;
+            border-color: #ffbcbc;
+        }
+
+        #print-header {
+            display: none;
+        }
+
+        @media print {
+
+            header,
+            .tabs,
+            .sidebar,
+            .editor-toolbar,
+            #project-modal,
+            #toggle-sidebar-btn {
+                display: none !important;
+            }
+
+            .workspace,
+            .main-canvas {
+                display: block !important;
+                overflow: visible !important;
+                height: auto !important;
+            }
+
+            .view-panel {
+                padding: 0 var(--dyn-canvas-padding) !important;
+                margin: 0 !important;
+                overflow: visible !important;
+                box-sizing: border-box;
+            }
+
+            #editor-canvas {
+                overflow: visible !important;
+                height: auto !important;
+                min-height: 0 !important;
+                padding-bottom: 0 !important;
+            }
+
+            body {
+                height: auto !important;
+                background: white !important;
+            }
+
+            html,
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            #print-header {
+                display: block !important;
+                position: relative;
+                text-align: center;
+                margin-bottom: 40px;
+                border-bottom: 2px solid #000;
+                padding: 0 var(--dyn-canvas-padding) 16px var(--dyn-canvas-padding) !important;
+                box-sizing: border-box;
+                break-after: avoid;
+            }
+
+            .print-title {
+                font-size: 2.2rem;
+                font-weight: 800;
+                margin: 0 0 8px 0;
+                color: #111;
+                letter-spacing: 1px;
+            }
+
+            .print-artist {
+                font-size: 1.1rem;
+                color: #555;
+                margin: 0;
+                font-weight: 500;
+            }
+
+            .print-meta-right {
+                position: absolute;
+                top: 0;
+                right: var(--dyn-canvas-padding);
+                text-align: right;
+                font-size: 1rem;
+                color: #333;
+                font-family: 'Inter', sans-serif;
+                font-weight: 600;
+            }
+
+            .view-panel:not(.active) {
+                display: none !important;
+            }
+
+            .chord-val {
+                border: none !important;
+                background: transparent !important;
+                box-shadow: none !important;
+            }
+
+            .chord-val:empty::before {
+                display: none !important;
+            }
+
+            .chord-widget {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            .lyric-ruby {
+                border: none !important;
+                background: transparent !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="brand">runso/ <span>Editor</span> <span class="version-tag">v1.7.03291000</span></div>
+        <div class="meta-inputs">
+            <input type="text" id="meta-title" placeholder="歌曲名稱" value="告訴我也好 (Tell me)">
+            <input type="text" id="meta-artist" placeholder="藝人" value="Runner's Blue">
+            <input type="text" id="meta-key" placeholder="Key" value="A">
+            <input type="text" id="meta-bpm" placeholder="BPM" value="120">
+        </div>
+        <div class="actions">
+            <button class="toggle-btn" id="toggle-sidebar-btn" onclick="UI.toggleSidebar()">➡️ 面板</button>
+            <button onclick="Storage.newProject()">📝 開新</button>
+            <button onclick="Storage.openManager()">📂 專案列表</button>
+            <button class="save-btn" onclick="Storage.saveProject()">💾 儲存</button>
+            <button class="print-btn" onclick="window.print()">🖨️ 匯出 PDF</button>
+        </div>
+    </header>
+
+    <div class="workspace">
+        <div class="main-canvas">
+            <nav class="tabs">
+                <div class="tab" onclick="UI.switchView(1)">1. 貼上歌詞 (Raw)</div>
+                <div class="tab active" onclick="UI.switchView(2)">2. 和弦譜編輯 (Arrange)</div>
+                <div class="tab" onclick="UI.switchView(3)">3. 註釋譜編輯 (Ruby Sheet)</div>
+                <div class="tab" onclick="UI.switchView(4)">4. 純和弦 (Lead Sheet)</div>
+            </nav>
+
+            <div id="print-header">
+                <div class="print-meta-right">
+                    <div id="print-key-text">Key: A</div>
+                    <div id="print-bpm-text">BPM: 120</div>
+                </div>
+                <h1 class="print-title" id="print-title-text">告訴我也好 (Tell me)</h1>
+                <div class="print-artist" id="print-artist-text">Runner's Blue</div>
+            </div>
+
+            <div id="view-raw" class="view-panel">
+                <div style="margin-bottom: 12px; color: var(--muted); font-size: 0.9rem;">
+                    💡 語法：和弦 `[和弦|拍|段|X|Y]`，字典標記 `{文字|解釋}`。
+                </div>
+                <textarea id="raw-lyrics-textarea" placeholder="在這裡貼上資料..."></textarea>
+            </div>
+
+            <div id="view-arrange" class="view-panel active">
+                <div class="editor-toolbar">
+                    <button class="btn-insert" onclick="Interaction.insertChord()" title="快捷鍵: Ctrl+K">➕ 插入和弦</button>
+                    <button class="btn-ruby" onclick="Interaction.insertRuby()" title="反白歌詞後使用。快捷鍵: Ctrl+J">🉐
+                        標記字典</button>
+                    <span class="shortcut-hint">(Ctrl+K 加和弦 / 畫布支援 Tab 鍵對齊排版)</span>
+                </div>
+                <div id="editor-canvas" contenteditable="true" spellcheck="false"
+                    onclick="Interaction.handleCanvasClick(event)"></div>
+            </div>
+
+            <div id="view-ruby" class="view-panel">
+                <div class="empty-state" style="margin-top: 100px;">
+                    <h2 style="color: #d97706;">🚧 註釋譜閱讀模式 (開發中)</h2>
+                    <p>未來的小字模閱讀專屬位置，將提供不含和弦的純淨歌詞與注音排版。</p>
+                </div>
+            </div>
+
+            <div id="view-leadsheet" class="view-panel">
+                <div id="leadsheet-canvas"></div>
+            </div>
+        </div>
+
+        <aside class="sidebar" id="app-sidebar">
+            <div class="sidebar-section" id="inspector-section">
+                <h3 id="inspector-title">🎯 屬性編輯</h3>
+                <div id="inspector-empty" class="empty-state">
+                    請在畫布上點選藍色「和弦」<br>或反白多個進行「批次編輯」。
+                </div>
+
+                <div id="inspector-chord-form" style="display: none;">
+                    <div class="form-group" id="group-chord-name">
+                        <label>和弦文字 (Chord)</label>
+                        <input type="text" id="prop-chord" placeholder="例: C#m7">
+                    </div>
+                    <div class="form-group" id="group-chord-move">
+                        <label>節點對齊 (Snap)</label>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="move-btn" onclick="Inspector.moveChord(-1)">⬅️ 左移</button>
+                            <button class="move-btn" onclick="Inspector.moveChord(1)">右移 ➡️</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>個體 X 軸微調 (X-Offset)</label>
+                        <div class="range-group" style="margin:0;">
+                            <input type="range" id="prop-x-offset" min="-50" max="50" step="1" value="0">
+                            <span class="range-val" id="val-x-offset">0px</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>個體 Y 軸微調 (Y-Offset)</label>
+                        <div class="range-group" style="margin:0;">
+                            <input type="range" id="prop-y-offset" min="-30" max="30" step="1" value="0">
+                            <span class="range-val" id="val-y-offset">0px</span>
+                        </div>
+                    </div>
+                    <div class="form-group" id="group-chord-beats">
+                        <label>拍子長度 (Beats)</label>
+                        <select id="prop-beats">
+                            <option value="">無</option>
+                            <option value="4">4 拍 (1小節)</option>
+                            <option value="2">2 拍 (半小節)</option>
+                            <option value="1">1 拍</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="group-chord-section">
+                        <label>標記為新段落 (Section)</label>
+                        <input type="text" id="prop-section" placeholder="例: Intro, Verse 1">
+                    </div>
+
+                    <div id="group-batch-actions" style="display: none; margin-top: 16px;">
+                        <button class="confirm-btn" onclick="Interaction.clearActiveState()">✅ 完成編輯</button>
+                        <button class="danger-btn" style="margin-top:4px;" onclick="Interaction.clearActiveState()">❌
+                            取消選取</button>
+                    </div>
+
+                    <button class="danger-btn" id="btn-delete-chord" onclick="Inspector.removeActiveElement()">🗑️
+                        刪除和弦</button>
+                </div>
+
+                <div id="inspector-ruby-form" style="display: none;">
+                    <div class="form-group">
+                        <label>目標文字 (Base Text)</label>
+                        <input type="text" id="prop-ruby-base" disabled style="background:#eee; color:#666;">
+                    </div>
+                    <div class="form-group">
+                        <label>字典解釋 (Dictionary Meaning)</label>
+                        <input type="text" id="prop-ruby-rt" placeholder="輸入解釋或注音...">
+                    </div>
+                    <button class="danger-btn" onclick="Inspector.removeActiveElement()">🗑️ 解除字典標記</button>
+                </div>
+            </div>
+
+            <div class="sidebar-section" id="dict-section">
+                <h3>📖 本曲註解字典</h3>
+                <div class="dict-list" id="dict-list-container"></div>
+            </div>
+
+            <div class="sidebar-section" id="layout-section">
+                <h3>🎛️ 版面與列印設定</h3>
+
+                <div style="font-size:0.75rem; color:var(--muted); margin-bottom:8px; font-weight:600;">字體與排版</div>
+                <div class="range-group">
+                    <label>和弦字體</label><input type="range" id="ui-chord-size" min="0.6" max="1.5" step="0.05"
+                        value="1"><span class="range-val" id="val-chord-size">1</span>
+                </div>
+                <div class="range-group">
+                    <label>歌詞字體</label><input type="range" id="ui-lyric-size" min="0.8" max="2" step="0.05"
+                        value="1.15"><span class="range-val" id="val-lyric-size">1.15</span>
+                </div>
+                <div class="range-group">
+                    <label>行距間距</label><input type="range" id="ui-line-height" min="1.5" max="4" step="0.1"
+                        value="2.8"><span class="range-val" id="val-line-height">2.8</span>
+                </div>
+
+                <div style="border-top:1px dashed var(--border); margin: 12px 0 8px 0; padding-top: 8px;">
+                    <div style="font-size:0.75rem; color:var(--muted); margin-bottom:8px; font-weight:600;">全域位置與邊界
+                    </div>
+                    <div class="range-group">
+                        <label>和弦全域 X</label><input type="range" id="ui-global-x" min="-20" max="20" step="1"
+                            value="0"><span class="range-val" id="val-global-x">0</span>
+                    </div>
+                    <div class="range-group">
+                        <label>和弦全域 Y</label><input type="range" id="ui-global-y" min="-20" max="20" step="1"
+                            value="0"><span class="range-val" id="val-global-y">0</span>
+                    </div>
+                    <div class="range-group">
+                        <label>畫布邊距</label><input type="range" id="ui-canvas-pad" min="0" max="20" step="1"
+                            value="10"><span class="range-val" id="val-canvas-pad">10%</span>
+                    </div>
+                </div>
+
+                <label class="toggle-group"><input type="checkbox" id="ui-columns"> 開啟雙排格式 (A4列印)</label>
+            </div>
+        </aside>
+    </div>
+
+    <div id="project-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📂 Session Manager</h2>
+                <button class="close-btn" onclick="Storage.closeManager()">&times;</button>
+            </div>
+
+            <div class="manager-toolbar">
+                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                    <input type="checkbox" id="select-all-projects" onchange="Storage.toggleSelectAll(this.checked)"> 全選
+                </label>
+                <button onclick="Storage.exportSelected()">📤 匯出選取專案 (.json)</button>
+                <label class="file-btn">
+                    📥 匯入專案檔案
+                    <input type="file" accept=".json,.txt" onchange="Storage.importFile(event)">
+                </label>
+                <div style="flex:1; text-align:right; font-size:0.8rem; color:var(--muted);">
+                    提示：可以直接在此修改歌曲屬性
+                </div>
+            </div>
+
+            <div id="project-list-container"></div>
+        </div>
+    </div>
+
+    <script>
+        //#region [1. 系統狀態與資料 (State)]
+        const AppState = {
+            rawData: "[A|4|Verse 1]華やいだ風に [E]さらされても\n[F#m]溶けてゆけない {自分|じぶん}を見つめている\n\n[C#m7|4|Solo][D5|4|] \n",
+            activeElement: null,
+            activeBatchChords: [],
+            currentProjectId: null
+        };
+        //#endregion
+
+        //#region [2. 核心解析器 (Parser)]
+        const Parser = {
+            extractNode: function (node) {
+                let out = "";
+                for (let child of node.childNodes) {
+                    if (child.nodeType === Node.TEXT_NODE) {
+                        out += child.nodeValue;
+                    } else if (child.classList && child.classList.contains('chord-widget')) {
+                        const input = child.querySelector('.chord-val');
+                        if (input) {
+                            let val = input.innerText.replace(/\+/g, '').trim();
+                            let params = [val === "和弦" ? "" : val, input.dataset.beats || "", input.dataset.section || "", input.dataset.xOffset || "0", input.dataset.yOffset || "0"];
+                            while (params.length > 1 && (params[params.length - 1] === "" || params[params.length - 1] === "0")) { params.pop(); }
+                            out += `[${params.join('|')}]`;
+                        }
+                    } else if (child.classList && child.classList.contains('lyric-ruby')) {
+                        out += `{${Parser.extractNode(child)}|${child.dataset.rt || ""}}`;
+                    } else if (child.nodeName === 'BR') {
+                        if (child.parentNode.nodeName !== 'DIV' || child.parentNode.childNodes.length > 1) { out += '\n'; }
+                    } else if (child.nodeName === 'DIV' || child.nodeName === 'P') {
+                        out += '\n' + Parser.extractNode(child);
+                    } else { out += Parser.extractNode(child); }
+                }
+                return out;
+            },
+            editorToRaw: function () {
+                let text = Parser.extractNode(document.getElementById('editor-canvas'));
+                text = text.replace(/^[\n]/, '').trimEnd() + '\n';
+                document.getElementById('raw-lyrics-textarea').value = text;
+                AppState.rawData = text;
+                UI.updateDict();
+            },
+            rawToEditor: function () {
+                let text = document.getElementById('raw-lyrics-textarea').value;
+                let html = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+                const lines = html.split('\n');
+                for (let i = 0; i < lines.length; i++) {
+                    let line = lines[i];
+                    let stripped = line.replace(/\[.*?\]/g, '').trim();
+                    if (stripped === '' && line.includes('[')) { lines[i] = line.replace(/ /g, '\t'); }
+                }
+                html = lines.map(l => `<div>${l === '' ? '<br>' : l}</div>`).join('');
+
+                html = html.replace(/\{([^\|\}]+)\|([^}]*)\}/g, `<span class="lyric-ruby" data-rt="$2">$1</span>`);
+                html = html.replace(/\[([^\]]*)\]/g, (match, content) => {
+                    const p = content.split('|');
+                    const x = p[3] || "0"; const y = p[4] || "0";
+                    let style = (x !== "0" ? `margin-left: ${x}px; ` : '') + (y !== "0" ? `margin-bottom: ${y}px; ` : '');
+                    return `<span class="chord-widget" contenteditable="false"><span class="chord-val" contenteditable="true" data-beats="${p[1] || ""}" data-section="${p[2] || ""}" data-x-offset="${x}" data-y-offset="${y}" style="${style}" oninput="Inspector.syncChordVal(this)">${p[0] || ""}</span></span>`;
+                });
+
+                document.getElementById('editor-canvas').innerHTML = html;
+
+                document.querySelectorAll('.chord-val').forEach(el => {
+                    el.addEventListener('keydown', Interaction.handleChordKeydown);
+                });
+
+                UI.updateDict();
+            }
+        };
+        //#endregion
+
+        //#region [3. UI 更新與渲染 (UI)]
+        const UI = {
+            init: function () {
+                const controls = [
+                    { id: 'ui-chord-size', var: '--dyn-chord-size', unit: 'rem', valId: 'val-chord-size' },
+                    { id: 'ui-lyric-size', var: '--dyn-lyric-size', unit: 'rem', valId: 'val-lyric-size' },
+                    { id: 'ui-line-height', var: '--dyn-line-height', unit: '', valId: 'val-line-height' },
+                    { id: 'ui-global-x', var: '--dyn-chord-global-x', unit: 'px', valId: 'val-global-x' },
+                    { id: 'ui-global-y', var: '--dyn-chord-global-y', unit: 'px', valId: 'val-global-y' },
+                    { id: 'ui-canvas-pad', var: '--dyn-canvas-padding', unit: '%', valId: 'val-canvas-pad' }
+                ];
+                controls.forEach(c => {
+                    const el = document.getElementById(c.id);
+                    el.addEventListener('input', (e) => {
+                        document.getElementById(c.valId).innerText = e.target.value;
+                        document.documentElement.style.setProperty(c.var, e.target.value + c.unit);
+                    });
+                });
+                document.getElementById('ui-columns').addEventListener('change', (e) => { document.documentElement.style.setProperty('--dyn-columns', e.target.checked ? '2' : '1'); });
+            },
+            switchView: function (tabIndex) {
+                document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === tabIndex - 1));
+                document.getElementById('view-raw').style.display = (tabIndex === 1) ? 'block' : 'none';
+                document.getElementById('view-arrange').style.display = (tabIndex === 2) ? 'block' : 'none';
+                document.getElementById('view-ruby').style.display = (tabIndex === 3) ? 'block' : 'none';
+                document.getElementById('view-leadsheet').style.display = (tabIndex === 4) ? 'block' : 'none';
+
+                if (tabIndex === 1) Parser.editorToRaw();
+                if (tabIndex === 2 && document.getElementById('raw-lyrics-textarea').value !== AppState.rawData) {
+                    AppState.rawData = document.getElementById('raw-lyrics-textarea').value;
+                    Parser.rawToEditor();
+                }
+                if (tabIndex === 4) { Parser.editorToRaw(); UI.renderLeadSheet(); }
+
+                document.getElementById('print-title-text').innerText = document.getElementById('meta-title').value || "Untitled Song";
+                document.getElementById('print-artist-text').innerText = document.getElementById('meta-artist').value || "Unknown";
+                document.getElementById('print-key-text').innerText = "Key: " + (document.getElementById('meta-key').value || "-");
+                document.getElementById('print-bpm-text').innerText = "BPM: " + (document.getElementById('meta-bpm').value || "-");
+            },
+            toggleSidebar: function () {
+                const sidebar = document.getElementById('app-sidebar');
+                const btn = document.getElementById('toggle-sidebar-btn');
+                sidebar.classList.toggle('collapsed');
+                btn.innerHTML = sidebar.classList.contains('collapsed') ? '⬅️ 展開' : '➡️ 面板';
+            },
+            updateDict: function () {
+                const container = document.getElementById('dict-list-container');
+                const dictMap = new Map();
+                document.getElementById('editor-canvas').querySelectorAll('.lyric-ruby').forEach(r => {
+                    let base = r.innerText.trim(); if (base) dictMap.set(base, r.dataset.rt || "");
+                });
+                if (dictMap.size === 0) { container.innerHTML = '<div style="padding: 12px; font-size:0.8rem; color:#888; text-align:center;">畫布上尚無標記資料。</div>'; return; }
+                container.innerHTML = "";
+                dictMap.forEach((rt, base) => { container.innerHTML += `<div class="dict-item"><span class="dict-base">${base}</span><span class="dict-rt">${rt}</span></div>`; });
+            },
+            renderLeadSheet: function () {
+                const surface = document.getElementById('leadsheet-canvas');
+                surface.innerHTML = "";
+                let hasValid = false; let currentSec = ""; let grid = null;
+
+                document.getElementById('editor-canvas').querySelectorAll('.chord-val').forEach(input => {
+                    const val = input.innerText.replace(/\+/g, '').trim();
+                    if (!val || val === "和弦") return;
+                    hasValid = true;
+                    if (input.dataset.section && input.dataset.section !== currentSec) {
+                        currentSec = input.dataset.section;
+                        const block = document.createElement('div'); block.className = 'section-block';
+                        block.innerHTML = `<div class="section-title">${currentSec}</div>`;
+                        grid = document.createElement('div'); grid.className = 'chord-grid';
+                        block.appendChild(grid); surface.appendChild(block);
+                    } else if (!currentSec && !grid) {
+                        grid = document.createElement('div'); grid.className = 'chord-grid'; surface.appendChild(grid);
+                    }
+                    grid.innerHTML += `<div class="chord-item"><span>${val}</span>${input.dataset.beats ? `<span class="beat-badge">${input.dataset.beats}</span>` : ''}</div>`;
+                });
+                if (!hasValid) surface.innerHTML = '<div class="empty-state">無有效和弦</div>';
+            }
+        };
+        //#endregion
+
+        //#region [4. 畫布交互與批次選取 (Interaction)]
+        const Interaction = {
+            handleCanvasClick: function (e) {
+                const ruby = e.target.closest('.lyric-ruby'); const chord = e.target.closest('.chord-val');
+                if (chord && AppState.activeBatchChords.length <= 1) { Inspector.setChord(chord); }
+                else if (ruby) { Inspector.setRuby(ruby); }
+            },
+            clearActiveState: function () {
+                if (AppState.activeElement) AppState.activeElement.classList.remove('editing');
+                AppState.activeBatchChords.forEach(c => c.classList.remove('batch-selected'));
+                AppState.activeBatchChords = []; AppState.activeElement = null;
+                document.getElementById('inspector-empty').style.display = 'block';
+                document.getElementById('inspector-chord-form').style.display = 'none';
+                document.getElementById('inspector-ruby-form').style.display = 'none';
+                document.getElementById('inspector-title').innerText = "🎯 屬性編輯";
+            },
+            insertChord: function () {
+                const canvas = document.getElementById('editor-canvas'); canvas.focus();
+                let sel = window.getSelection(); if (!sel.rangeCount) return;
+                let range = sel.getRangeAt(0); if (!canvas.contains(range.commonAncestorContainer)) return;
+
+                const widget = document.createElement('span'); widget.className = 'chord-widget'; widget.contentEditable = "false";
+                const input = document.createElement('span'); input.className = 'chord-val'; input.contentEditable = "true";
+                input.dataset.beats = ""; input.dataset.section = ""; input.dataset.xOffset = "0"; input.dataset.yOffset = "0";
+
+                input.oninput = function () { Inspector.syncChordVal(this); };
+                input.addEventListener('keydown', Interaction.handleChordKeydown);
+
+                widget.appendChild(input); range.insertNode(widget);
+                range.setStartAfter(widget); range.collapse(true); sel.removeAllRanges(); sel.addRange(range);
+                input.focus(); Inspector.setChord(input);
+            },
+            handleChordKeydown: function (e) {
+                if (e.key === 'Backspace' && this.innerText.replace(/\+/g, '').trim() === '') {
+                    e.preventDefault(); this.parentElement.remove(); Interaction.clearActiveState(); document.getElementById('editor-canvas').focus();
+                }
+                if (e.key === 'Enter') {
+                    e.preventDefault(); this.blur(); document.getElementById('editor-canvas').focus();
+                }
+            },
+            insertRuby: function () {
+                const canvas = document.getElementById('editor-canvas'); let sel = window.getSelection();
+                if (!sel.rangeCount || sel.isCollapsed) { alert("請先選取要標記的文字！"); return; }
+                let range = sel.getRangeAt(0); if (!canvas.contains(range.commonAncestorContainer)) return;
+
+                const ruby = document.createElement('span'); ruby.className = 'lyric-ruby'; ruby.dataset.rt = '字典解釋'; ruby.innerText = range.toString();
+                range.deleteContents(); range.insertNode(ruby); sel.removeAllRanges(); Inspector.setRuby(ruby);
+            }
+        };
+
+        document.addEventListener('selectionchange', () => {
+            const sel = window.getSelection(); if (sel.isCollapsed) return;
+            const canvas = document.getElementById('editor-canvas'); if (!canvas.contains(sel.anchorNode)) return;
+
+            const selected = [];
+            canvas.querySelectorAll('.chord-val').forEach(c => { if (sel.containsNode(c, true)) selected.push(c); });
+
+            if (selected.length > 1) {
+                AppState.activeBatchChords.forEach(c => c.classList.remove('batch-selected'));
+                AppState.activeBatchChords = selected;
+                AppState.activeBatchChords.forEach(c => c.classList.add('batch-selected'));
+                AppState.activeElement = null; Inspector.showBatch();
+            } else {
+                AppState.activeBatchChords.forEach(c => c.classList.remove('batch-selected'));
+                AppState.activeBatchChords = [];
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); Interaction.insertChord(); }
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'j') { e.preventDefault(); Interaction.insertRuby(); }
+        });
+        document.getElementById('editor-canvas').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); document.execCommand('insertLineBreak'); }
+            if (e.key === 'Tab') { e.preventDefault(); document.execCommand('insertText', false, '\t'); }
+        });
+        //#endregion
+
+        //#region [5. 屬性面板邏輯 (Inspector)]
+        const Inspector = {
+            props: {
+                val: document.getElementById('prop-chord'), beats: document.getElementById('prop-beats'), sec: document.getElementById('prop-section'),
+                x: document.getElementById('prop-x-offset'), y: document.getElementById('prop-y-offset'),
+                rBase: document.getElementById('prop-ruby-base'), rRt: document.getElementById('prop-ruby-rt')
+            },
+            setChord: function (el) {
+                Interaction.clearActiveState(); AppState.activeElement = el; el.classList.add('editing');
+                document.getElementById('inspector-empty').style.display = 'none'; document.getElementById('inspector-chord-form').style.display = 'block';
+                document.getElementById('group-chord-name').style.display = 'block'; document.getElementById('group-chord-move').style.display = 'block';
+                document.getElementById('group-chord-beats').style.display = 'block'; document.getElementById('group-chord-section').style.display = 'block';
+                document.getElementById('group-batch-actions').style.display = 'none'; document.getElementById('btn-delete-chord').style.display = 'block';
+
+                let val = el.innerText.replace(/\+/g, '').trim();
+                this.props.val.value = val === "和弦" ? "" : val;
+                this.props.beats.value = el.dataset.beats || ""; this.props.sec.value = el.dataset.section || "";
+                this.props.x.value = el.dataset.xOffset || "0"; document.getElementById('val-x-offset').innerText = this.props.x.value + "px";
+                this.props.y.value = el.dataset.yOffset || "0"; document.getElementById('val-y-offset').innerText = this.props.y.value + "px";
+            },
+            showBatch: function () {
+                document.getElementById('inspector-empty').style.display = 'none'; document.getElementById('inspector-chord-form').style.display = 'block';
+                document.getElementById('inspector-title').innerText = `🎯 批次編輯 (${AppState.activeBatchChords.length}個)`;
+                document.getElementById('group-chord-name').style.display = 'none'; document.getElementById('group-chord-move').style.display = 'none';
+                document.getElementById('group-chord-beats').style.display = 'none'; document.getElementById('group-chord-section').style.display = 'none';
+                document.getElementById('group-batch-actions').style.display = 'block'; document.getElementById('btn-delete-chord').style.display = 'none';
+
+                this.props.x.value = 0; document.getElementById('val-x-offset').innerText = "批次微調";
+                this.props.y.value = 0; document.getElementById('val-y-offset').innerText = "批次微調";
+            },
+            setRuby: function (el) {
+                Interaction.clearActiveState(); AppState.activeElement = el; el.classList.add('editing');
+                document.getElementById('inspector-empty').style.display = 'none'; document.getElementById('inspector-ruby-form').style.display = 'block';
+                this.props.rBase.value = el.innerText; this.props.rRt.value = el.dataset.rt || ""; this.props.rRt.focus();
+            },
+            syncChordVal: function (el) {
+                if (AppState.activeElement === el) { this.props.val.value = el.innerText.replace(/\+/g, '').trim() === "和弦" ? "" : el.innerText.replace(/\+/g, '').trim(); }
+            },
+            moveChord: function (dir) {
+                if (!AppState.activeElement) return;
+                let widget = AppState.activeElement.parentElement;
+                let target = dir === -1 ? widget.previousSibling : widget.nextSibling;
+                while (target && target.nodeType === Node.TEXT_NODE && target.textContent === "") {
+                    target = dir === -1 ? target.previousSibling : target.nextSibling;
+                }
+                if (target) {
+                    if (target.nodeType === Node.TEXT_NODE) {
+                        let t = target.textContent;
+                        if (dir === -1) { target.textContent = t.slice(0, -1); widget.after(document.createTextNode(t.slice(-1))); }
+                        else { target.textContent = t.slice(1); widget.before(document.createTextNode(t.slice(0, 1))); }
+                    } else { dir === -1 ? target.before(widget) : target.after(widget); }
+                    AppState.activeElement.focus();
+                }
+            },
+            removeActiveElement: function () {
+                if (AppState.activeElement) {
+                    if (AppState.activeElement.classList.contains('chord-val')) AppState.activeElement.parentElement.remove();
+                    else { AppState.activeElement.replaceWith(document.createTextNode(AppState.activeElement.innerText)); }
+                }
+                Interaction.clearActiveState(); UI.updateDict();
+            },
+            bindEvents: function () {
+                this.props.val.addEventListener('input', e => { if (AppState.activeElement) AppState.activeElement.innerText = e.target.value; });
+                this.props.beats.addEventListener('change', e => { if (AppState.activeElement) AppState.activeElement.dataset.beats = e.target.value; });
+                this.props.sec.addEventListener('input', e => { if (AppState.activeElement) AppState.activeElement.dataset.section = e.target.value; });
+
+                this.props.x.addEventListener('input', e => {
+                    let v = parseInt(e.target.value);
+                    if (AppState.activeBatchChords.length > 1) {
+                        AppState.activeBatchChords.forEach(c => { c.style.marginLeft = (parseInt(c.dataset.xOffset || 0) + v) + 'px'; });
+                        document.getElementById('val-x-offset').innerText = `+${v}px`;
+                    } else if (AppState.activeElement) { AppState.activeElement.dataset.xOffset = v; AppState.activeElement.style.marginLeft = v + 'px'; document.getElementById('val-x-offset').innerText = v + "px"; }
+                });
+                this.props.y.addEventListener('input', e => {
+                    let v = parseInt(e.target.value);
+                    if (AppState.activeBatchChords.length > 1) {
+                        AppState.activeBatchChords.forEach(c => { c.style.marginBottom = (parseInt(c.dataset.yOffset || 0) + v) + 'px'; });
+                        document.getElementById('val-y-offset').innerText = `+${v}px`;
+                    } else if (AppState.activeElement) { AppState.activeElement.dataset.yOffset = v; AppState.activeElement.style.marginBottom = v + 'px'; document.getElementById('val-y-offset').innerText = v + "px"; }
+                });
+                this.props.x.addEventListener('change', e => {
+                    if (AppState.activeBatchChords.length > 1) {
+                        let v = parseInt(e.target.value); AppState.activeBatchChords.forEach(c => { c.dataset.xOffset = parseInt(c.dataset.xOffset || 0) + v; });
+                        Inspector.props.x.value = 0; document.getElementById('val-x-offset').innerText = "微調";
+                    }
+                });
+                this.props.y.addEventListener('change', e => {
+                    if (AppState.activeBatchChords.length > 1) {
+                        let v = parseInt(e.target.value); AppState.activeBatchChords.forEach(c => { c.dataset.yOffset = parseInt(c.dataset.yOffset || 0) + v; });
+                        Inspector.props.y.value = 0; document.getElementById('val-y-offset').innerText = "微調";
+                    }
+                });
+                this.props.rRt.addEventListener('input', e => { if (AppState.activeElement) { AppState.activeElement.dataset.rt = e.target.value; UI.updateDict(); } });
+            }
+        };
+        //#endregion
+
+        //#region [6. 專案儲存管理 (Storage) ✨ 升級版]
+        const Storage = {
+            getAll: function () { return JSON.parse(localStorage.getItem('runsoProjectList')) || {}; },
+            newProject: function () {
+                if (confirm("建立新專案？")) {
+                    AppState.currentProjectId = null; document.getElementById('meta-title').value = "Untitled Song";
+                    document.getElementById('meta-artist').value = ""; document.getElementById('meta-key').value = "";
+                    document.getElementById('meta-bpm').value = ""; document.getElementById('raw-lyrics-textarea').value = "";
+                    document.getElementById('editor-canvas').innerHTML = ""; localStorage.removeItem('runsoLastProjectId'); UI.switchView(2);
+                }
+            },
+            saveProject: function (silent = false) {
+                // 根據當前視窗決定序列化方向
+                if (document.getElementById('view-raw').style.display === 'block') {
+                    AppState.rawData = document.getElementById('raw-lyrics-textarea').value;
+                    Parser.rawToEditor();
+                } else {
+                    Parser.editorToRaw();
+                }
+
+                const title = document.getElementById('meta-title').value.trim() || "Untitled Song";
+                if (!AppState.currentProjectId) AppState.currentProjectId = 'PROJ_' + Date.now();
+                const pData = {
+                    id: AppState.currentProjectId, title: title, artist: document.getElementById('meta-artist').value,
+                    key: document.getElementById('meta-key').value, bpm: document.getElementById('meta-bpm').value,
+                    rawText: AppState.rawData, updatedAt: new Date().toLocaleString()
+                };
+
+                const p = this.getAll(); p[AppState.currentProjectId] = pData;
+                localStorage.setItem('runsoProjectList', JSON.stringify(p));
+                localStorage.setItem('runsoLastProjectId', AppState.currentProjectId);
+
+                if (!silent) alert(`已儲存：「${title}」`);
+            },
+
+            // ✨ 在 Modal 列表內直接修改 Meta 並背景存檔
+            updateMeta: function (id, field, val) {
+                const p = this.getAll();
+                if (p[id]) {
+                    p[id][field] = val;
+                    p[id].updatedAt = new Date().toLocaleString();
+                    localStorage.setItem('runsoProjectList', JSON.stringify(p));
+
+                    // 如果改到的是當下正在開啟的專案，同步更新頂部 Header
+                    if (AppState.currentProjectId === id) {
+                        if (field === 'title') document.getElementById('meta-title').value = val;
+                        if (field === 'artist') document.getElementById('meta-artist').value = val;
+                        if (field === 'key') document.getElementById('meta-key').value = val;
+                        if (field === 'bpm') document.getElementById('meta-bpm').value = val;
+                    }
+                }
+            },
+
+            // ✨ 一鍵複製專案
+            cloneProject: function (id) {
+                const p = this.getAll();
+                if (p[id]) {
+                    const newId = 'PROJ_' + Date.now();
+                    const clone = JSON.parse(JSON.stringify(p[id]));
+                    clone.id = newId;
+                    clone.title = clone.title + " (Copy)";
+                    clone.updatedAt = new Date().toLocaleString();
+                    p[newId] = clone;
+                    localStorage.setItem('runsoProjectList', JSON.stringify(p));
+                    this.openManager(); // 重繪列表
+                }
+            },
+
+            openManager: function () {
+                const c = document.getElementById('project-list-container'); c.innerHTML = "";
+                const p = this.getAll(); const keys = Object.keys(p).sort((a, b) => b.localeCompare(a));
+                if (keys.length === 0) {
+                    c.innerHTML = "<p style='color:#888; text-align:center;'>尚未儲存任何專案。</p>";
+                } else {
+                    keys.forEach(k => {
+                        const proj = p[k];
+                        c.innerHTML += `
+                        <div class="project-item">
+                            <div style="display:flex; align-items:center; gap:12px; width:100%;">
+                                <input type="checkbox" class="proj-cb" value="${k}">
+                                <div class="project-info" style="flex:1; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                                    <input type="text" value="${proj.title}" onchange="Storage.updateMeta('${k}', 'title', this.value)" style="font-weight:bold; width:200px;">
+                                    <input type="text" value="${proj.artist || ''}" placeholder="藝人" onchange="Storage.updateMeta('${k}', 'artist', this.value)" style="width:100px;">
+                                    <input type="text" value="${proj.key || ''}" placeholder="Key" onchange="Storage.updateMeta('${k}', 'key', this.value)" style="width:50px;">
+                                    <input type="text" value="${proj.bpm || ''}" placeholder="BPM" onchange="Storage.updateMeta('${k}', 'bpm', this.value)" style="width:60px;">
+                                </div>
+                                <div class="project-actions">
+                                    <button class="btn-load" onclick="Storage.loadProject('${k}')">讀取</button>
+                                    <button onclick="Storage.cloneProject('${k}')">複製</button>
+                                    <button class="btn-del" onclick="Storage.deleteProject('${k}')">刪除</button>
+                                </div>
+                            </div>
+                        </div>`;
+                    });
+                }
+                document.getElementById('project-modal').style.display = 'flex';
+            },
+
+            // ✨ 全選/取消全選
+            toggleSelectAll: function (checked) {
+                document.querySelectorAll('.proj-cb').forEach(cb => cb.checked = checked);
+            },
+
+            // ✨ 匯出選取的 JSON
+            exportSelected: function () {
+                const cbs = document.querySelectorAll('.proj-cb:checked');
+                if (cbs.length === 0) return alert("請先勾選要匯出的專案！");
+
+                const currentProjects = this.getAll();
+                const exportData = {};
+                cbs.forEach(cb => {
+                    if (currentProjects[cb.value]) {
+                        exportData[cb.value] = currentProjects[cb.value];
+                    }
+                });
+
+                const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `runso_backup_${Date.now()}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+            },
+
+            // ✨ 匯入 JSON 檔案
+            importFile: function (e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const importedData = JSON.parse(event.target.result);
+                        const currentProjects = this.getAll();
+
+                        // 將匯入的資料覆蓋/合併進現有列表
+                        Object.keys(importedData).forEach(k => {
+                            currentProjects[k] = importedData[k];
+                        });
+
+                        localStorage.setItem('runsoProjectList', JSON.stringify(currentProjects));
+                        alert("匯入成功！");
+                        Storage.openManager(); // 刷新列表
+                    } catch (err) {
+                        alert("檔案格式錯誤，無法匯入！請確保是 runso 產出的 .json 備份檔。");
+                    }
+                };
+                reader.readAsText(file);
+                e.target.value = ''; // 重置 input 讓下次同檔名也能觸發
+            },
+
+            closeManager: function () { document.getElementById('project-modal').style.display = 'none'; },
+            loadProject: function (id) {
+                const p = this.getAll()[id];
+                if (p) {
+                    AppState.currentProjectId = p.id; document.getElementById('meta-title').value = p.title; document.getElementById('meta-artist').value = p.artist || "";
+                    document.getElementById('meta-key').value = p.key || ""; document.getElementById('meta-bpm').value = p.bpm || "";
+                    document.getElementById('raw-lyrics-textarea').value = p.rawText; AppState.rawData = p.rawText;
+                    localStorage.setItem('runsoLastProjectId', p.id); this.closeManager(); Parser.rawToEditor(); UI.switchView(2);
+                }
+            },
+            deleteProject: function (id) {
+                if (confirm("刪除此專案？")) {
+                    const p = this.getAll(); delete p[id]; localStorage.setItem('runsoProjectList', JSON.stringify(p));
+                    if (AppState.currentProjectId === id) AppState.currentProjectId = null; this.openManager();
+                }
+            }
+        };
+        //#endregion
+
+        window.onload = () => {
+            UI.init(); Inspector.bindEvents();
+            const lastId = localStorage.getItem('runsoLastProjectId');
+            if (lastId && Storage.getAll()[lastId]) { Storage.loadProject(lastId); }
+            else { document.getElementById('raw-lyrics-textarea').value = AppState.rawData; Parser.rawToEditor(); }
+        }
+    </script>
+</body>
+
+</html>

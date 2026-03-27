@@ -1,0 +1,105 @@
+/* 引入類似 Notion 的無襯線字體 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    --bg-color: #ffffff;
+    --text-main: #37352f;
+    --text-muted: #787774;
+    --chord-color: #0070f3;
+    /* 跑者藍的點綴 */
+    --border-color: #ededed;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* 頂部導覽 */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.logo {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.logo span {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* 雙欄工作區 */
+.workspace {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.editor-pane {
+    flex: 7;
+    padding: 40px 10%;
+    overflow-y: auto;
+    border-right: 1px solid var(--border-color);
+}
+
+.tools-pane {
+    flex: 3;
+    padding: 24px;
+    background-color: #fbfbfa;
+    overflow-y: auto;
+}
+
+/* 歌詞與注音 (Furigana) 樣式 */
+.notion-style {
+    font-size: 1.1rem;
+    line-height: 2.2;
+}
+
+.lyric-line {
+    margin-bottom: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    /* 單字之間的微小間距 */
+}
+
+.word-block {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 0 2px;
+}
+
+.word-block:hover {
+    background-color: #f1f1ef;
+}
+
+/* 和弦預留位置 */
+.chord-label {
+    font-size: 0.85rem;
+    color: var(--chord-color);
+    font-weight: 600;
+    height: 1.2em;
+    margin-bottom: -2px;
+}
+
+/* 字典列表樣式 */
+.dict-item {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
