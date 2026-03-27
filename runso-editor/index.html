@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>runso/ Editor | v2.0-Alpha (Modularized)</title>
+    <title>runso/ Editor | v2.1-Alpha (Ruby Global Offset)</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
     <header>
-        <div class="brand">runso/</div>
+        <div class="brand">runso/ <span>Editor</span> <span class="version-tag">v2.1-Alpha</span></div>
         <div class="header-center">
             <input type="text" id="meta-title" placeholder="歌曲名稱" value="Tell me">
             <input type="text" id="meta-artist" placeholder="藝人" value="Runner's Blue">
@@ -26,7 +25,7 @@
             <div class="divider"></div>
             <button onclick="Storage.newProject()" title="開新專案">📄New</button>
             <button onclick="Storage.openManager()" title="專案列表">📂List</button>
-            <button class="btn-dark" onclick="Storage.saveProject()" title="儲存">💾Safe</button>
+            <button class="btn-dark" onclick="Storage.saveProject()" title="儲存">💾Save</button>
             <button onclick="Storage.saveAsNew()" title="另存新檔">📑As</button>
 
             <div class="divider"></div>
@@ -151,6 +150,10 @@
                             max="20" step="1" value="0"><span class="range-val" id="val-global-x">0</span></div>
                     <div class="range-group"><label>和弦全域 Y</label><input type="range" id="ui-global-y" min="-20"
                             max="20" step="1" value="0"><span class="range-val" id="val-global-y">0</span></div>
+                    <div class="range-group"><label>註釋全域 X</label><input type="range" id="ui-ruby-global-x" min="-50"
+                            max="50" step="1" value="0"><span class="range-val" id="val-ruby-global-x">0px</span></div>
+                    <div class="range-group"><label>註釋全域 Y</label><input type="range" id="ui-ruby-global-y" min="-20"
+                            max="20" step="1" value="0"><span class="range-val" id="val-ruby-global-y">0px</span></div>
                     <div class="range-group"><label>畫布邊距</label><input type="range" id="ui-canvas-pad" min="0" max="20"
                             step="1" value="10"><span class="range-val" id="val-canvas-pad">10%</span></div>
                 </div>

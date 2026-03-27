@@ -1,7 +1,6 @@
 import { Storage } from './storage.js';
 import { Transposer } from './transposer.js';
 
-// 狀態管理
 export const AppState = {
     rawData: "[A|4|Verse 1]華やいだ風に [E]さらされても\n[F#m]溶けてゆけない {自分|じぶん}を見つめている\n\n[C#m7|4|Solo][D5|4|] \n",
     activeElement: null,
@@ -9,7 +8,6 @@ export const AppState = {
     currentProjectId: null
 };
 
-// 解析器
 export const Parser = {
     extractNode: function (node) {
         let out = "";
@@ -67,23 +65,25 @@ export const Parser = {
     }
 };
 
-// 介面渲染
 export const UI = {
     init: function () {
+        // ✨ 新增了 'ui-ruby-global-x' 與 'ui-ruby-global-y' 到監聽陣列中
         const controls = [
             { id: 'ui-chord-size', var: '--dyn-chord-size', unit: 'rem', valId: 'val-chord-size' },
             { id: 'ui-lyric-size', var: '--dyn-lyric-size', unit: 'rem', valId: 'val-lyric-size' },
             { id: 'ui-line-height', var: '--dyn-line-height', unit: '', valId: 'val-line-height' },
             { id: 'ui-global-x', var: '--dyn-chord-global-x', unit: 'px', valId: 'val-global-x' },
             { id: 'ui-global-y', var: '--dyn-chord-global-y', unit: 'px', valId: 'val-global-y' },
+            { id: 'ui-ruby-global-x', var: '--dyn-ruby-global-x', unit: 'px', valId: 'val-ruby-global-x' },
+            { id: 'ui-ruby-global-y', var: '--dyn-ruby-global-y', unit: 'px', valId: 'val-ruby-global-y' },
             { id: 'ui-canvas-pad', var: '--dyn-canvas-padding', unit: '%', valId: 'val-canvas-pad' }
         ];
 
         controls.forEach(c => {
             const el = document.getElementById(c.id);
-            if (el) { // 🛡️ 防呆：確保元素存在才綁定，防止畫面變白
+            if (el) {
                 el.addEventListener('input', (e) => {
-                    document.getElementById(c.valId).innerText = e.target.value;
+                    document.getElementById(c.valId).innerText = e.target.value + (c.unit === 'px' ? 'px' : '');
                     document.documentElement.style.setProperty(c.var, e.target.value + c.unit);
                 });
             }
@@ -96,15 +96,17 @@ export const UI = {
             });
         }
 
-        // ✨ 新增：隱藏和弦開關 (純歌詞模式)
         const hideToggle = document.getElementById('toggle-hide-chords');
         if (hideToggle) {
             hideToggle.addEventListener('change', (e) => {
                 const canvas = document.getElementById('editor-canvas');
+                const rubyCanvas = document.getElementById('ruby-canvas');
                 if (e.target.checked) {
                     canvas.classList.add('hide-chords');
+                    if (rubyCanvas) rubyCanvas.classList.add('hide-chords');
                 } else {
                     canvas.classList.remove('hide-chords');
+                    if (rubyCanvas) rubyCanvas.classList.remove('hide-chords');
                 }
             });
         }
@@ -121,6 +123,17 @@ export const UI = {
         if (tabIndex === 2 && document.getElementById('raw-lyrics-textarea').value !== AppState.rawData) {
             AppState.rawData = document.getElementById('raw-lyrics-textarea').value; Parser.rawToEditor();
         }
+
+        if (tabIndex === 3) {
+            Parser.editorToRaw();
+            Parser.rawToEditor();
+            const rubyCanvas = document.getElementById('ruby-canvas');
+            if (rubyCanvas) {
+                rubyCanvas.innerHTML = document.getElementById('editor-canvas').innerHTML;
+                rubyCanvas.querySelectorAll('.chord-val').forEach(el => el.removeAttribute('contenteditable'));
+            }
+        }
+
         if (tabIndex === 4) { Parser.editorToRaw(); UI.renderLeadSheet(); }
 
         document.getElementById('print-title-text').innerText = document.getElementById('meta-title').value || "Untitled Song";
@@ -133,7 +146,7 @@ export const UI = {
         const sidebar = document.getElementById('app-sidebar');
         const btn = document.getElementById('toggle-sidebar-btn');
         sidebar.classList.toggle('collapsed');
-        btn.innerText = sidebar.classList.contains('collapsed') ? '⬅️ ' : '➡️ ';
+        btn.innerText = sidebar.classList.contains('collapsed') ? '⬅️' : '➡️';
     },
 
     toggleZenMode: function () {
@@ -141,12 +154,12 @@ export const UI = {
         const btn = document.getElementById('zen-toggle-btn');
         if (btn) {
             if (document.body.classList.contains('zen-mode')) {
-                btn.innerHTML = '⬇️'; // 進入滿版後變成向下箭頭.
+                btn.innerHTML = '⬇️';
                 btn.style.color = 'var(--primary)';
                 btn.style.borderColor = 'var(--primary)';
-                btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'; // 給浮動按鈕加個立體陰影
+                btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
             } else {
-                btn.innerHTML = '⬆️'; // 恢復原狀
+                btn.innerHTML = '⬆️';
                 btn.style.color = 'var(--text)';
                 btn.style.borderColor = 'var(--border)';
                 btn.style.boxShadow = '0 1px 2px rgba(0,0,0,0.02)';
@@ -187,7 +200,6 @@ export const UI = {
     }
 };
 
-// 交互引擎
 export const Interaction = {
     handleCanvasClick: function (e) {
         const ruby = e.target.closest('.lyric-ruby'); const chord = e.target.closest('.chord-val');
@@ -262,7 +274,6 @@ document.getElementById('editor-canvas').addEventListener('keydown', (e) => {
     if (e.key === 'Tab') { e.preventDefault(); document.execCommand('insertText', false, '\t'); }
 });
 
-// 屬性面板
 export const Inspector = {
     props: {
         val: document.getElementById('prop-chord'), beats: document.getElementById('prop-beats'), sec: document.getElementById('prop-section'),
@@ -355,7 +366,6 @@ export const Inspector = {
     }
 };
 
-// 暴露 API 供 HTML inline handler 呼叫
 window.UI = UI;
 window.Interaction = Interaction;
 window.Inspector = Inspector;

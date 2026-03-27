@@ -13,6 +13,9 @@
     --dyn-columns: 1;
     --dyn-chord-global-x: 0px;
     --dyn-chord-global-y: 0px;
+    /* ✨ 加入註釋小字的全域變數 */
+    --dyn-ruby-global-x: 0px;
+    --dyn-ruby-global-y: 0px;
     --dyn-canvas-padding: 10%;
 }
 
@@ -884,17 +887,53 @@ header {
         background: transparent !important;
     }
 
-
-
 }
+
+/* 確保 @media print 在這裡結束 */
+
+/* ==========================================
+   ✨ 註釋譜專屬樣式 (Tab 3: Ruby Sheet)
+   ========================================== */
+/* 1. 在註釋譜中，強制隱藏所有和弦，讓畫面極度乾淨 */
+#ruby-canvas .chord-widget {
+    display: none !important;
+}
+
+/* 2. 調整行距，讓版面適合閱讀歌詞 */
+#ruby-canvas {
+    line-height: 2.2 !important;
+}
+
+/* ✨ 3. 實體化小字：結合全域 X/Y 偏移量 */
+#ruby-canvas .lyric-ruby::before {
+    content: attr(data-rt);
+    position: absolute;
+    /* 加入全域 Y 軸變數 */
+    bottom: calc(100% + var(--dyn-ruby-global-y));
+    left: 50%;
+    /* 加入全域 X 軸變數 */
+    transform: translateX(calc(-50% + var(--dyn-ruby-global-x)));
+    font-size: 0.7em;
+    color: #d97706;
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+    margin-bottom: 2px;
+}
+
+#ruby-canvas .lyric-ruby {
+    border-bottom: 1px dashed #d97706;
+    background: transparent;
+}
+
 
 /* ==========================================
    ✨ 滿版專注模式 (Zen Mode for iPad)
-   現在它自由了，在正常的螢幕上也能發動！
    ========================================== */
 
-/* 隱藏 1 2 3 4 標籤列 */
-body.zen-mode .tabs {
+/* ✨ 隱藏 1 2 3 4 標籤列 與 編輯工具列(插入和弦那排) */
+body.zen-mode .tabs,
+body.zen-mode .editor-toolbar {
     display: none !important;
 }
 
