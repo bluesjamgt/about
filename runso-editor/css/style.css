@@ -881,4 +881,47 @@ header {
         border: none !important;
         background: transparent !important;
     }
+
+
+
+}
+
+/* ==========================================
+   ✨ 滿版專注模式 (Zen Mode for iPad)
+   現在它自由了，在正常的螢幕上也能發動！
+   ========================================== */
+
+/* 隱藏 1 2 3 4 標籤列 */
+body.zen-mode .tabs {
+    display: none !important;
+}
+
+/* 讓工作區填滿整個螢幕 */
+body.zen-mode .workspace {
+    height: 100vh !important;
+}
+
+/* Header 隱身術：變成透明浮動，並定位在右上角 */
+body.zen-mode header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 100;
+    background: transparent !important;
+    border: none !important;
+    padding: 10px;
+    width: auto;
+}
+
+/* 隱藏 Header 裡除了「滿版切換按鈕」以外的所有東西 */
+body.zen-mode .brand,
+body.zen-mode .header-center,
+body.zen-mode .actions button:not(#zen-toggle-btn),
+body.zen-mode .actions .divider {
+    display: none !important;
+}
+
+/* 滿版模式下，調整畫布頂部空間，避免字貼到死角，也閃開右上角的按鈕 */
+body.zen-mode .view-panel {
+    padding-top: 60px !important;
 }

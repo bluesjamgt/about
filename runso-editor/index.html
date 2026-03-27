@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,22 +12,25 @@
 <body>
 
     <header>
-        <div class="brand">runso/ <span>Editor</span> <span class="version-tag">v2.0-Alpha</span></div>
+        <div class="brand">runso/</div>
         <div class="header-center">
-            <input type="text" id="meta-title" placeholder="歌曲名稱" value="告訴我也好 (Tell me)">
+            <input type="text" id="meta-title" placeholder="歌曲名稱" value="Tell me">
             <input type="text" id="meta-artist" placeholder="藝人" value="Runner's Blue">
             <input type="text" id="meta-key" placeholder="Key" value="A">
             <input type="text" id="meta-bpm" placeholder="BPM" value="120">
         </div>
         <div class="actions">
-            <button onclick="UI.toggleSidebar()" id="toggle-sidebar-btn">➡️ 面板</button>
+            <button id="zen-toggle-btn" onclick="UI.toggleZenMode()" title="滿版專注模式">⬆️</button>
+            <button onclick="UI.toggleSidebar()" id="toggle-sidebar-btn" title="側邊欄">➡️</button>
+
             <div class="divider"></div>
-            <button onclick="Storage.newProject()">📄 開新</button>
-            <button onclick="Storage.openManager()">📂 列表</button>
-            <button class="btn-dark" onclick="Storage.saveProject()">💾 儲存</button>
-            <button onclick="Storage.saveAsNew()">📑 另存新檔</button>
+            <button onclick="Storage.newProject()" title="開新專案">📄New</button>
+            <button onclick="Storage.openManager()" title="專案列表">📂List</button>
+            <button class="btn-dark" onclick="Storage.saveProject()" title="儲存">💾Safe</button>
+            <button onclick="Storage.saveAsNew()" title="另存新檔">📑As</button>
+
             <div class="divider"></div>
-            <button class="btn-accent" onclick="window.print()">🖨️ 匯出 PDF</button>
+            <button class="btn-accent" onclick="window.print()" title="匯出 PDF">🖨️Print</button>
         </div>
     </header>
 
@@ -44,7 +48,7 @@
                     <div id="print-key-text">Key: A</div>
                     <div id="print-bpm-text">BPM: 120</div>
                 </div>
-                <h1 class="print-title" id="print-title-text">告訴我也好 (Tell me)</h1>
+                <h1 class="print-title" id="print-title-text">Tell me</h1>
                 <div class="print-artist" id="print-artist-text">Runner's Blue</div>
             </div>
 

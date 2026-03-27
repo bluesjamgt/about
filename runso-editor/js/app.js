@@ -133,7 +133,25 @@ export const UI = {
         const sidebar = document.getElementById('app-sidebar');
         const btn = document.getElementById('toggle-sidebar-btn');
         sidebar.classList.toggle('collapsed');
-        btn.innerText = sidebar.classList.contains('collapsed') ? '⬅️ 展開' : '➡️ 面板';
+        btn.innerText = sidebar.classList.contains('collapsed') ? '⬅️ ' : '➡️ ';
+    },
+
+    toggleZenMode: function () {
+        document.body.classList.toggle('zen-mode');
+        const btn = document.getElementById('zen-toggle-btn');
+        if (btn) {
+            if (document.body.classList.contains('zen-mode')) {
+                btn.innerHTML = '⬇️'; // 進入滿版後變成向下箭頭
+                btn.style.color = 'var(--primary)';
+                btn.style.borderColor = 'var(--primary)';
+                btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'; // 給浮動按鈕加個立體陰影
+            } else {
+                btn.innerHTML = '⬆️'; // 恢復原狀
+                btn.style.color = 'var(--text)';
+                btn.style.borderColor = 'var(--border)';
+                btn.style.boxShadow = '0 1px 2px rgba(0,0,0,0.02)';
+            }
+        }
     },
 
     updateDict: function () {
