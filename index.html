@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,7 +8,9 @@
   <meta name="description" content="Blu J's space for music, AI, Dev, and writing." />
   <link rel="icon" href="favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Noto+Serif+TC:wght@400;700&display=swap"
+    rel="stylesheet">
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Blu J" />
   <meta property="og:description" content="Music / AI / Dev / Spirits." />
@@ -18,55 +21,102 @@
   <script src="lang.js"></script>
 
   <style>
-    body { font-family: 'Inter', sans-serif; }
-    h1, h2, h3, .serif { font-family: 'Noto Serif TC', serif; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    .gallery-img { transition: transform 0.5s ease; }
-    .gallery-img:hover { transform: scale(1.05); }
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    .serif {
+      font-family: 'Noto Serif TC', serif;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .gallery-img {
+      transition: transform 0.5s ease;
+    }
+
+    .gallery-img:hover {
+      transform: scale(1.05);
+    }
 
     /* --- 音樂播放器樣式 --- */
     @keyframes marquee {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
+      0% {
+        transform: translateX(100%);
+      }
+
+      100% {
+        transform: translateX(-100%);
+      }
     }
+
     .animate-marquee {
       animation: marquee 15s linear infinite;
     }
+
     input[type=range] {
       -webkit-appearance: none;
       appearance: none;
     }
-    
+
     /* 進度條 (Seek) */
     .seek-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      height: 12px; width: 12px;
-      border-radius: 50%; background: #1f2937;
-      cursor: pointer; margin-top: -4px;
+      height: 12px;
+      width: 12px;
+      border-radius: 50%;
+      background: #1f2937;
+      cursor: pointer;
+      margin-top: -4px;
       transition: transform 0.1s;
     }
-    .seek-slider:hover::-webkit-slider-thumb { transform: scale(1.2); }
+
+    .seek-slider:hover::-webkit-slider-thumb {
+      transform: scale(1.2);
+    }
+
     .seek-slider::-webkit-slider-runnable-track {
-      width: 100%; height: 4px; border-radius: 2px;
-      background: #cbd5e1; 
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
+      background: #cbd5e1;
     }
 
     /* 音量條 (Volume) */
     .volume-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      height: 10px; width: 10px;
-      border-radius: 50%; background: #6b7280;
-      cursor: pointer; margin-top: -3px;
+      height: 10px;
+      width: 10px;
+      border-radius: 50%;
+      background: #6b7280;
+      cursor: pointer;
+      margin-top: -3px;
     }
-    .volume-slider:hover::-webkit-slider-thumb { background: #374151; }
+
+    .volume-slider:hover::-webkit-slider-thumb {
+      background: #374151;
+    }
+
     .volume-slider::-webkit-slider-runnable-track {
-      width: 100%; height: 4px; border-radius: 2px;
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
       background: #cbd5e1;
     }
   </style>
 </head>
+
 <body class="bg-stone-50 text-gray-800 antialiased overflow-x-hidden">
 
   <div id="navbar" class="sticky top-0 z-40"></div>
@@ -78,14 +128,16 @@
   </div>
 
   <main>
-    <section class="min-h-[60vh] flex flex-col justify-center items-center text-center px-4 pt-20 relative overflow-hidden">
+    <section
+      class="min-h-[60vh] flex flex-col justify-center items-center text-center px-4 pt-20 relative overflow-hidden">
       <div class="absolute inset-0 z-0 select-none pointer-events-none">
-        <img src="img/787343561280611_1694067413.jpg" 
-             alt="Hero Background" 
-             class="w-full max-w-[1440px] mx-auto block h-full object-cover opacity-15">
+        <img src="img/787343561280611_1694067413.jpg" alt="Hero Background"
+          class="w-full max-w-[1440px] mx-auto block h-full object-cover opacity-15">
         <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-stone-50 to-transparent"></div>
       </div>
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 z-0"></div>
+      <div
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 z-0">
+      </div>
       <div class="space-y-4 max-w-2xl relative z-10">
         <h1 class="text-6xl md:text-8xl font-bold text-gray-900 tracking-tight" data-i18n="hero_title">
           Blu J<span class="text-lg md:text-xl font-mono text-gray-400 font-normal align-top ml-2 opacity-60"></span>
@@ -99,8 +151,8 @@
     <section id="bluj" class="py-20 max-w-5xl mx-auto px-6 relative z-10">
       <div class="grid md:grid-cols-2 gap-10 items-center">
         <div class="relative rotate-2 hover:rotate-0 transition duration-500">
-           <img src="img\077949A0-02E2-44D0-A533-B6F8EB3753C4.jpg" 
-                class="rounded-xl shadow-lg w-full object-cover h-[600px]" alt="About">
+          <img src="img\077949A0-02E2-44D0-A533-B6F8EB3753C4.jpg"
+            class="rounded-xl shadow-lg w-full object-cover h-[600px]" alt="About">
         </div>
         <div class="space-y-4">
           <h2 class="text-3xl font-bold" data-i18n="sect_about_title">Reflections</h2>
@@ -120,29 +172,40 @@
               Exploring tools, automation...
             </p>
             <div class="flex flex-wrap gap-4">
-              <a href="dev.html" class="inline-block px-6 py-2 bg-gray-100 border border-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition" data-i18n="btn_view_project">
-                View Projects 
+              <a href="dev.html"
+                class="inline-block px-6 py-2 bg-gray-100 border border-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition"
+                data-i18n="btn_view_project">
+                View Projects
               </a>
-              <a href="ai.html" class="inline-block px-6 py-2 bg-gray-100 border border-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition" data-i18n="btn_view_ai">
+              <a href="ai.html"
+                class="inline-block px-6 py-2 bg-gray-100 border border-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition"
+                data-i18n="btn_view_ai">
                 View AI Works
               </a>
             </div>
           </div>
-          
-          <div id="photo-stack" class="order-1 md:order-2 relative w-full h-[300px] cursor-pointer group select-none perspective-1000" onclick="toggleStack()">
-              
-              <img id="stack-img-1" src="img/2025-12-27-192650-822434423568865-o.webp" 
-                   class="stack-card absolute inset-0 w-full h-full object-cover rounded-xl shadow-xl border-[0.1px] border-white transition-all duration-500 ease-out z-20 rotate-0 scale-100 brightness-100 group-hover:-translate-y-1">
 
-              <img id="stack-img-2" src="img/2025-12-27_192845.jpg" 
-                   class="stack-card absolute inset-0 w-full h-full object-cover rounded-xl shadow-md border-[0.1px] border-white transition-all duration-500 ease-out z-10 rotate-6 translate-x-12 translate-y-6 scale-100 brightness-75">
+          <div id="photo-stack"
+            class="order-1 md:order-2 relative w-full h-[300px] cursor-pointer group select-none perspective-1000"
+            onclick="toggleStack()">
 
-              <div class="absolute bottom-4 right-4 z-40 bg-black/60 text-white text-[10px] px-3 py-1 rounded-full backdrop-blur pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
-                  <span>Swap</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
-              </div>
+            <img id="stack-img-1" src="img/2025-12-27-192650-822434423568865-o.webp"
+              class="stack-card absolute inset-0 w-full h-full object-cover rounded-xl shadow-xl border-[0.1px] border-white transition-all duration-500 ease-out z-20 rotate-0 scale-100 brightness-100 group-hover:-translate-y-1">
+
+            <img id="stack-img-2" src="img/2025-12-27_192845.jpg"
+              class="stack-card absolute inset-0 w-full h-full object-cover rounded-xl shadow-md border-[0.1px] border-white transition-all duration-500 ease-out z-10 rotate-6 translate-x-12 translate-y-6 scale-100 brightness-75">
+
+            <div
+              class="absolute bottom-4 right-4 z-40 bg-black/60 text-white text-[10px] px-3 py-1 rounded-full backdrop-blur pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+              <span>Swap</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" class="w-3 h-3">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+              </svg>
+            </div>
           </div>
-          </div>
+        </div>
       </div>
     </section>
 
@@ -150,15 +213,15 @@
       <div class="max-w-5xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-10 items-center">
           <div class="relative rotate-1 hover:rotate-0 transition duration-500">
-             <img src="img/48388802_2833742426639782_80953776548505190.jpg" 
-                  class="rounded-xl shadow-lg w-full object-cover h-[400px]" alt="Music">
+            <img src="img/48388802_2833742426639782_80953776548505190.jpg"
+              class="rounded-xl shadow-lg w-full object-cover h-[400px]" alt="Music">
           </div>
           <div class="space-y-6">
             <h2 class="text-3xl font-bold" data-i18n="sect_music_title">Soundscape</h2>
             <p class="text-gray-600 leading-relaxed text-lg" data-i18n="sect_music_text">
               Guitar, composition...
             </p>
-            
+
             <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 select-none space-y-3">
               <audio id="audio-player">
                 <source src="project/Gunpowder _01Prologue.m4a" type="audio/mpeg">
@@ -166,30 +229,45 @@
               </audio>
 
               <div class="flex items-center gap-4">
-                <button id="play-btn" class="w-10 h-10 flex items-center justify-center bg-gray-900 text-white rounded-full hover:bg-gray-700 transition shrink-0">
-                  <svg id="icon-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 ml-0.5"><path fill-rule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clip-rule="evenodd" /></svg>
-                  <svg id="icon-pause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 hidden"><path fill-rule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clip-rule="evenodd" /></svg>
+                <button id="play-btn"
+                  class="w-10 h-10 flex items-center justify-center bg-gray-900 text-white rounded-full hover:bg-gray-700 transition shrink-0">
+                  <svg id="icon-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                    class="w-5 h-5 ml-0.5">
+                    <path fill-rule="evenodd"
+                      d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                      clip-rule="evenodd" />
+                  </svg>
+                  <svg id="icon-pause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                    class="w-5 h-5 hidden">
+                    <path fill-rule="evenodd"
+                      d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z"
+                      clip-rule="evenodd" />
+                  </svg>
                 </button>
 
                 <div class="flex-1 flex items-center">
-                  <input type="range" id="seek-slider" value="0" max="100" class="seek-slider w-full h-1 bg-slate-300 rounded-lg appearance-none cursor-pointer block">
+                  <input type="range" id="seek-slider" value="0" max="100"
+                    class="seek-slider w-full h-1 bg-slate-300 rounded-lg appearance-none cursor-pointer block">
                 </div>
 
                 <div class="text-xs text-gray-400 font-mono w-9 text-right shrink-0" id="time-display">0:00</div>
 
                 <div class="flex items-center gap-2 group border-l border-gray-200 pl-3 ml-1">
-                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-gray-400">
-                    <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 001.5 12c0 2.485.586 4.815 1.632 6.845.199.39.49.668.893.842.82.355 1.77.106 2.309-.569l2.71-3.388c.84-.968 2.067-1.49 3.37-1.49h1.19a.75.75 0 000-1.5h-1.19c-.896 0-1.748.33-2.395.918l-1.678 2.098c-.22.274-.564.385-.89.243a8.27 8.27 0 01-1.082-4.275c0-1.62.46-3.13 1.258-4.444.15-.246.069-.548-.124-.741a.75.75 0 00-.53-.22H4.5c-.322 0-.626.208-.737.525A9.752 9.752 0 003 12c0 1.94.57 3.738 1.558 5.25.07.108.188.167.311.167h4.09l4.5 4.5c.945.945 2.56.276 2.56-1.06V4.06zM18.5 12a5.25 5.25 0 01-1.54 3.71.75.75 0 001.06 1.06 6.75 6.75 0 000-9.54.75.75 0 00-1.06 1.06A5.25 5.25 0 0118.5 12z" />
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                    class="w-4 h-4 text-gray-400">
+                    <path
+                      d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 001.5 12c0 2.485.586 4.815 1.632 6.845.199.39.49.668.893.842.82.355 1.77.106 2.309-.569l2.71-3.388c.84-.968 2.067-1.49 3.37-1.49h1.19a.75.75 0 000-1.5h-1.19c-.896 0-1.748.33-2.395.918l-1.678 2.098c-.22.274-.564.385-.89.243a8.27 8.27 0 01-1.082-4.275c0-1.62.46-3.13 1.258-4.444.15-.246.069-.548-.124-.741a.75.75 0 00-.53-.22H4.5c-.322 0-.626.208-.737.525A9.752 9.752 0 003 12c0 1.94.57 3.738 1.558 5.25.07.108.188.167.311.167h4.09l4.5 4.5c.945.945 2.56.276 2.56-1.06V4.06zM18.5 12a5.25 5.25 0 01-1.54 3.71.75.75 0 001.06 1.06 6.75 6.75 0 000-9.54.75.75 0 00-1.06 1.06A5.25 5.25 0 0118.5 12z" />
                   </svg>
-                  <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5" class="volume-slider w-16 h-1 bg-slate-300 rounded-lg appearance-none cursor-pointer">
+                  <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5"
+                    class="volume-slider w-16 h-1 bg-slate-300 rounded-lg appearance-none cursor-pointer">
                   <span id="vol-text" class="text-xs text-gray-500 font-mono w-8 text-right">50%</span>
                 </div>
               </div>
 
               <div class="relative w-full h-5 overflow-hidden border-t border-gray-50 pt-1">
-                 <div class="whitespace-nowrap absolute animate-marquee text-xs font-medium text-gray-500 tracking-wide">
-                   🎵 Gunpowder - Prologue ...  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                 </div>
+                <div class="whitespace-nowrap absolute animate-marquee text-xs font-medium text-gray-500 tracking-wide">
+                  🎵 Gunpowder - Prologue ... &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
               </div>
             </div>
           </div>
@@ -201,42 +279,57 @@
 
   <footer class="bg-gray-900 text-white py-16 overflow-hidden relative z-10">
     <div class="max-w-7xl mx-auto px-4 text-center mb-10">
-      <h3 class="text-2xl font-serif italic text-gray-400" data-i18n="footer_quote">"The world is a gallery of moments."</h3>
+      <h3 class="text-2xl font-serif italic text-gray-400" data-i18n="footer_quote">"The world is a gallery of moments."
+      </h3>
     </div>
     <div class="relative w-full group max-w-6xl mx-auto">
-      <button onclick="scrollGallery(-1)" class="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur text-white p-3 rounded-full transition">&#10094;</button>
+      <button onclick="scrollGallery(-1)"
+        class="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur text-white p-3 rounded-full transition">&#10094;</button>
       <div id="gallery" class="flex gap-6 overflow-x-auto no-scrollbar px-12 md:px-10 scroll-smooth pb-4 items-center">
-         <img src="img\483591732_29661157326804928_8909035304980.jpg" class="gallery-img shrink-0 w-[200px] h-[300px] object-cover rounded shadow-lg">
-         <img src="img\487314710_29840475338873125_210146699094583478.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
-         <img src="img\503385212_18334306345160927_52282287847.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
-         <img src="img\491754156_30059593510294639_59040979729.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
-         <img src="img\FD6DB3C4-842B-4472-882F-90AAD.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
-         <img src="img\96935955_0.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
-         <img src="img\96935956_0.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">        
-        </div>
-      <button onclick="scrollGallery(1)" class="absolute right-2 md:right-0 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur text-white p-3 rounded-full transition">&#10095;</button>
+        <img src="img\483591732_29661157326804928_8909035304980.jpg"
+          class="gallery-img shrink-0 w-[200px] h-[300px] object-cover rounded shadow-lg">
+        <img src="img\487314710_29840475338873125_210146699094583478.jpg"
+          class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+        <img src="img\503385212_18334306345160927_52282287847.jpg"
+          class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+        <img src="img\491754156_30059593510294639_59040979729.jpg"
+          class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+        <img src="img\FD6DB3C4-842B-4472-882F-90AAD.jpg"
+          class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+        <img src="img\96935955_0.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+        <img src="img\96935956_0.jpg" class="gallery-img shrink-0 w-[300px] h-[200px] object-cover rounded shadow-lg">
+      </div>
+      <button onclick="scrollGallery(1)"
+        class="absolute right-2 md:right-0 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur text-white p-3 rounded-full transition">&#10095;</button>
     </div>
-    <div class="max-w-6xl mx-auto mt-12 px-10 flex flex-col md:flex-row justify-end items-center gap-6 text-xs text-gray-500">
-      
+    <div
+      class="max-w-6xl mx-auto mt-12 px-10 flex flex-col md:flex-row justify-end items-center gap-6 text-xs text-gray-500">
+
       <span data-i18n="footer_copy" class="order-2 md:order-1">© 2025 Blu J </span>
 
       <div class="flex items-center gap-5 order-1 md:order-2">
-        
-        <a href="https://www.instagram.com/bluzjamgt/" target="_blank" class="hover:text-white transition duration-300" aria-label="Instagram">
+
+        <a href="https://www.instagram.com/bluzjamgt/" target="_blank" class="hover:text-white transition duration-300"
+          aria-label="Instagram">
           <svg fill="currentColor" class="w-4 h-4" viewBox="0 0 24 24">
-            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.069-4.85.069-3.204 0-3.584-.011-4.849-.069-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            <path
+              d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.069-4.85.069-3.204 0-3.584-.011-4.849-.069-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
           </svg>
         </a>
 
-        <a href="https://www.youtube.com/@bluesjamgt/channels" target="_blank" class="hover:text-white transition duration-300" aria-label="YouTube">
+        <a href="https://www.youtube.com/@bluesjamgt/channels" target="_blank"
+          class="hover:text-white transition duration-300" aria-label="YouTube">
           <svg fill="currentColor" class="w-5 h-5" viewBox="0 0 24 24">
-            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+            <path
+              d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
           </svg>
         </a>
 
-        <a href="mailto:bluesjamgt@gmail.com" title="bluesjamgt@gmail.com" class="hover:text-white transition duration-300" aria-label="Email">
+        <a href="mailto:bluesjamgt@gmail.com" title="bluesjamgt@gmail.com"
+          class="hover:text-white transition duration-300" aria-label="Email">
           <svg fill="currentColor" class="w-5 h-5" viewBox="0 0 24 24">
-            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            <path
+              d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
           </svg>
         </a>
 
@@ -256,7 +349,7 @@
       const timeDisplay = document.getElementById('time-display');
       const volText = document.getElementById('vol-text');
 
-      if(audio && playBtn) {
+      if (audio && playBtn) {
         audio.volume = 0.5;
         volumeSlider.value = 0.5;
         volText.textContent = '50%';
@@ -306,27 +399,28 @@
     let isSwapped = false;
 
     function toggleStack() {
-        const img1 = document.getElementById('stack-img-1');
-        const img2 = document.getElementById('stack-img-2');
+      const img1 = document.getElementById('stack-img-1');
+      const img2 = document.getElementById('stack-img-2');
 
-        // 定義樣式常量
-        // Top: 正中、亮、有陰影
-        const topStyle = "z-20 rotate-0 translate-x-0 translate-y-0 scale-100 brightness-100 shadow-xl group-hover:-translate-y-1";
-        // Bottom: 歪斜、暗、稍微位移
-        const bottomStyle = "z-10 rotate-6 translate-x-10 translate-y-6 scale-100 brightness-75 shadow-md";
+      // 定義樣式常量
+      // Top: 正中、亮、有陰影
+      const topStyle = "z-20 rotate-0 translate-x-0 translate-y-0 scale-100 brightness-100 shadow-xl group-hover:-translate-y-1";
+      // Bottom: 歪斜、暗、稍微位移
+      const bottomStyle = "z-10 rotate-6 translate-x-10 translate-y-6 scale-100 brightness-75 shadow-md";
 
-        isSwapped = !isSwapped;
+      isSwapped = !isSwapped;
 
-        if (isSwapped) {
-            // 交換狀態：圖2變上面，圖1變下面
-            img2.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[0.1px] border-white transition-all duration-500 ease-out ${topStyle}`;
-            img1.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[0.1px] border-white transition-all duration-500 ease-out ${bottomStyle}`;
-        } else {
-            // 恢復原狀：圖1在上面，圖2在下面
-            img1.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[0.1px] border-white transition-all duration-500 ease-out ${topStyle}`;
-            img2.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[0.1px] border-white transition-all duration-500 ease-out ${bottomStyle}`;
-        }
+      if (isSwapped) {
+        // 交換狀態：圖2變上面，圖1變下面
+        img2.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[0.1px] border-white transition-all duration-500 ease-out ${topStyle}`;
+        img1.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[0.1px] border-white transition-all duration-500 ease-out ${bottomStyle}`;
+      } else {
+        // 恢復原狀：圖1在上面，圖2在下面
+        img1.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[0.1px] border-white transition-all duration-500 ease-out ${topStyle}`;
+        img2.className = `stack-card absolute inset-0 w-full h-full object-cover rounded-xl border-[0.1px] border-white transition-all duration-500 ease-out ${bottomStyle}`;
+      }
     }
   </script>
 </body>
+
 </html>
