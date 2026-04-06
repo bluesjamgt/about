@@ -81,7 +81,7 @@ const rawTranslations = {
     tw: "類比與數位間、科技與人文間，多領域並存的個人角落。",
     jp: "アナログとデジタル、テクノロジーと人文が共存する個人的なスペース。"
   },
-  
+
   sect_about_title: {
     en: "Life & Spirits",
     tw: "人與酒",
@@ -103,7 +103,7 @@ const rawTranslations = {
     tw: "隨著時代與時俱進，探索各種形式工具，AI、LLM的獨立部屬與平台實作運用，完成自己各種事物的「創造目的」，解決問題。",
     jp: "時代と共に進化し、あらゆるツールを探求する。AIやLLMの独自展開からプラットフォーム実装まで、「創造の目的」を達成し、問題を解決するために。"
   },
-  
+
   btn_view_project: {
     en: "View Projects",
     tw: "開發專案",
@@ -154,7 +154,7 @@ const rawTranslations = {
   },
 
   // --- Dev Page Projects ---
-  
+
   // P0: PrismStem (Flagship)
   dev_p0_title: {
     en: "PrismStem",
@@ -168,7 +168,7 @@ const rawTranslations = {
   },
   dev_p0_desc2: {
     en: "Distinguished from generic online tools, this is a local-native stem separation workstation built for ultimate fidelity. It integrates the Demucs AI model with a custom Mini-DAW engine to precisely isolate vocals, drums, bass, and guitars without any cloud uploads. Featuring smart beat detection and a familiar real-time mixing interface, it is an essential tool for musicians to deconstruct and analyze audio with zero compromise.",
-    tw: "不用綁線上服務與DAW介面化的分軌工具，注重音質還原的音樂分軌工具、人聲分離、吉他、貝斯、鼓組、其他樂器單獨抽離，與智慧節拍偵測產生。擺脫線上工具的頻率綁定，整合 Demucs AI 模型與專業級 Mini-DAW 播放引擎，無需上傳雲端，利用本機算力即可精準分離人聲與樂器。具備DAW風格介面、即時混音控制，是音樂人拆解分析的超實用工具。",
+    tw: "不綁線上服務與DAW介面化的分軌工具，注重音質還原的音樂分軌工具、人聲分離、吉他、貝斯、鼓組、其他樂器單獨抽離，與智慧節拍偵測產生。擺脫線上工具的頻率綁定，整合 Demucs AI 模型與專業級 Mini-DAW 播放引擎，無需上傳雲端，利用本機算力即可精準分離人聲與樂器。具備DAW風格介面、即時混音控制，是音樂人拆解分析的實用工具。",
     jp: "一般的なオンラインツールとは一線を画す、究極の音質を追求したローカル完結型のAI音源分離ツールです。Demucs AIとMini-DAWエンジンを統合し、クラウドにアップロードすることなく、ボーカル、ギター、ベース、ドラムを高精度に分離。スマートなBPM検出機能とリアルタイム・ミキシング可能なDAW風UIを備え、楽曲構造を深く分析したいミュージシャンのための強力なソリューションです。"
   },
 
@@ -180,12 +180,12 @@ const rawTranslations = {
   },
   dev_p1_desc1: {
     en: "A modern, cross-platform GUI wrapper for the powerful yt-dlp tool.",
-    tw: "強大 yt-dlp 工具的現代化跨平台圖形介面。",
+    tw: "強大 yt-dlp工具，下載支援平台地的影片音訊格式的現代化跨平台圖形介面。",
     jp: "強力なyt-dlpツールのためのモダンなGUI。"
   },
   dev_p1_desc2: {
     en: "Download videos effortlessly with a clean, user-friendly interface.",
-    tw: "透過簡潔直觀的介面，輕鬆下載影片。",
+    tw: "透過簡潔直觀的介面，輕鬆下載影片，以及歷史清單管理。",
     jp: "クリーンなインターフェースで動画を簡単にダウンロード。"
   },
 
@@ -257,7 +257,7 @@ for (const key in rawTranslations) {
  */
 function setLang(lang) {
   localStorage.setItem('site_lang', lang);
-  
+
   // 更新按鈕樣式
   document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('font-bold', 'underline'));
   const activeBtn = document.getElementById('btn-' + lang);
@@ -279,8 +279,8 @@ function setLang(lang) {
 function scrollGallery(direction) {
   const gallery = document.getElementById('gallery');
   if (gallery) {
-      const scrollAmount = 300; 
-      gallery.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+    const scrollAmount = 300;
+    gallery.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
   }
 }
 
@@ -289,13 +289,13 @@ function scrollGallery(direction) {
  */
 function detectSystemLang() {
   const sysLang = navigator.language.toLowerCase();
-  
+
   // 如果包含 'zh' (zh-TW, zh-CN, zh-HK) -> 回傳 tw
   if (sysLang.includes('zh')) return 'tw';
-  
+
   // 如果包含 'ja' -> 回傳 jp
   if (sysLang.includes('ja')) return 'jp';
-  
+
   // 其他情況 -> 回傳 en
   return 'en';
 }
@@ -312,17 +312,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 載入 Navbar
   const container = document.getElementById('navbar');
   if (container) {
-      try {
-        const res = await fetch('navbar.html');
-        if (res.ok) {
-          const html = await res.text();
-          container.innerHTML = html;
-          // Navbar 載入後，立刻翻譯
-          setLang(savedLang); 
-        }
-      } catch (e) { console.error("Navbar load failed", e); }
+    try {
+      const res = await fetch('navbar.html');
+      if (res.ok) {
+        const html = await res.text();
+        container.innerHTML = html;
+        // Navbar 載入後，立刻翻譯
+        setLang(savedLang);
+      }
+    } catch (e) { console.error("Navbar load failed", e); }
   }
-  
+
   // 初始化頁面內容
   setLang(savedLang);
 });
