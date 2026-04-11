@@ -208,6 +208,7 @@
             padding: 32px var(--dyn-canvas-padding);
             flex: 1;
             overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .view-panel.active {
@@ -291,15 +292,44 @@
             font-size: var(--dyn-lyric-size);
             line-height: var(--dyn-line-height);
             column-count: var(--dyn-columns);
+            -webkit-column-count: var(--dyn-columns);
             column-gap: 60px;
+            -webkit-column-gap: 60px;
+            column-fill: auto;
+            -webkit-column-fill: auto;
             min-height: 50vh;
             padding-bottom: 80px;
             letter-spacing: 0.5px;
             tab-size: 6;
+            overflow: visible;
         }
 
         #editor-canvas div {
             min-height: 1em;
+            -webkit-column-break-inside: avoid;
+            break-inside: avoid;
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+
+        /* iPad / 平板雙排模式修正：縮小欄間距與側邊距，避免切邊 */
+        @media screen and (max-width: 1100px) {
+
+            #editor-canvas,
+            #leadsheet-canvas {
+                column-gap: 32px !important;
+                -webkit-column-gap: 32px !important;
+            }
+
+            .view-panel {
+                padding-left: 4% !important;
+                padding-right: 4% !important;
+            }
+
+            .tabs {
+                padding-left: 4% !important;
+                padding-right: 4% !important;
+            }
         }
 
         /* ✨ 純歌詞模式：隱藏和弦並壓縮行距 */
@@ -365,6 +395,8 @@
             overflow: visible;
             vertical-align: baseline;
             user-select: none;
+            -webkit-column-break-inside: avoid;
+            break-inside: avoid;
         }
 
         .chord-val {
@@ -617,7 +649,11 @@
            ========================================== */
         #leadsheet-canvas {
             column-count: var(--dyn-columns);
+            -webkit-column-count: var(--dyn-columns);
             column-gap: 60px;
+            -webkit-column-gap: 60px;
+            column-fill: auto;
+            -webkit-column-fill: auto;
         }
 
         .ls-table {
