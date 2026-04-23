@@ -1,0 +1,163 @@
+{
+  "PROJ_1776981459815": {
+    "id": "PROJ_1776981459815",
+    "title": "鳳翼天翔",
+    "artist": "陰陽座",
+    "key": "",
+    "bpm": "",
+    "rawText": "[Em7||Intro]\t[Am7]\t\t[Bm7]\t\t[Em7]\n[Em7]\t\t[Em7/D]\t\t[C#m7-5]\t[Am7]\t\t[Bm7]\t\t[Em7]\n[Em7]\t\t[Em7/D]\t\t[C#m7-5]\t[Am7]\t\t[Bm7]\n\n[Em||Verse 1]{朝|あさ}に{醒|さ}めた{顰|ひそ}む\n[Em]{征野|せいや}の [Am7]{白|しろ}き[Bm7]{乙女|おとめ}[Em]\n[Em]{瑞|みず}の{小佩|おひも}\n[Em]{堅|かた}く{結|むす}びて[Am7]{撓|たおり}に[Bm7]{立|た}[Em]つ\n\n[Em||Verse 2]{浅葱|あさぎ}{褪|ざ}めた{澱|よど}む\n[Em]{遠夜|たいや}の [Am7]{藍|あい}に[Bm7]{沈|しず}[Em]む\n[Em]{失|うしな}われし{輝|かか}る\n[Em]{吾|あ}が{手|て}を [Am7]{包|つつ}[Bm7]む{光|ひかり}[Esus4]よ [E]\n\n[CM7||Chorus 1]{暁|あかつき}[D/C]{夢見|ゆめみ}し{蒼|あお}き{焔|ほむら}\n[Bm7]{纏|まと}う[Em]{鳳|とり}が\n[Am7]{生|いく}の[Bm7]{國|くに}まで\n[Bm7]{舞|ま}い[Em7]{上|あ}[Em7/D]が[C#m7-5]る\n\n[Em||Verse 3]{翠|みどり}{絶|た}えし{大地|だいじ}にも\n[Em]{堕|お}ちた{天|てん}にも\n[Am7]{五色|ごしき}の[Bm7]{翼|つばさ}{掲|かか}げ[Em]て\n[Em]{羽|はね}に{湛|たた}えた{慈|いつく}しみ\n[Em]{渾|すべ}ての{魂|もの}に\n[Am7]{与|あた}え[Bm7]てそだた[Esus4]く [E]\n\n[CM7||Chorus 2]{暁|あかつき} [D/C]{夢見|ゆめみ}し{蒼|あお}き{焔|ほむら}[Bm7]\n[Bm7]{纏|まと}う[Em]{鳳|とり}が\n[Am7]{生|いく}の[Bm7]{國|くに}まで[Em]{舞|ま}い{上|あ}がる\n\n[Em||Bridge]{天明|てんめい}を[D]{邀|むか}えた\n[Am7]{梧桐|あおぎり}の[C]{丘|おか}か[D]ら\n[Em]{鏘鏘|そうそう}と[D]{鳴|な}く\n[D]{聲|こえ}が[Am7]{届|とど}い[B7]たら\n\n[CM7||Chorus 3]{紅月|あかつき}{燃|も}え[D/C]{逝|ゆ}く\n[D/C]{斯|か}かる[Bm7]{星|ほし}の\n[Bm7]{天空|そら}を[Em]{惑|まど}う\n[Am7]{幾億|いくおく}の{魄霊|はくれい}を[Bm7]\n[Bm7]{明|あか}き[CM7]{心|こころ}で{束|たばね}[Bm7]て\n[Am7]{生|せい}と{死|し}の[Bm7]{理|ことわり}を\n[Bm7]{来世|あす}に[CM7]{伝|つた}え[D]て\n[D]{舞|ま}い[Em7]{上|あ}[Em7/D]が[C#m7-5]れ [Am7] [Bm7] [Em7]\n",
+    "layout": {
+      "chordSize": "1.05",
+      "lyricSize": "1.3",
+      "lineHeight": "2.8",
+      "globalX": "3",
+      "globalY": "8",
+      "rubyX": "-9",
+      "rubyY": "-18",
+      "canvasPad": "10",
+      "lsCols": "8",
+      "columns": false
+    },
+    "updatedAt": "2026/4/24 上午5:57:39"
+  },
+  "PROJ_1776980121111": {
+    "id": "PROJ_1776980121111",
+    "title": "甲賀忍法帖",
+    "artist": "陰陽座",
+    "key": "Am",
+    "bpm": "",
+    "rawText": "[Am||Intro]\t[F]\t[G]\n[Am]\t[F]\t[G]\n[Am]\t[F]\t[G]\n[Am]\t[F]\t[G]\n\n[Am7||Verse 1]{下弦|かげん}の{月|つき}が {朧|おぼろ}に{搖|ゆ}れる\n[F]{夜|よる}を [G]{包|つつ}む [E/G#]{叢雲|むらくも}\n[Am7]{磔|はりつけ}られた {番|つが}う{雛|ひいな}\n[F]{絡|から}める [E]{非情|ひじょう}の{罠|わな}\n\n[C||Pre-Chorus 1]{嗚呼|ああ} [G/B]{今|いま}も [Am7]{燻|くす}[G]ぶ\n[Dm]{想|おも}い[D#dim]{胸|むね}に [Esus4]しかと [E]{宿|やど}らば ({殲|せん})\n\n[NC||Chorus 1]{水|みず}の{様|よう}に[F]{優|やさ}し[G/F]く {花|はな}の{様|よう}に[Em]{劇|はげ}し[Am]く\n[F]{震|ふる}える [E7]{刃|やいば}で [Am]{貫|つらぬ}[G/B]い[C]て\n[Dm]{宿命|さだめ}られ[F]た{涙|なみだ}[G/F]を\n[Em]{瞳|ひとみ}の [Am]{奥|おく}{閉|と}じても\n[F]{貴方|あなた}を [G]{瞼|まぶた}が [Am]{憶|おぼ}えているの\n[F]\t\t[G]\n\n[Am||Interlude\t1]\t[F]\t[G]\t[NC]\n\n[Am7||Verse 2]{無明|むみょう}の{淵|ふち}で {終焉|おわり}を{待|ま}つ\n[F]{私|わたし}は [G]むせぶ [E/G#]{身無|みな}し{児|ご}\n[Am7]ふみにじられた {尽|すが}る{恋|こい}を\n[F]{両手|りょうて}に [E]{包|つつ}んだ{儘|まま}\n\n[C||Pre-Chorus 2]もう [G/B]あらがえ[Am7]ない [G]{共|とも}に[Dm]たど[D#dim]る\n[Esus4]ちぬりの{黄泉路|みち}を({殲|せん})\n\n[F||Chorus 2]{水|みず}の{様|よう}に[G/F]{優|やさ}しく {花|はな}の{様|よう}に[Em]{劇|はげ}し[Am]く\n[F]{震|ふる}える [E7]{刃|やいば}で [Am]{貫|つらぬ}[G/B]い[C]て\n[Dm]{宿命|さだめ}られた[F] {涙|なみだ}[G/F]を {瞳|ひとみ}の [Em]{奥|おく}{閉|と}じて[Am]も\n[F]{貴方|あなた}を [G]{瞼|まぶた}が [F]{憶|おぼ}えているの\n[G/F]\t\t[F]\t\t[G/F]\n\n[Em||Solo]\t[G#dim]\t[Asus4]\t[Am]\n[F]\t[Em]\t[Am]\n[Dm]\t[D#dim]\t[Esus4]\t[E]\n[E]\n\n[F||Chorus 3]{水|みず}の{様|よう}に[G7]{優|やさ}しく {花|はな}の{様|よう}に[Em]{劇|はげ}し[Am]く\n[F]{震|ふる}える [E7]{刃|やいば}で [Am]{貫|つらぬ}[G/B]い[C]て\n[Dm]{宿命|さだめ}られた[F] {涙|なみだ}[G/F]を {瞳|ひとみ}の [Em]{奥|おく}{閉|と}じて[Am]も\n[F]{流|なが}れる [F#dim]{血潮|ちしお} [Esus4]{止|と}められな[E]い\n\n[F||Chorus 4]{蜜|みつ}の{様|よう}に[G/F]{零|こぼ}れて {徒|あだ}の{様|よう}に[Em]{散|ち}りゆ[Am]く\n[F]はかない [E7]{祈|いの}りを [Am]かき[G/B]{消|け}し[C]て\n[Dm]{宿命|さだめ}られた[F] {二人|ふたり}[G7]を\n[Em]{葵闇|あおいやみ}が[Am]{裂|さ}いても\n[F]{貴方|あなた}と [G]たゆたう [NC]{隱|かく}り[Am]{世|よ}まで\n\n[F||Outro]\t\t[G]\n[Am]\t\t[F]\t\t[G]\n[Am]\t\t[F]\t\t[G]\n[Am]\t\t[F]\t\t[G]\n[G]\t\t[Am]\n",
+    "layout": {
+      "chordSize": "1.05",
+      "lyricSize": "1.3",
+      "lineHeight": "2.8",
+      "globalX": "3",
+      "globalY": "8",
+      "rubyX": "-9",
+      "rubyY": "-18",
+      "canvasPad": "10",
+      "lsCols": "8",
+      "columns": false
+    },
+    "updatedAt": "2026/4/24 上午5:52:26"
+  },
+  "PROJ_1776979578016": {
+    "id": "PROJ_1776979578016",
+    "title": "TONIGHT",
+    "artist": "LUNA SEA",
+    "key": "B",
+    "bpm": "178",
+    "rawText": "[Em||Intro]\t[F]\t[G]\t[Am]\n[Em]\t[F]\t[G]\t[Am]\n[Em]\t[F]\t[G]\t[Am]\n[Em]\t[F]\t[G]\t[Am]\n[Em||Verse 1]{奪|うば}い[F]に{行|い}こう [G]{欲|ほ}しいも[Am]のな[Em]ら\n[F]{夜空|よぞら}に[G]{散|ち}った [Am]あの{星|ほし}[Em]さえも\n[F]いつか{見|み}た{夢|ゆめ} [G]{今|いま}{取|と}り[Am]{戻|もど}せ [Em]{乾|かわ}き[F]{切|き}る{前|まえ}[G]に [F]Oh\n[G||Chorus 1]キミだ[Am]けのMelody [F] 　[G]キミだ[Am]けの{祈|いの}り [F]Oh\n[G]キミだ[Am]けの{夜|よる}[F]に [G]{壊|こわ}し[Em]て\n[F||Verse 2]{閉|と}じ{込|こ}[G]めた かす[Am]かな{声|こえ}[Em]を{聞|き}く\n[F]ふいに[G]{目覚|めざ}めた [Am]{白夜|びゃくや}の[Em]{中|なか}で\n[F]{感|かん}じ[G]てるなら [Am]{世界|せかい}の[Em]{果|は}てで [F]{一|ひと}つになれ[G]る [F]Oh\n\n[G||Chorus 2]キミだ[Am]けのMelody [F]　 [G]キミだ[Am]けの{祈|いの}り [F]Oh\n[G]キミだ[Am]けの{夜|よる}[F]に [G]キミだ[C]けの{夜|よる}に\n[C||Interlude]\t[F]\n[G||Chorus 3]{涙|なみだ}[Am]の{数|かず}だ[F]け [G]{心|こころ}[Am]に{刻|きざ}ん[F]だOh\n[G]{真実|しんじつ}[Am]のかけ[F]ら [G]ずっと[Am]{抱|だ}きしめ[F]て\n[G]キミだ[Am]けの{夜|よる}[F]に [G]キミだ[Am]けの{夜|よる}[F]にOh\n[G]キミだ[Am]けの{夜|よる}[F]に [G]キミだ[C]けの{夜|よる}に\n",
+    "layout": {
+      "chordSize": "1.05",
+      "lyricSize": "1.3",
+      "lineHeight": "2.8",
+      "globalX": "3",
+      "globalY": "8",
+      "rubyX": "-9",
+      "rubyY": "-18",
+      "canvasPad": "10",
+      "lsCols": "8",
+      "columns": false
+    },
+    "updatedAt": "2026/4/24 上午5:29:06"
+  },
+  "PROJ_1776977997443": {
+    "id": "PROJ_1776977997443",
+    "title": "Storm",
+    "artist": "LUNA SEA",
+    "key": "C#m",
+    "bpm": "197",
+    "rawText": "[Am||Intro]\t[G]\t[F]\t[G]\n[Am]\t[G]\t[F]\n[Am7]\t[F]\t[Dm]\t[G]\n[Am7]\t[F]\t[Dm]\t[G]\n\n[F||Verse 1]ふと [Am7]{目|め}を{覚|さま}した [F]{真夜中|まよなか}の\n[Dm]プラチ[G]ナの [Am7]{光|ひかり}の{中|なか}\n[F]ギラギラと{輝|かがや}いた [Dm]この[G]{街|まち}も [Am7]{悪|わる}くない\n[F]{君|きみ}とならこの{嵐|あらし}も [Dm]{乗|の}り{越|こ}[G]えら[Am7]れるはずさ\n\n[Am7||Pre-Chorus]Do you like it rough?\n[F]ときめきを [Dm]そうさ[G]{求|もと}[F]め{続|つづ}けよう\n[F]Do you like it rough? (Do you like it rough?)\n\n[C||Chorus 1]{今|いま}{吹|ふ}き{荒|あ}れる [E]{嵐|あらし}の{中|なか}\n[Am]そう{抱|だ}き{合|あ}って{確|たし}[C7]かめ{合|あ}って\n[F]{失|うしな}[G]うものなど[Am]{何|なに}もなかったはずだ[G]ね\n[C]{手|て}を{伸|の}ばさなきゃ [E]あの{光|ひかり}さえつ[Am]かめない\n[C7]What will it take for you\n[F]{君|きみ}が[G]{望|のぞ}む{様|よう}に{僕|ぼく}も{望|のぞ}んでる\n[Am||Post-Chorus]Kiss [G]me [F]in the [G]Stormy…\n[Am]\t[G]\t[F]\t[G]\n[Am]Kiss [G]me [F]in the [G]Stormy…\n[Am]\t[G]\t[F]\t[G]\n\n[C||Interlude]\t[E]\t[Am]\t[C]\n[F]\t[G]\t[Am]\t[G]\n[C]\t[E]\t[Am]\t[C]\n[F]\t[G]\n[Am]\t[G]\t[Am]\t[G]\t[Am]\t[G]\n[Am]\t[G]\t[Am]\t[G]\t[Am]\t[G]\n[Am]\t[G]\t[Am]\t[G]\t[Am]\t[G]\n[Am]\t[G]\t[Am]\t[G]\t[Am]\t[G]\t[N.C.]\n[C||Chorus 2]{今|いま}{吹|ふ}き{荒|あ}れる [E]{嵐|あらし}の{中|なか}\n[Am]そう{抱|だ}き{合|あ}って{確|たし}[C7]かめ{合|あ}って\n[F]{失|うしな}[G]うものなど[Am]{何|なに}もなかったはずだ[G]ね\n[C]{真実|しんじつ}はきっと [E]{臆病|おくびょう}だから\n[Am]そ[C7]の{姿|すがた}を{決|けっ}して{見|み}せない\n[F]だけ[G]ど{僕|ぼく}らは{離|はな}れたりしないから\n[C]{手|て}を{伸|の}ばさなきゃ [E]あの{光|ひかり}さえつ[Am]かめない\n[C7]What will it take for you\n[F]{君|きみ}が[G]{望|のぞ}む{様|よう}に{僕|ぼく}も{望|のぞ}んでる\n[Am||Outro]Kiss [G]me [F]in the [G]Stormy…\n[Am]\t[G]\t[F]\t[G]\n[Am]Kiss [G]me [F]in the [G]Stormy…\n[Am]\t[G]\t[F]\t[G]\n[Fmaj7]\t[G]\t[E/G#]\n[Am7]\t[F]\t[Dm]\t[G]\n[Am7]\t[F]\t[Dm]\t[G]\n[F]\t[C]\n",
+    "layout": {
+      "chordSize": "1.05",
+      "lyricSize": "1.3",
+      "lineHeight": "2.8",
+      "globalX": "3",
+      "globalY": "8",
+      "rubyX": "-9",
+      "rubyY": "-18",
+      "canvasPad": "10",
+      "lsCols": "8",
+      "columns": false
+    },
+    "updatedAt": "2026/4/24 上午5:15:54"
+  },
+  "PROJ_1774629364410": {
+    "id": "PROJ_1774629364410",
+    "title": "Hallowed Be Thy Name",
+    "artist": "Iron Maiden",
+    "key": "A",
+    "bpm": "120",
+    "rawText": "[Em||Intro]I'm waiting in my cold cell when the bell begins to chime\nReflecting on my past life and it doesn't have much time\n[C]'Cause at five o'clock they [D]take me to the gallows [Em]pole\n[C]The sands of time for [D]me are running [Em]low [C]\t[D]\nRunning low, yeah\n\n[Em||Interlude\t1]\t[C]\t[D]\t[Em]\n\n[Em||Verse 1]When the priest comes to read me the last rites [B5]\t[C5]\nTake a look through the bars at the last sights [A5]\t[D5]\nOf a world that has gone very wrong for me [Em]\t[B5]\t[C5]\n[Em]Can it be that there's some sort of error? [B5]\t[C5]\nHard to stop the surmounting terror [A5]\t[D5]\nIs it really the end, not some crazy dream?[Em] \t[B5]\t[C5]\n\n[Em||Verse 2]Somebody please tell me that I'm dreaming\n[C5]It's not easy to stop from screaming\n[D5]But words escape me when I try to speak [Em]\t[B5]\t[C5]\n[Em]Tears fall, but why am I crying?\n[C5]After all, I'm not afraid of dying\n[D5]Don't I believe that there never is an end? [Em]\t[B5]\t[C5]\n\n[Em||Instrumental\tBreak]\t[C]\t[D]\t[Em]\n[Em]\t[Em]\t[C]\t[C]\n[Em]\t[Em]\t[C]\t[C]\n[Em]\t[Em]\t[C]\t[C]\n[Em]\t[Em]\t[C]\t[C]\n\n[Em||Verse 3]As the guards march me out to the courtyard\n[C]Somebody cries from a cell, \"God be with you\"\n[D]If there's a God, why has He let me [Em]go?\nAs I walk, my life drifts before me\n[C]And though the end is near, I'm not sorry\n[D]Catch my soul, it's willing to fly a[Em]way\n\n[Em||Verse 4]Mark my words, believe my soul lives on\n[C]Don't worry now that I have [D]gone\nI've gone beyond to seek the [Em]truth\nWhen you know that your time is close at hand\n[C]Maybe then you'll begin to understand\n[D]Life down here is just a strange illu[Em]sion\n\n[Em||Solo]\t[Em]\t[C]\t[C]\n[Em]\t[Em]\t[Em]\t[Em]\n[C]\t[C]\t[Em]\t[Em]\n[Em7]\t[C]\t[D]\t[Em7]\t[C]\t[D]\n[Em]\t[Em]\t[D]\t[D]\n[Em]\t[Em]\t[D]\t[D]\n[Em]\t[Em]\t[D]\t[D]\n[Em]\t[Em]\t[D]\t[D]\n[Em]\t[Em]\t[D]\t[D]\n[Em]\t[Em]\t[D]\t[D]\n[Em]\t[Em]\t[G]\n[Em]\t[Em]\t[G]\n[Em]\t[Em]\t[G]\n[Em]\t[Em]\t[G]\n[Em]\t[C]\t[D]\t[Em]\n[Em]\t[C]\t[D]\t[Em]\t[B5]\t[C5]\n\n[Em||Outro]Yeah, yeah, [C5]yeah [D5]Hallowed be thy [Em]name\n[Em]Yeah, yeah, [C5]yeah [D5]Hallowed be thy [Em]name\n[D]Yeah [C]\t[D]\t[Em]\n",
+    "updatedAt": "2026/4/24 上午5:16:04"
+  },
+  "PROJ_1774629010734": {
+    "id": "PROJ_1774629010734",
+    "title": "The Trooper",
+    "artist": "Iron Maiden",
+    "key": "",
+    "bpm": "",
+    "rawText": "\n[Em||Intro]\t[D]\t[C]\t[D]\t[Em]\t[D]\t[C]\t[D]\n[Em]\t[D]\t[C]\t[D]\t[Em]\t[D]\t[C]\t[D]\n[Em]\t[D]\t[Em]\t[D]\n[C]\t[D]\t[Em]\t[D]\n[Em]\t[D]\t[Em]\t[D]\n[C]\t[D]\t[Em]\t[D]\n[Em||Verse 1]You'll take my life, but I'll take yours [D]too\n[Em]You'll fire your musket, but I'll run you [D]through\n[C]So when you're waiting for the next at[D]tack\n[Em]You'd better stand, there's no turning [D]back\n[Em]The bugle sounds, the charge be[D]gins\n[Em]But on this battlefield, no one [D]wins\n[C]The smell of acrid smoke and horse's [D]breath\n[Em]As I plunge on into certain death\n\n[D||Chorus 1]Oh-oh-oh-[Em]oh-oh-oh-oh-oh-oh\n[D]Oh-oh-oh-[Em]oh-oh-[D]oh-oh-oh-oh\n\n[Em||Bridge\t1]\t[D]\t[Em]\t[D]\n[C]\t[F/C]\t[D]\n[Em]\t[D]\t[Em]\t[D]\n[C]\t[F/C]\t[D]\n\n[Em||Verse 2]The horse, he sweats with fear, we break to [D]run\n[Em]The mighty roar of the Russian [D]guns\n[C]And as we race towards the human [D]wall\n[Em]The screams of pain as my comrades [D]fall\n[Em]We hurdle bodies that lay on the [D]ground\n[Em]And the Russians fire another [D]round\n[C]We get so near, yet so far a[D]way\n[Em]We won't live to fight another day\n\n\n[D||Chorus 2]Oh-oh-oh-[Em]oh-oh-oh-oh-oh-oh\n[D]Oh-oh-oh-[Em]oh-oh-[D]oh-oh-oh-oh\n\n[Em||Solo]\t[D]\t[Bm]\t[C]\t[D]\t[Em]\t[D]\t[Bm]\t[C]\t[D]\n[Em]\t[D]\t[Bm]\t[C]\t[D]\t[Em]\t[D]\t[Bm]\t[C]\t[D]\n[Am]\t[G]\t[Em]\t[F]\t[G]\t[Am]\t[G]\t[Em]\t[F]\t[G]\n[Am]\t[G]\t[Em]\t[F]\t[G]\t[Am]\t[G]\t[Em]\t[F]\t[D]\n\n[Em||Bridge\t2]\t[D]\t[Em]\t[D]\n[C]\t[F/C]\t[D]\n[Em]\t[D]\t[Em]\t[D]\n[C]\t[F/C]\t[D]\n\n[Em||Verse 3]We get so close, near enough to [D]fight\n[Em]When a Russian gets me in his [D]sights\n[C]He pulls the trigger and I feel the [D]blow\n[Em]A burst of rounds takes my horse be[D]low\n[Em]And as I lay there, gazing at the [D]sky\n[Em]My body's numb and my throat is [D]dry\n[C]And as I lay forgotten and a[D]lone\n[Em]Without a tear, I draw my parting groan\n\n[D||Chorus 3]Oh-oh-oh-[Em]oh-oh-oh-oh-oh-oh\n[D]Oh-oh-oh-[Em]oh-oh-[D]oh-oh-oh-oh\n\n[Em||Outro]\t[D]\t[C]\t[D]\t[Em]\t[D]\t[C]\t[D]\n[Em]\t[D]\t[C]\t[D]\t[Em]\t[D]\t[C]\t[D]\t[Em]\n",
+    "updatedAt": "2026/3/28上午12:30:10"
+  },
+  "PROJ_1774626372522": {
+    "id": "PROJ_1774626372522",
+    "title": "Dr.Stein",
+    "artist": "Helloween",
+    "key": "",
+    "bpm": "",
+    "rawText": "\n[E||Intro]\t[B]\t[C]\t[E]\n[E]\t[B]\t[E]\t[D]\n[Em||Verse 1]Once they killed his monster [B]when it went into a [Em]trap\n[Em]Now he's making better ones [B]on a higher [E]step\n\n[B||Bridge 1]On a warm summer [Em]day the [D]doctor went a[G]way\n[C]To a place where he could [G]make it [D]real\n[B]His assistant's hips were [Em]nice so he [D]cloned her once or [G]twice\n[C]Now his hips are [D]aching what a [G]deal\n\n[C||Chorus 1]Dr. [D]Stein grows [G]funny creatures\n[C]Lets them [D]run into the [Bm]night\n[C]They be[D]come great [G]rock musicians\n[C]And their [D]time is [E]right\n\n[Em||Verse 2]Sometimes when he's feeling [B]bored\n[B]He's calling it a [Em]day\n[E]He's got his com[B]puters and they [C]do it their own [E]way [Dm]\n\n[B||Bridge 2]They mix some [Em]DNA, [D]some skin and a certain [G]spray\n[C]You can watch it [G]on a laser [D]screen\n[B]And the fellow's blue and [Em]grey [D]or sometimes pink and [G]green\n[C]Just check it [D]out on Hello[G]ween\n\n[C||Chorus 2]Dr. [D]Stein grows [G]funny creatures\n[C]Lets them [D]run into the [Bm]night\n[C]They be[D]come great [G]politicians\n[C]And their [D]time is [E]right\n[E||Instrumental\t1]\t[D]\n[Em||Solo]\t[B]\t[Em]\t[E]\n[B]\t[Bm]\t[B]\t[E]\n[B]\t[Bm]\t[E]\t[G]\n[B]\t[Em]\t[E]\n\n[Em||Instrumental\t2]\t[Bm]\t[C]\t[Bm]\t[E]\n[Em]\t[Bm]\t[C]\t[E]\n[B||Bridge 3]One night he cloned him[E]self\n[D]Put his brother on a [G]shelf\n[C]But when he fell a[G]sleep that [D]night\n[B]It crept up from be[Em]hind and [D]thought \"well [G]never mind\"\n[C]Took a sy[D]ringe and blew out his [G]life\n\n[C||Chorus 3]Dr. [D]Stein grows [G]funny creatures\n[C]Lets them [D]run into the [Bm]night\n[C]They be[D]come a great pos[G]session\n[C]And their [D]time is [E]right\n\n[C||Chorus 4]Dr. [D]Stein grows [G]funny creatures\n[C]Lets them [D]run into the [Bm]night\n[C]They be[D]come a great op[G]pression\n[C]And their [D]time is [E]right\n\n[D||Outro]Time is [E]right, [D]time is [E]right, [Dm]time is [Em]right\n",
+    "updatedAt": "2026/3/27下午11:46:12"
+  },
+  "PROJ_1774624322719": {
+    "id": "PROJ_1774624322719",
+    "title": "Tell Me",
+    "artist": "HIDE",
+    "key": "A",
+    "bpm": "200",
+    "rawText": "[A||Verse 1]{華やいだ|はなやいだ}{風|かぜ}に [E]さらされても\n[F#m]{溶けて|とけて}ゆけない {自分|じぶん}[G]を{見つ|みつ}[E]めている\n[A]{歩み寄る|あゆみよる}{素振り|そぶり}も [E]{見せずに|みせずに}\n[F#m]{輪郭|りんかく}[G]は [A]{浮き彫ら|うきぼら}[Asus4]れて[A]く\n\n\n[E||Verse 2]{幻覺|げんかく}に{踊る|おどる} {身|から}[F#m]{体|だ}は\n[G]{心|こころ}とは{裹腹|うらはら}の パン[E]トマイム\n[C#m7]ほころびている{傷|きず}を [F#m]{埋める|うめる}のは\n[D]{僕|ぼく}が{僕|ぼく}で [E]{在り続け|ありつづけ}[A]るため [E7]\n\n[A||Chorus 1]Tell me, Somebody [E]tell me, Please [F#m]tell me\n[G]こえにならない {言葉|ことば}[E]でも\n[A]Tell me, Somebody [C#7]tell me, Please [F#m]tell me\n[D]まだ{君|きみ}の[E]こえは とど[A]かない [A]\n\n\n[E] \t[D]\t[A] \t [E] \t [D]\n[E||Verse 3]いびつな{愛|あい}を [F#m]{求めて|もとめて}も\n[G]{答え|こたえ}なく {意味|いみ}もなく む[E]さぼるだけ\n[C#m7]{流されて|ながされて}る {自分|じぶん}の[F#m]こえは\n[D]{灰|はい}になるま[E]で {聞こえて|きこえて}[A]こない [E7]\n\n[A||Chorus 2]Tell me, Somebody [E]tell me, Please [F#m]tell me\n[G]{目の前|めのまえ}を ふさぐ[E]のは{誰|だれ}?\n[A]Tell me, Somebody [C#7]tell me, Please [F#m]tell me\n[D]{僕|ぼく}の{瞳|ひとみ}[E]は {君|きみ}を{見て|みて}い[D]るか\n\n[F||Solo]\t\t[G]\t\t[C]\t\t[G]\t\t[Am]\t\t[Em]\n[F]\t\t[G]\t\t[A]\n[F]\t\t[G]\t\t[C]\t\t[G/B]\t\t[Am]\t\t[G]\n[F]\t\t[G]\t\t[E7]\n\n[A||Bridge]Tell me, {誰|だれ}か [E]tell me, Please [F#m]tell me.\n[G]{君|きみ}には{僕|ぼく}が [E]{見えて|みえて}いるか\n[A]Mm Tell me, Somebody [E]tell me, Please [F#m]tell me.\n[D]{僕|ぼく}には{僕|ぼく}が [E]{見え|みえ}ない\n[C||Chorus 3]Tell me, Somebody [G]tell me, Please [Am]tell me.\n[A#]{声|こえ}にならない [G]{言葉|ことば}でも Wow\n[C]Tell me, Somebody [E7]tell me, Please [Am]tell me.\n[F]まだ [G]{君|きみ}の [G#]{詩|うた}は{聴|き}こ[A#]えない\n\n[C||Outro]Singin' my [G]song for [F]me.\n[C]Singin' your [G]song for [F]you.\n[C]Singin' my [G]song for [F]me.\n[C]Singin' your [G]song for [F]you.\n[C]\t\t[G]\t\t[F]\n[C]\t\t[G]\t\t[F]\n[C]\t\t[G]\t\t[F]\n[C]\t\t[G]\t\t[F]\n",
+    "layout": {
+      "chordSize": "1.05",
+      "lyricSize": "1.3",
+      "lineHeight": "2.8",
+      "globalX": "3",
+      "globalY": "8",
+      "rubyX": "-9",
+      "rubyY": "-18",
+      "canvasPad": "10",
+      "lsCols": "8",
+      "columns": false
+    },
+    "updatedAt": "2026/4/24 上午5:14:55"
+  },
+  "PROJ_1774617345861": {
+    "id": "PROJ_1774617345861",
+    "title": "I Want Out ",
+    "artist": "Helloween",
+    "key": "A",
+    "bpm": "200",
+    "rawText": "[Dm||Intro]         [Bb]         [C]         [Dm]         [Bb]         [C]        \n[Dm]         [Bb]         [C]         [Dm]         [Bb]         [C]         \n[Dm]         [G5]         [F5]         [E5]         [C]         [Dm] \n\n[Dm||Verse 1]From our lives' beginning on\nWe are [Bb]pushed in little forms\n[C]No-one asks us how we'd [Dm]like [G5]to [F5]be [E5] [C] [Dm]\n[Dm]In school they teach us what to think\nBut everyone says [Bb]different things\nBut [C]they're all convinced that they're the ones to [Dm]see\n\n[C||Pre-Chorus 1]So they keep talking and they never stop\n[Gm]At a certain point you give it up\n[Bb]So the only thing that's left to think is [A]this\n\n[F5||Chorus 1] [E5] [Dm]I want out\n[Bb]To live my [C]life alone\n[Dm]I want out\n[Bb]Leave [C]me be\n[Dm]I want out\n[Bb]To do things [C]on my own\n[Dm]I want out\n[Bb]To live my [C]life and to be free\n\n[Dm||Intro 2] [Bb] [C] [Dm] [Bb] [C]\n\n[Dm||Verse 2]People tell me A and B\nThey tell me how [Bb]I have to see\n[C]Things that I have seen already [Dm]clear [G5] [F5] [E5] [C] [Dm]\n[Dm]So they push me then from side to side\nThey're pushing me from [Bb]black to white\nThey're [C]pushing 'til there's nothing more to [Dm]hear\n\n[C||Pre-Chorus 2]But don't push me to the maximum\n[Gm]Shut your mouth and take it home\n[Bb]Cause I decide the way things gonna [A]be\n\n[F5||Chorus 1] [E5] [Dm]I want out\n[Bb]To live my [C]life alone\n[Dm]I want out\n[Bb]Leave [C]me be\n[Dm]I want out\n[Bb]To do things [C]on my own\n[Dm]I want out\n[Bb]To live my [C]life and to be [Dm]free\n\n[Am||Bridge 1]There's a million ways (million ways) to see the things in life\n[G]A million ways to be the fool (million ways)\n[F]In the end of it, (in the end) none of us is right\n[G]Sometimes, we need to be [E]alone (alone, alone, alone)\n\n[Am||Solo] [F] [G] [E7] [F] [G] [Am]\n[Am] [F] [G] [E7] [C] [Dm] [E]\n[Dm] [F] [C] [Dm] [F] [C] [Dm] [F] [C] [Dm] [F] [C]\n\n[Dm||Bridge 2] [Bb] [C] [Dm] [Bb] [C]\n[Dm] [Bb] [C]\n[Dm]No, no, no, no, [Bb]no, no, [C]no\nLeave [Dm]me alone\n\n[Bb/D||Chorus 2]To live my [C]life alone\n[Dm]I want out\n[Bb/D]Leave [C]me be\n[Dm]I want out\n[Bb/D]To do things [C]on my own\n[Dm]I want out\n[Bb/D]To live my [C]life and to be [Em]free\n\n[C||Outro] [D] [Em] [C] [D]\n[Em] [C] [D] [Em] [C] [D]\nI [Em]want out\n",
+    "updatedAt": "2026/3/28上午12:36:21"
+  },
+  "PROJ_1774610842112": {
+    "id": "PROJ_1774610842112",
+    "title": "DICE",
+    "artist": "HIDE",
+    "key": "A",
+    "bpm": "200",
+    "rawText": "[Dm||Verse 1]{目の前|めのまえ}に{有る|ある} {全ての物|すべてのもの}が [A#maj7]{化物|ばけもの}に{見える|みえる}\n[Dm]{揺るぎ無い|ゆるぎない}{時間|じかん}の{重さと|おもさと} [C]{過去|かこ}の{亡霊|ぼうれい}に{追われる|おわれる}\n[Dm]{腐り散りゆく|くさりちりゆく}まま {押し流されて|おしながされて} [A#maj7]{飲み込まれて|のみこまれて}ゆく\n[C]{意識|いしき}のパイプは{断たれた|たたれた}ままで [Dm]{十字|じゅうじ}を{切れ|きれ}\n\n[D#||Chorus 1]{君|きみ}の[F]{思い|おもい} [Gm]{通りの|どおりの} [A#]{花|はな}を{咲かせよう|さかせよう}\n[D#]むしり[F]取られ {枯|か}[G]れる{前|まえ}に\n[D#]いつし[F]か つぼみは [Dm]{花|はな}となり\n[Gm]{理想|りそう}を[D#]{吐き|はき}[F]{出し|だし} {君|きみ}に [Gm]{語る|かたる}だろう\n\n[D#]\t[Gm]\t[D#]\t[Gm]\t[D#]\t\t\t\t\n\n[D#||Chorus 2]その[F]{腕|うで}の [Gm]{中|なか}{持て|もて}[A#]る{夢|ゆめ} {抱えて|かかえて}\n[D#]{視|し}[F]{界|かい}ゼロの [G]{海|うみ}に{出よう|でよう}\n[D#]{見る|みる}[F]もの{全てが|すべてが} [D]{変わり|かわり}[Gm]{果てた|はてた}ならば\n[D#]{花|はな}[F]を抱いて [Gm]{眠ればいい|ねむればいい}\n\n\n[D#]\t[Gm]\t[D#]\t[Gm]\t\t\t\t\t\t\n[D#]\t[D#]\t[F]\t[Gm]\t\t\t\t\n[D#]\t[F]\t[G#]\t[A#]\t\n[G#]\t[A#]\t[G#]\t[A#]\n[G#]\t[A#]\t[Cm]\t[N.C.]\n\n\n\n[Dm||Verse 2]{手|て}を{伸ばせば|のばせば} {振り払われ|ふりはらわれ}て [A#maj7]{粉々|こなごな}に{消える|きえる}\n[Dm]はかなさの{代償|だいしょう} [C]{無駄|むだ}に{使い|つかい} {垂れ流す|たれながす}リビドー\n[Dm]{痛み|いたみ}もがくが{故|ゆえ} [A#maj7]{認識|にんしき}する {存在|そんざい}の{意味|いみ}を\n[C]{教えて|おしえて}くれと [Dm]すがり{叫ぶ|さけぶ} {鏡|かがみ}の{中|なか}のおのれ\n\n[D#||Chorus 3]{君|きみ}の[F]{中|なか} {渇いた|かわいた} [Gm]{花|はな}に{水|みず}[A#]をやろう\n[D#]もしも[F] その{身|み} [G]{果てぬ|はてぬ}なら\n[D#]{咲き乱|さきみだ}[F]れるのか [D]{朽ち|くち}[Gm]{果ててる|はててる}のか\n[D#]二つ[F]に一[Gm]つのダイス\n\n[D#||Chorus 4]{君|きみ}の[F]{思い|おもい} [Gm]{通りの|どおりの} [A#]{花|はな}を{咲かせよう|さかせよう}\n[D#]むし[F]り取られ {枯|か}[G]れる{前|まえ}に\n[D#]いつ[F]しか つぼみは [Dm]{花|はな}となり\n[Gm]{昨日|きのう}[D#]を{吐き|はき}[F]{出し|だし} {君|きみ}に [Gm]{話す|はなす}だろう\n\n[Gm||Outro]Once and for all, Dice away. [D#]\n[Gm]Once and for all, Dice away. [D#]\n[Gm]Once and for all, Dice away. [D#]\n[Gm]Dice [D#]away\n[Gm]Once and for all, Dice away. [D#]\n[Gm]Once and for all, Dice away. [D#]\n[Gm]Once and for all, Dice away. [D#]\n[Gm]Once and for all, Dice away. [D#]\n[Gm]Once and for all, Dice away. [D#]\n[Gm]oh, [D#]Once and for all, Dice away.\n[Gm]Up to you\n",
+    "layout": {
+      "chordSize": "1.05",
+      "lyricSize": "1.3",
+      "lineHeight": "2.8",
+      "globalX": "3",
+      "globalY": "8",
+      "rubyX": "-9",
+      "rubyY": "-18",
+      "canvasPad": "10",
+      "columns": false
+    },
+    "updatedAt": "2026/4/11 下午10:03:53"
+  }
+}
