@@ -12,23 +12,42 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         :root {
+            /* === 顏色變數 === */
             --primary: #0070f3;
+            /* 主要顏色 (按鈕、和弦藍色文字、啟用狀態) */
             --bg: #ffffff;
+            /* 應用程式主要背景色 */
             --text: #37352f;
+            /* 主要文字顏色 (如歌詞文字) */
             --muted: #787774;
+            /* 次要/靜默文字顏色 (如提示文字、未選取標籤) */
             --border: #ededed;
+            /* 邊框、分隔線顏色 */
             --hover: #f7f7f5;
+            /* 滑鼠懸停時的背景色 */
 
+            /* === 版面尺寸與字體預設值 === 
+               (注意：這裡提供 CSS 初始渲染值。真正的「全站預設值」受最下方 JS 的 UI.applyLayoutSettings 控管) */
             --dyn-chord-size: 1rem;
+            /* 和弦字體大小 (對應右側面板: 和弦大小) */
             --dyn-lyric-size: 1.15rem;
+            /* 歌詞字體大小 (對應右側面板: 歌詞大小) */
             --dyn-line-height: 2.8;
+            /* 行高，決定歌詞之間的上下間距以容納和弦 (對應右側面板: 整體行高) */
             --dyn-columns: 1;
+            /* (已停用) 原為分欄數量，現已被 CSS Grid 取代 */
 
+            /* === 座標微調預設值 === */
             --dyn-chord-global-x: 0px;
+            /* 和弦全域 X 軸微調偏移量 (左右平移) */
             --dyn-chord-global-y: 0px;
+            /* 和弦全域 Y 軸微調偏移量 (上下平移) */
             --dyn-ruby-global-x: -9px;
+            /* 註釋 (Ruby) 全域 X 軸微調 */
             --dyn-ruby-global-y: -18px;
+            /* 註釋 (Ruby) 全域 Y 軸微調 */
             --dyn-canvas-padding: 10%;
+            /* 畫布兩側留白比例 (對應右側面板: 畫布左右內邊距) */
         }
 
         * {
