@@ -134,10 +134,13 @@
             display: flex;
             gap: 6px;
             align-items: center;
+            justify-content: flex-end;
             flex-wrap: wrap;
+            margin-left: auto;
         }
 
-        .actions button {
+        .actions button,
+        .header-icon-button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -156,9 +159,17 @@
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
         }
 
-        .actions button:hover {
+        .actions button:hover,
+        .header-icon-button:hover {
             background: var(--hover);
             border-color: #d1d1d1;
+        }
+
+        .header-icon-button {
+            width: 36px;
+            padding: 0;
+            font-size: 0.95rem;
+            font-weight: 700;
         }
 
         .actions .divider {
@@ -469,6 +480,10 @@
 
         #editor-canvas.mode-ruby .lyric-ruby {
             pointer-events: auto;
+        }
+
+        #editor-canvas.mode-ruby {
+            padding-top: 1.8em;
         }
 
         .lyric-ruby {
@@ -1296,7 +1311,7 @@
         }
 
         body.zen-mode .brand,
-        body.zen-mode .meta-inputs,
+        body.zen-mode .meta-inputs input,
         body.zen-mode .workspace-scale-controls,
         body.zen-mode .actions button:not(#zen-toggle-btn),
         body.zen-mode .actions .divider {
@@ -1318,6 +1333,7 @@
             <input type="text" id="meta-artist" placeholder="藝人" value="Runner's Blue">
             <input type="text" id="meta-key" placeholder="Key" value="A">
             <input type="text" id="meta-bpm" placeholder="BPM" value="120">
+            <button class="header-icon-button" id="zen-toggle-btn" onclick="UI.toggleZenMode()" title="滿版專注模式">▲</button>
         </div>
         <div class="actions">
             <div class="workspace-scale-controls" title="工作區縮放，不影響頂部功能列">
@@ -1325,8 +1341,6 @@
                 <input type="text" id="workspace-scale-input" value="100%" inputmode="numeric" aria-label="工作區縮放比例">
                 <button type="button" onclick="UI.adjustWorkspaceScale(10)" title="放大工作區">＋</button>
             </div>
-            <button id="zen-toggle-btn" onclick="UI.toggleZenMode()" title="滿版專注模式">⬆️</button>
-            <button id="toggle-sidebar-btn" onclick="UI.toggleSidebar()" title="側邊欄">➡️</button>
 
             <div class="divider"></div>
             <button onclick="Storage.newProject()" title="開新專案">📄 開新</button>
@@ -1336,6 +1350,7 @@
 
             <div class="divider"></div>
             <button class="btn-accent" onclick="window.print()" title="匯出 PDF">🖨️ PDF</button>
+            <button class="header-icon-button" id="toggle-sidebar-btn" onclick="UI.toggleSidebar()" title="側邊欄">▶</button>
         </div>
     </header>
 
@@ -1403,8 +1418,8 @@
                     <div class="form-group" id="group-chord-move">
                         <label>節點對齊 (Snap)</label>
                         <div style="display: flex; gap: 8px;">
-                            <button class="move-btn" onclick="Inspector.moveChord(-1)">⬅️ 左移</button>
-                            <button class="move-btn" onclick="Inspector.moveChord(1)">右移 ➡️</button>
+                            <button class="move-btn" onclick="Inspector.moveChord(-1)">◀ 左移</button>
+                            <button class="move-btn" onclick="Inspector.moveChord(1)">右移 ▶</button>
                         </div>
                     </div>
                     <div class="form-group">
@@ -1474,7 +1489,7 @@
         <div class="layout-dock-header" onclick="UI.toggleLayoutDock()">
             <h3>🎛️ 版面與列印設定</h3>
             <button type="button" class="layout-dock-toggle" id="layout-dock-toggle"
-                onclick="event.stopPropagation(); UI.toggleLayoutDock();" title="展開版面設定">⬆️</button>
+                onclick="event.stopPropagation(); UI.toggleLayoutDock();" title="展開版面設定">▲</button>
         </div>
         <div id="layout-section">
             <div class="layout-settings-group">
@@ -1694,7 +1709,7 @@
                 const visibleHeight = collapsed ? 'var(--layout-dock-collapsed-height)' : getComputedStyle(document.documentElement).getPropertyValue('--layout-dock-height').trim();
                 document.documentElement.style.setProperty('--layout-dock-visible-height', visibleHeight || '42px');
                 if (btn) {
-                    btn.innerHTML = collapsed ? '⬆️' : '⬇️';
+                    btn.innerHTML = collapsed ? '▲' : '▼';
                     btn.title = collapsed ? '展開版面設定' : '收折版面設定';
                 }
                 if (persist) localStorage.setItem('runsoLayoutDockCollapsed', String(collapsed));
@@ -1948,19 +1963,19 @@
                 const sidebar = document.getElementById('app-sidebar');
                 const btn = document.getElementById('toggle-sidebar-btn');
                 sidebar.classList.toggle('collapsed');
-                btn.innerHTML = sidebar.classList.contains('collapsed') ? '⬅️' : '➡️';
+                btn.innerHTML = sidebar.classList.contains('collapsed') ? '◀' : '▶';
             },
             toggleZenMode: function () {
                 document.body.classList.toggle('zen-mode');
                 const btn = document.getElementById('zen-toggle-btn');
                 if (btn) {
                     if (document.body.classList.contains('zen-mode')) {
-                        btn.innerHTML = '⬇️';
+                        btn.innerHTML = '▼';
                         btn.style.color = 'var(--primary)';
                         btn.style.borderColor = 'var(--primary)';
                         btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
                     } else {
-                        btn.innerHTML = '⬆️';
+                        btn.innerHTML = '▲';
                         btn.style.color = 'var(--text)';
                         btn.style.borderColor = 'var(--border)';
                         btn.style.boxShadow = '0 1px 2px rgba(0,0,0,0.02)';
