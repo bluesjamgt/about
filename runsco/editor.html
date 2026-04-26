@@ -47,6 +47,7 @@
             --dyn-ruby-global-y: -18px;
             /* 註釋 (Ruby) 全域 Y 軸微調 */
             --dyn-canvas-padding: 10%;
+            --workspace-scale: 1;
             /* 畫布兩側留白比例 (對應右側面板: 畫布左右內邊距) */
         }
 
@@ -185,10 +186,38 @@
             border-color: #005bb5;
         }
 
+        .workspace-scale-controls {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0 2px;
+        }
+
+        .actions .workspace-scale-controls button {
+            width: 32px;
+            padding: 0;
+            font-weight: 700;
+        }
+
+        #workspace-scale-input {
+            width: 68px;
+            height: 32px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: white;
+            color: var(--text);
+            font: inherit;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-align: center;
+            padding: 0 6px;
+        }
+
         .workspace {
             display: flex;
             flex: 1;
             overflow: hidden;
+            min-height: 0;
         }
 
         .main-canvas {
@@ -196,6 +225,8 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            min-width: 0;
+            zoom: var(--workspace-scale);
         }
 
         .tabs {
@@ -313,8 +344,6 @@
             outline: none;
             font-size: var(--dyn-lyric-size);
             line-height: var(--dyn-line-height);
-            column-count: var(--dyn-columns);
-            -webkit-column-count: var(--dyn-columns);
             column-gap: 60px;
             -webkit-column-gap: 60px;
             column-fill: auto;
@@ -326,12 +355,32 @@
             overflow: visible;
         }
 
+        body.columns-enabled #editor-canvas,
+        body.columns-enabled #leadsheet-canvas {
+            column-count: 2 !important;
+            -webkit-column-count: 2 !important;
+            column-fill: balance !important;
+            -webkit-column-fill: balance !important;
+            width: 100%;
+        }
+
+        body:not(.columns-enabled) #editor-canvas,
+        body:not(.columns-enabled) #leadsheet-canvas {
+            column-count: 1 !important;
+            -webkit-column-count: 1 !important;
+        }
+
         #editor-canvas div {
             min-height: 1em;
             -webkit-column-break-inside: avoid;
             break-inside: avoid;
             -webkit-transform: translateZ(0);
             transform: translateZ(0);
+        }
+
+        body.columns-enabled #editor-canvas div {
+            -webkit-transform: none;
+            transform: none;
         }
 
         /* iPad / 平板雙排模式修正：縮小欄間距與側邊距，避免切邊 */
@@ -375,6 +424,15 @@
 
         #editor-canvas.mode-ruby .chord-widget {
             display: none !important;
+        }
+
+        #editor-canvas.mode-ruby div.ruby-chord-only-line {
+            display: none;
+        }
+
+        #editor-canvas.mode-ruby div.ruby-compact-gap {
+            min-height: 0.8em;
+            line-height: 0.8;
         }
 
         #editor-canvas.mode-ruby .lyric-ruby {
@@ -470,6 +528,18 @@
             display: flex;
             flex-direction: column;
             transition: all 0.3s ease;
+            min-height: 0;
+            overflow-y: hidden;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            zoom: var(--workspace-scale);
+        }
+
+        @supports not (zoom: 1) {
+            .workspace {
+                font-size: calc(1rem * var(--workspace-scale));
+            }
         }
 
         .sidebar.collapsed {
@@ -496,13 +566,15 @@
         }
 
         #inspector-section {
-            flex: 0 0 auto;
+            flex: 0 0 25%;
             overflow-y: auto;
-            max-height: 55%;
+            min-height: 110px;
+            -webkit-overflow-scrolling: touch;
         }
 
         #dict-section {
-            flex: 1 1 auto;
+            flex: 0 0 34%;
+            min-height: 140px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -517,8 +589,38 @@
         }
 
         #layout-section {
-            flex: 0 0 auto;
+            flex: 1 1 41%;
             background: #fafafa;
+            padding-bottom: 28px;
+            min-height: 180px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .sidebar-resizer {
+            flex: 0 0 12px;
+            position: relative;
+            background: #fafafa;
+            border-bottom: 1px solid var(--border);
+            cursor: row-resize;
+            touch-action: none;
+        }
+
+        .sidebar-resizer::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 44px;
+            height: 3px;
+            border-radius: 999px;
+            background: #d7d7d7;
+            transform: translate(-50%, -50%);
+        }
+
+        .sidebar-resizer:hover::before,
+        .sidebar-resizer.dragging::before {
+            background: var(--primary);
         }
 
         .form-group {
@@ -668,8 +770,6 @@
            [CSS-5] 專案管理 Modal (升級版) & 列印
            ========================================== */
         #leadsheet-canvas {
-            column-count: var(--dyn-columns);
-            -webkit-column-count: var(--dyn-columns);
             column-gap: 60px;
             -webkit-column-gap: 60px;
             column-fill: auto;
@@ -924,6 +1024,7 @@
                 display: block !important;
                 overflow: visible !important;
                 height: auto !important;
+                zoom: 1 !important;
             }
 
             .view-panel {
@@ -1037,6 +1138,7 @@
 
         body.zen-mode .brand,
         body.zen-mode .meta-inputs,
+        body.zen-mode .workspace-scale-controls,
         body.zen-mode .actions button:not(#zen-toggle-btn),
         body.zen-mode .actions .divider {
             display: none !important;
@@ -1059,6 +1161,11 @@
             <input type="text" id="meta-bpm" placeholder="BPM" value="120">
         </div>
         <div class="actions">
+            <div class="workspace-scale-controls" title="工作區縮放，不影響頂部功能列">
+                <button type="button" onclick="UI.adjustWorkspaceScale(-10)" title="縮小工作區">−</button>
+                <input type="text" id="workspace-scale-input" value="100%" inputmode="numeric" aria-label="工作區縮放比例">
+                <button type="button" onclick="UI.adjustWorkspaceScale(10)" title="放大工作區">＋</button>
+            </div>
             <button id="zen-toggle-btn" onclick="UI.toggleZenMode()" title="滿版專注模式">⬆️</button>
             <button id="toggle-sidebar-btn" onclick="UI.toggleSidebar()" title="側邊欄">➡️</button>
 
@@ -1192,10 +1299,16 @@
                 </div>
             </div>
 
+            <div class="sidebar-resizer" data-resize-before="inspector-section" data-resize-after="dict-section"
+                title="拖曳調整屬性與字典區高度"></div>
+
             <div class="sidebar-section" id="dict-section">
                 <h3>📖 本曲註解字典</h3>
                 <div class="dict-list" id="dict-list-container"></div>
             </div>
+
+            <div class="sidebar-resizer" data-resize-before="dict-section" data-resize-after="layout-section"
+                title="拖曳調整字典與版面設定高度"></div>
 
             <div class="sidebar-section" id="layout-section">
                 <h3>🎛️ 版面與列印設定</h3>
@@ -1288,7 +1401,10 @@
             activeBatchChords: [],
             currentProjectId: null,
             demoProjects: null,
-            currentManagerTab: 'user'
+            currentManagerTab: 'user',
+            currentViewIndex: 2,
+            suppressAutosave: false,
+            autosaveTimer: null
         };
         //#endregion
 
@@ -1329,13 +1445,19 @@
                 let text = document.getElementById('raw-lyrics-textarea').value;
                 let html = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-                const lines = html.split('\n');
-                for (let i = 0; i < lines.length; i++) {
-                    let line = lines[i];
-                    let stripped = line.replace(/\[.*?\]/g, '').trim();
-                    if (stripped === '' && line.includes('[')) { lines[i] = line.replace(/ /g, '\t'); }
-                }
-                html = lines.map(l => `<div>${l === '' ? '<br>' : l}</div>`).join('');
+                const lines = html.split('\n').map(line => {
+                    const lyricText = line.replace(/\[.*?\]/g, '').trim();
+                    const isChordOnly = lyricText === '' && line.includes('[');
+                    const isBlank = line.trim() === '';
+                    let className = '';
+                    if (isChordOnly) className = ' class="ruby-chord-only-line"';
+                    else if (isBlank) className = ' class="ruby-compact-gap"';
+                    return {
+                        html: isChordOnly ? line.replace(/ /g, '\t') : line,
+                        className
+                    };
+                });
+                html = lines.map(l => `<div${l.className}>${l.html === '' ? '<br>' : l.html}</div>`).join('');
 
                 html = html.replace(/\{([^\|\}]+)\|([^}]*)\}/g, `<span class="lyric-ruby" data-rt="$2">$1</span>`);
                 html = html.replace(/\[([^\]]*)\]/g, (match, content) => {
@@ -1383,12 +1505,125 @@
                     }
                 }
                 if (settings.columns !== undefined) {
-                    let colEl = document.getElementById('ui-columns');
-                    if (colEl) {
-                        colEl.checked = settings.columns;
-                        document.documentElement.style.setProperty('--dyn-columns', settings.columns ? '2' : '1');
-                    }
+                    UI.setColumnsMode(settings.columns);
                 }
+            },
+            setColumnsMode: function (enabled) {
+                const isEnabled = enabled === true || enabled === 'true' || enabled === 1 || enabled === '1';
+                const colEl = document.getElementById('ui-columns');
+                if (colEl) colEl.checked = isEnabled;
+                document.body.classList.toggle('columns-enabled', isEnabled);
+                document.documentElement.style.setProperty('--dyn-columns', isEnabled ? '2' : '1');
+                ['editor-canvas', 'leadsheet-canvas'].forEach(id => {
+                    const surface = document.getElementById(id);
+                    if (!surface) return;
+                    surface.style.columnCount = isEnabled ? '2' : '1';
+                    surface.style.webkitColumnCount = isEnabled ? '2' : '1';
+                    surface.style.columnFill = isEnabled ? 'balance' : 'auto';
+                    surface.style.webkitColumnFill = isEnabled ? 'balance' : 'auto';
+                });
+            },
+            applyWorkspaceScale: function (pct, persist = true) {
+                let pctVal = parseInt(pct, 10);
+                if (Number.isNaN(pctVal)) pctVal = 100;
+                pctVal = Math.max(60, Math.min(180, pctVal));
+
+                document.documentElement.style.setProperty('--workspace-scale', pctVal / 100);
+                const input = document.getElementById('workspace-scale-input');
+                if (input && input.value !== `${pctVal}%`) input.value = `${pctVal}%`;
+                if (persist) localStorage.setItem('runsoWorkspaceScale', String(pctVal));
+            },
+            adjustWorkspaceScale: function (delta) {
+                const input = document.getElementById('workspace-scale-input');
+                const current = input ? parseInt(input.value, 10) : 100;
+                this.applyWorkspaceScale((Number.isNaN(current) ? 100 : current) + delta);
+            },
+            refreshRubyLineVisibility: function () {
+                const canvas = document.getElementById('editor-canvas');
+                if (!canvas) return;
+                Array.from(canvas.children).filter(line => line.tagName === 'DIV').forEach(line => {
+                    line.classList.remove('ruby-chord-only-line', 'ruby-compact-gap');
+                    const clone = line.cloneNode(true);
+                    clone.querySelectorAll('.chord-widget').forEach(chord => chord.remove());
+                    const lyricText = clone.textContent.replace(/\u00a0/g, ' ').trim();
+                    if (lyricText === '' && line.querySelector('.chord-widget')) {
+                        line.classList.add('ruby-chord-only-line');
+                    } else if (lyricText === '' && !line.querySelector('.chord-widget')) {
+                        line.classList.add('ruby-compact-gap');
+                    }
+                });
+            },
+            initSidebarSplitters: function () {
+                const sidebar = document.getElementById('app-sidebar');
+                if (!sidebar) return;
+
+                const sectionIds = ['inspector-section', 'dict-section', 'layout-section'];
+                const sections = sectionIds.map(id => document.getElementById(id));
+                const minHeights = {
+                    'inspector-section': 110,
+                    'dict-section': 140,
+                    'layout-section': 180
+                };
+
+                const applySizes = (sizes) => {
+                    sections.forEach((section, index) => {
+                        if (!section || !sizes[index]) return;
+                        section.style.flex = `0 0 ${sizes[index]}px`;
+                    });
+                };
+
+                const saveSizes = () => {
+                    const sizes = sections.map(section => section ? Math.round(section.offsetHeight) : 0);
+                    localStorage.setItem('runsoSidebarSectionSizes', JSON.stringify(sizes));
+                };
+
+                const restoreSizes = () => {
+                    try {
+                        const saved = JSON.parse(localStorage.getItem('runsoSidebarSectionSizes') || 'null');
+                        if (Array.isArray(saved) && saved.length === sections.length) applySizes(saved);
+                    } catch (e) { }
+                };
+
+                restoreSizes();
+
+                sidebar.querySelectorAll('.sidebar-resizer').forEach(handle => {
+                    const before = document.getElementById(handle.dataset.resizeBefore);
+                    const after = document.getElementById(handle.dataset.resizeAfter);
+                    if (!before || !after) return;
+
+                    handle.addEventListener('pointerdown', (e) => {
+                        e.preventDefault();
+                        handle.classList.add('dragging');
+                        handle.setPointerCapture(e.pointerId);
+
+                        const startY = e.clientY;
+                        const beforeStart = before.offsetHeight;
+                        const afterStart = after.offsetHeight;
+                        const beforeMin = minHeights[before.id] || 100;
+                        const afterMin = minHeights[after.id] || 100;
+                        const scale = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--workspace-scale')) || 1;
+
+                        const onMove = (moveEvent) => {
+                            const delta = (moveEvent.clientY - startY) / scale;
+                            const pairTotal = beforeStart + afterStart;
+                            const beforeNext = Math.max(beforeMin, Math.min(pairTotal - afterMin, beforeStart + delta));
+                            const afterNext = pairTotal - beforeNext;
+                            before.style.flex = `0 0 ${beforeNext}px`;
+                            after.style.flex = `0 0 ${afterNext}px`;
+                        };
+
+                        const onUp = () => {
+                            handle.classList.remove('dragging');
+                            handle.releasePointerCapture(e.pointerId);
+                            window.removeEventListener('pointermove', onMove);
+                            window.removeEventListener('pointerup', onUp);
+                            saveSizes();
+                        };
+
+                        window.addEventListener('pointermove', onMove);
+                        window.addEventListener('pointerup', onUp);
+                    });
+                });
             },
             init: function () {
                 const controls = [
@@ -1412,7 +1647,25 @@
                         if (c.id === 'ui-leadsheet-cols') { UI.renderLeadSheet(); }
                     });
                 });
-                document.getElementById('ui-columns').addEventListener('change', (e) => { document.documentElement.style.setProperty('--dyn-columns', e.target.checked ? '2' : '1'); });
+                const scaleInput = document.getElementById('workspace-scale-input');
+                if (scaleInput) {
+                    scaleInput.addEventListener('change', (e) => {
+                        UI.applyWorkspaceScale(e.target.value);
+                    });
+                    scaleInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            UI.applyWorkspaceScale(e.target.value);
+                            scaleInput.blur();
+                        }
+                    });
+                    UI.applyWorkspaceScale(localStorage.getItem('runsoWorkspaceScale') || 100, false);
+                }
+                UI.initSidebarSplitters();
+                document.getElementById('ui-columns').addEventListener('change', (e) => {
+                    UI.setColumnsMode(e.target.checked);
+                    Storage.scheduleAutosave();
+                });
 
                 // ✨ 隱藏和弦開關 (純歌詞模式)
                 const hideToggle = document.getElementById('toggle-hide-chords');
@@ -1428,6 +1681,7 @@
                 }
             },
             switchView: function (tabIndex) {
+                AppState.currentViewIndex = tabIndex;
                 document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === tabIndex - 1));
                 document.getElementById('view-raw').style.display = (tabIndex === 1) ? 'block' : 'none';
                 document.getElementById('view-editor').style.display = (tabIndex === 2 || tabIndex === 3) ? 'block' : 'none';
@@ -1443,6 +1697,7 @@
                     } else {
                         document.getElementById('arrange-toolbar').style.display = 'none';
                         document.getElementById('ruby-toolbar').style.display = 'flex';
+                        UI.refreshRubyLineVisibility();
                         canvas.className = 'mode-ruby';
                     }
                 }
@@ -1458,6 +1713,7 @@
                 document.getElementById('print-artist-text').innerText = document.getElementById('meta-artist').value || "Unknown";
                 document.getElementById('print-key-text').innerText = "Key: " + (document.getElementById('meta-key').value || "-");
                 document.getElementById('print-bpm-text').innerText = "BPM: " + (document.getElementById('meta-bpm').value || "-");
+                Storage.scheduleAutosave();
             },
             toggleSidebar: function () {
                 const sidebar = document.getElementById('app-sidebar');
@@ -1759,32 +2015,8 @@
         //#region [6. 專案儲存管理 (Storage) ✨ 升級版]
         const Storage = {
             getAll: function () { return JSON.parse(localStorage.getItem('runsoProjectList')) || {}; },
-            saveAsNew: function () {
-                AppState.currentProjectId = null;
-                document.getElementById('meta-title').value += " (Copy)";
-                this.saveProject();
-            },
-            newProject: function () {
-                if (confirm("建立新專案？")) {
-                    AppState.currentProjectId = null; document.getElementById('meta-title').value = "Untitled Song";
-                    document.getElementById('meta-artist').value = ""; document.getElementById('meta-key').value = "";
-                    document.getElementById('meta-bpm').value = ""; document.getElementById('raw-lyrics-textarea').value = "";
-                    document.getElementById('editor-canvas').innerHTML = ""; localStorage.removeItem('runsoLastProjectId'); UI.switchView(2);
-                }
-            },
-            saveProject: function (silent = false) {
-                // 根據當前視窗決定序列化方向
-                if (document.getElementById('view-raw').style.display === 'block') {
-                    AppState.rawData = document.getElementById('raw-lyrics-textarea').value;
-                    Parser.rawToEditor();
-                } else {
-                    Parser.editorToRaw();
-                }
-
-                const title = document.getElementById('meta-title').value.trim() || "Untitled Song";
-                if (!AppState.currentProjectId) AppState.currentProjectId = 'PROJ_' + Date.now();
-
-                const layoutSettings = {
+            getLayoutSettings: function () {
+                return {
                     chordSize: document.getElementById('ui-chord-size').value,
                     lyricSize: document.getElementById('ui-lyric-size').value,
                     lineHeight: document.getElementById('ui-line-height').value,
@@ -1796,17 +2028,107 @@
                     lsCols: document.getElementById('ui-leadsheet-cols').value,
                     columns: document.getElementById('ui-columns').checked
                 };
+            },
+            syncCurrentRaw: function () {
+                if (document.getElementById('view-raw').style.display === 'block') {
+                    AppState.rawData = document.getElementById('raw-lyrics-textarea').value;
+                } else {
+                    Parser.editorToRaw();
+                }
+            },
+            buildProjectData: function (id) {
+                const title = document.getElementById('meta-title').value.trim() || "Untitled Song";
+                return {
+                    id: id,
+                    title: title,
+                    artist: document.getElementById('meta-artist').value,
+                    key: document.getElementById('meta-key').value,
+                    bpm: document.getElementById('meta-bpm').value,
+                    rawText: AppState.rawData,
+                    layout: this.getLayoutSettings(),
+                    viewIndex: AppState.currentViewIndex,
+                    updatedAt: new Date().toLocaleString()
+                };
+            },
+            autoSaveDraft: function () {
+                if (AppState.suppressAutosave) return;
+                this.syncCurrentRaw();
+                const draft = this.buildProjectData(AppState.currentProjectId || null);
+                draft.isDraft = true;
+                localStorage.setItem('runsoAutosaveDraft', JSON.stringify(draft));
+            },
+            scheduleAutosave: function () {
+                if (AppState.suppressAutosave) return;
+                clearTimeout(AppState.autosaveTimer);
+                AppState.autosaveTimer = setTimeout(() => this.autoSaveDraft(), 500);
+            },
+            bindAutosave: function () {
+                const watchIds = [
+                    'meta-title', 'meta-artist', 'meta-key', 'meta-bpm',
+                    'raw-lyrics-textarea', 'editor-canvas',
+                    'prop-chord', 'prop-beats', 'prop-section',
+                    'prop-x-offset', 'prop-y-offset', 'prop-ruby-rt'
+                ];
+                watchIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.addEventListener('input', () => this.scheduleAutosave());
+                    if (el) el.addEventListener('change', () => this.scheduleAutosave());
+                });
+                document.querySelectorAll('#layout-section input, #layout-section select').forEach(el => {
+                    el.addEventListener('input', () => this.scheduleAutosave());
+                    el.addEventListener('change', () => this.scheduleAutosave());
+                });
+                window.addEventListener('beforeunload', () => this.autoSaveDraft());
+            },
+            restoreAutosaveDraft: function () {
+                try {
+                    const draft = JSON.parse(localStorage.getItem('runsoAutosaveDraft') || 'null');
+                    if (!draft) return false;
+                    AppState.currentProjectId = draft.id || null;
+                    document.getElementById('meta-title').value = draft.title || "Untitled Song";
+                    document.getElementById('meta-artist').value = draft.artist || "";
+                    document.getElementById('meta-key').value = draft.key || "";
+                    document.getElementById('meta-bpm').value = draft.bpm || "";
+                    document.getElementById('raw-lyrics-textarea').value = draft.rawText;
+                    AppState.rawData = draft.rawText;
+                    if (draft.layout) UI.applyLayoutSettings(draft.layout);
+                    if (draft.id) localStorage.setItem('runsoLastProjectId', draft.id);
+                    Parser.rawToEditor();
+                    UI.switchView(draft.viewIndex || 2);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            },
+            saveAsNew: function () {
+                AppState.currentProjectId = null;
+                document.getElementById('meta-title').value += " (Copy)";
+                this.saveProject();
+            },
+            newProject: function () {
+                if (confirm("建立新專案？")) {
+                    AppState.currentProjectId = null; document.getElementById('meta-title').value = "Untitled Song";
+                    document.getElementById('meta-artist').value = ""; document.getElementById('meta-key').value = "";
+                    document.getElementById('meta-bpm').value = ""; document.getElementById('raw-lyrics-textarea').value = "";
+                    AppState.rawData = "";
+                    document.getElementById('editor-canvas').innerHTML = ""; localStorage.removeItem('runsoLastProjectId'); localStorage.removeItem('runsoAutosaveDraft'); UI.switchView(2);
+                }
+            },
+            saveProject: function (silent = false) {
+                this.syncCurrentRaw();
+
+                const title = document.getElementById('meta-title').value.trim() || "Untitled Song";
+                if (!AppState.currentProjectId) AppState.currentProjectId = 'PROJ_' + Date.now();
+
+                const layoutSettings = this.getLayoutSettings();
                 localStorage.setItem('runsoGlobalLayout', JSON.stringify(layoutSettings));
 
-                const pData = {
-                    id: AppState.currentProjectId, title: title, artist: document.getElementById('meta-artist').value,
-                    key: document.getElementById('meta-key').value, bpm: document.getElementById('meta-bpm').value,
-                    rawText: AppState.rawData, layout: layoutSettings, updatedAt: new Date().toLocaleString()
-                };
+                const pData = this.buildProjectData(AppState.currentProjectId);
 
                 const p = this.getAll(); p[AppState.currentProjectId] = pData;
                 localStorage.setItem('runsoProjectList', JSON.stringify(p));
                 localStorage.setItem('runsoLastProjectId', AppState.currentProjectId);
+                localStorage.setItem('runsoAutosaveDraft', JSON.stringify({ ...pData, isDraft: true }));
 
                 if (!silent) alert(`已儲存：「${title}」`);
             },
@@ -2050,6 +2372,7 @@
         //#endregion
 
         window.onload = async () => {
+            AppState.suppressAutosave = true;
             UI.init(); Inspector.bindEvents();
 
             Storage.fetchDemoProjects();
@@ -2070,13 +2393,17 @@
                 });
             }
 
+            const restoredDraft = Storage.restoreAutosaveDraft();
             const lastId = localStorage.getItem('runsoLastProjectId');
-            if (lastId && Storage.getAll()[lastId]) {
+            if (!restoredDraft && lastId && Storage.getAll()[lastId]) {
                 Storage.loadProject(lastId, true);
-            } else {
+            } else if (!restoredDraft) {
                 document.getElementById('raw-lyrics-textarea').value = AppState.rawData;
                 Parser.rawToEditor();
             }
+            AppState.suppressAutosave = false;
+            Storage.bindAutosave();
+            Storage.autoSaveDraft();
         }
     </script>
 </body>
