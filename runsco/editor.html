@@ -46,8 +46,9 @@
             /* 註釋 (Ruby) 全域 X 軸微調 */
             --dyn-ruby-global-y: -18px;
             /* 註釋 (Ruby) 全域 Y 軸微調 */
-            --dyn-canvas-padding: 10%;
+            --dyn-canvas-padding: 6%;
             --workspace-scale: 1;
+            --layout-dock-height: 240px;
             /* 畫布兩側留白比例 (對應右側面板: 畫布左右內邊距) */
         }
 
@@ -364,6 +365,11 @@
             width: 100%;
         }
 
+        body.columns-enabled .view-panel {
+            padding-left: clamp(24px, var(--dyn-canvas-padding), 64px);
+            padding-right: clamp(24px, var(--dyn-canvas-padding), 64px);
+        }
+
         body:not(.columns-enabled) #editor-canvas,
         body:not(.columns-enabled) #leadsheet-canvas {
             column-count: 1 !important;
@@ -384,17 +390,28 @@
         }
 
         /* iPad / 平板雙排模式修正：縮小欄間距與側邊距，避免切邊 */
-        @media screen and (max-width: 1100px) {
+        @media screen and (max-width: 1400px) {
 
             #editor-canvas,
             #leadsheet-canvas {
-                column-gap: 32px !important;
-                -webkit-column-gap: 32px !important;
+                column-gap: 40px;
+                -webkit-column-gap: 40px;
+            }
+
+            body.columns-enabled .view-panel {
+                padding-left: clamp(24px, 4vw, 56px) !important;
+                padding-right: clamp(24px, 4vw, 56px) !important;
+            }
+
+            body.columns-enabled #editor-canvas,
+            body.columns-enabled #leadsheet-canvas {
+                column-gap: clamp(28px, 3.5vw, 44px) !important;
+                -webkit-column-gap: clamp(28px, 3.5vw, 44px) !important;
             }
 
             .view-panel {
-                padding-left: 4% !important;
-                padding-right: 4% !important;
+                padding-left: clamp(24px, 4vw, 56px) !important;
+                padding-right: clamp(24px, 4vw, 56px) !important;
             }
 
             .tabs {
@@ -566,14 +583,14 @@
         }
 
         #inspector-section {
-            flex: 0 0 25%;
+            flex: 0 0 32%;
             overflow-y: auto;
             min-height: 110px;
             -webkit-overflow-scrolling: touch;
         }
 
         #dict-section {
-            flex: 0 0 34%;
+            flex: 1 1 auto;
             min-height: 140px;
             display: flex;
             flex-direction: column;
@@ -589,12 +606,128 @@
         }
 
         #layout-section {
-            flex: 1 1 41%;
+            display: grid;
+            grid-template-columns: minmax(260px, 1fr) minmax(300px, 1fr);
+            gap: 18px;
             background: #fafafa;
-            padding-bottom: 28px;
-            min-height: 180px;
+            padding: 10px 20px 14px;
+            flex: 1 1 auto;
+            min-height: 0;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
+        }
+
+        .layout-dock {
+            flex: 0 0 var(--layout-dock-height);
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            border-top: 1px solid var(--border);
+            background: #fafafa;
+            box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.04);
+            z-index: 60;
+        }
+
+        .layout-dock-resizer {
+            flex: 0 0 12px;
+            position: relative;
+            cursor: row-resize;
+            touch-action: none;
+            background: #fafafa;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .layout-dock-resizer::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 72px;
+            height: 4px;
+            border-radius: 999px;
+            background: #d7d7d7;
+            transform: translate(-50%, -50%);
+        }
+
+        .layout-dock-resizer:hover::before,
+        .layout-dock-resizer.dragging::before {
+            background: var(--primary);
+        }
+
+        .layout-dock-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 40px;
+            padding: 6px 18px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .layout-dock-header h3 {
+            margin: 0;
+            font-size: 0.92rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .layout-dock-toggle {
+            width: 32px;
+            height: 28px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: white;
+            color: var(--text);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .layout-dock.collapsed #layout-section {
+            display: none;
+        }
+
+        .layout-dock.collapsed {
+            flex: 0 0 auto;
+        }
+
+        .layout-dock.collapsed .layout-dock-resizer {
+            display: none;
+        }
+
+        .layout-dock.collapsed .layout-dock-header {
+            border-bottom: none;
+        }
+
+        .layout-settings-group {
+            min-width: 0;
+        }
+
+        .layout-settings-title {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .layout-settings-group.position-group {
+            border-left: 1px dashed var(--border);
+            padding-left: 18px;
+        }
+
+        @media screen and (max-width: 760px) {
+            #layout-section {
+                grid-template-columns: 1fr;
+            }
+
+            .layout-settings-group.position-group {
+                border-left: none;
+                border-top: 1px dashed var(--border);
+                padding-left: 0;
+                padding-top: 10px;
+            }
         }
 
         .sidebar-resizer {
@@ -1013,6 +1146,7 @@
             header,
             .tabs,
             .sidebar,
+            .layout-dock,
             .editor-toolbar,
             #project-modal,
             #toggle-sidebar-btn {
@@ -1118,6 +1252,10 @@
            ✨ 滿版專注模式 (Zen Mode)
            ========================================== */
         body.zen-mode .tabs {
+            display: none !important;
+        }
+
+        body.zen-mode .layout-dock {
             display: none !important;
         }
 
@@ -1307,13 +1445,19 @@
                 <div class="dict-list" id="dict-list-container"></div>
             </div>
 
-            <div class="sidebar-resizer" data-resize-before="dict-section" data-resize-after="layout-section"
-                title="拖曳調整字典與版面設定高度"></div>
+        </aside>
+    </div>
 
-            <div class="sidebar-section" id="layout-section">
-                <h3>🎛️ 版面與列印設定</h3>
-
-                <div style="font-size:0.75rem; color:var(--muted); margin-bottom:8px; font-weight:600;">字體與排版</div>
+    <section class="layout-dock collapsed" id="layout-dock">
+        <div class="layout-dock-resizer" id="layout-dock-resizer" title="拖曳調整譜面與設定區比例"></div>
+        <div class="layout-dock-header" onclick="UI.toggleLayoutDock()">
+            <h3>🎛️ 版面與列印設定</h3>
+            <button type="button" class="layout-dock-toggle" id="layout-dock-toggle"
+                onclick="event.stopPropagation(); UI.toggleLayoutDock();" title="展開版面設定">⬆️</button>
+        </div>
+        <div id="layout-section">
+            <div class="layout-settings-group">
+                <div class="layout-settings-title">字體與排版</div>
                 <div class="range-group">
                     <label>和弦字體</label><input type="range" id="ui-chord-size" min="0.6" max="1.5" step="0.05"
                         value="1"><span class="range-val" id="val-chord-size">1</span>
@@ -1326,40 +1470,38 @@
                     <label>行距間距</label><input type="range" id="ui-line-height" min="1.5" max="4" step="0.1"
                         value="2.8"><span class="range-val" id="val-line-height">2.8</span>
                 </div>
-
-                <div style="border-top:1px dashed var(--border); margin: 12px 0 8px 0; padding-top: 8px;">
-                    <div style="font-size:0.75rem; color:var(--muted); margin-bottom:8px; font-weight:600;">全域位置與邊界
-                    </div>
-                    <div class="range-group">
-                        <label>和弦全域 X</label><input type="range" id="ui-global-x" min="-20" max="20" step="1"
-                            value="0"><span class="range-val" id="val-global-x">0</span>
-                    </div>
-                    <div class="range-group">
-                        <label>和弦全域 Y</label><input type="range" id="ui-global-y" min="-20" max="20" step="1"
-                            value="0"><span class="range-val" id="val-global-y">0</span>
-                    </div>
-                    <div class="range-group">
-                        <label>註釋全域 X</label><input type="range" id="ui-ruby-x" min="-30" max="30" step="1"
-                            value="-9"><span class="range-val" id="val-ruby-x">-9px</span>
-                    </div>
-                    <div class="range-group">
-                        <label>註釋全域 Y</label><input type="range" id="ui-ruby-y" min="-30" max="30" step="1"
-                            value="-18"><span class="range-val" id="val-ruby-y">-18px</span>
-                    </div>
-                    <div class="range-group">
-                        <label>畫布邊距</label><input type="range" id="ui-canvas-pad" min="0" max="20" step="1"
-                            value="10"><span class="range-val" id="val-canvas-pad">10%</span>
-                    </div>
-                    <div class="range-group">
-                        <label>純和弦數目</label><input type="range" id="ui-leadsheet-cols" min="4" max="16" step="1"
-                            value="8"><span class="range-val" id="val-leadsheet-cols">8</span>
-                    </div>
-                </div>
-
                 <label class="toggle-group"><input type="checkbox" id="ui-columns"> 開啟雙排格式 (A4列印)</label>
             </div>
-        </aside>
-    </div>
+
+            <div class="layout-settings-group position-group">
+                <div class="layout-settings-title">全域位置與邊界</div>
+                <div class="range-group">
+                    <label>和弦全域 X</label><input type="range" id="ui-global-x" min="-20" max="20" step="1"
+                        value="0"><span class="range-val" id="val-global-x">0</span>
+                </div>
+                <div class="range-group">
+                    <label>和弦全域 Y</label><input type="range" id="ui-global-y" min="-20" max="20" step="1"
+                        value="0"><span class="range-val" id="val-global-y">0</span>
+                </div>
+                <div class="range-group">
+                    <label>註釋全域 X</label><input type="range" id="ui-ruby-x" min="-30" max="30" step="1"
+                        value="-9"><span class="range-val" id="val-ruby-x">-9px</span>
+                </div>
+                <div class="range-group">
+                    <label>註釋全域 Y</label><input type="range" id="ui-ruby-y" min="-30" max="30" step="1"
+                        value="-18"><span class="range-val" id="val-ruby-y">-18px</span>
+                </div>
+                <div class="range-group">
+                    <label>畫布邊距</label><input type="range" id="ui-canvas-pad" min="0" max="20" step="1"
+                        value="6"><span class="range-val" id="val-canvas-pad">6%</span>
+                </div>
+                <div class="range-group">
+                    <label>純和弦數目</label><input type="range" id="ui-leadsheet-cols" min="4" max="16" step="1"
+                        value="8"><span class="range-val" id="val-leadsheet-cols">8</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <div id="project-modal">
         <div class="modal-content">
@@ -1523,6 +1665,65 @@
                     surface.style.webkitColumnFill = isEnabled ? 'balance' : 'auto';
                 });
             },
+            setLayoutDockCollapsed: function (collapsed, persist = true) {
+                const dock = document.getElementById('layout-dock');
+                const btn = document.getElementById('layout-dock-toggle');
+                if (!dock) return;
+                dock.classList.toggle('collapsed', collapsed);
+                if (btn) {
+                    btn.innerHTML = collapsed ? '⬆️' : '⬇️';
+                    btn.title = collapsed ? '展開版面設定' : '收折版面設定';
+                }
+                if (persist) localStorage.setItem('runsoLayoutDockCollapsed', String(collapsed));
+            },
+            setLayoutDockHeight: function (height, persist = true) {
+                const viewport = window.innerHeight || 720;
+                const minHeight = 150;
+                const maxHeight = Math.max(190, Math.min(Math.round(viewport * 0.55), viewport - 220));
+                const nextHeight = Math.max(minHeight, Math.min(maxHeight, Math.round(height)));
+                document.documentElement.style.setProperty('--layout-dock-height', `${nextHeight}px`);
+                if (persist) localStorage.setItem('runsoLayoutDockHeight', String(nextHeight));
+            },
+            toggleLayoutDock: function () {
+                const dock = document.getElementById('layout-dock');
+                if (!dock) return;
+                this.setLayoutDockCollapsed(!dock.classList.contains('collapsed'));
+            },
+            initLayoutDock: function () {
+                const saved = localStorage.getItem('runsoLayoutDockCollapsed');
+                this.setLayoutDockHeight(parseInt(localStorage.getItem('runsoLayoutDockHeight') || '240', 10), false);
+                this.setLayoutDockCollapsed(saved === null ? true : saved === 'true', false);
+            },
+            initLayoutDockResize: function () {
+                const dock = document.getElementById('layout-dock');
+                const handle = document.getElementById('layout-dock-resizer');
+                if (!dock || !handle) return;
+
+                handle.addEventListener('pointerdown', (e) => {
+                    e.preventDefault();
+                    this.setLayoutDockCollapsed(false);
+                    handle.classList.add('dragging');
+                    handle.setPointerCapture(e.pointerId);
+
+                    const startY = e.clientY;
+                    const startHeight = dock.getBoundingClientRect().height;
+
+                    const onMove = (moveEvent) => {
+                        this.setLayoutDockHeight(startHeight + (startY - moveEvent.clientY), false);
+                    };
+
+                    const onUp = () => {
+                        handle.classList.remove('dragging');
+                        handle.releasePointerCapture(e.pointerId);
+                        window.removeEventListener('pointermove', onMove);
+                        window.removeEventListener('pointerup', onUp);
+                        localStorage.setItem('runsoLayoutDockHeight', String(Math.round(dock.getBoundingClientRect().height)));
+                    };
+
+                    window.addEventListener('pointermove', onMove);
+                    window.addEventListener('pointerup', onUp);
+                });
+            },
             applyWorkspaceScale: function (pct, persist = true) {
                 let pctVal = parseInt(pct, 10);
                 if (Number.isNaN(pctVal)) pctVal = 100;
@@ -1557,12 +1758,11 @@
                 const sidebar = document.getElementById('app-sidebar');
                 if (!sidebar) return;
 
-                const sectionIds = ['inspector-section', 'dict-section', 'layout-section'];
+                const sectionIds = ['inspector-section', 'dict-section'];
                 const sections = sectionIds.map(id => document.getElementById(id));
                 const minHeights = {
                     'inspector-section': 110,
-                    'dict-section': 140,
-                    'layout-section': 180
+                    'dict-section': 140
                 };
 
                 const applySizes = (sizes) => {
@@ -1661,6 +1861,8 @@
                     });
                     UI.applyWorkspaceScale(localStorage.getItem('runsoWorkspaceScale') || 100, false);
                 }
+                UI.initLayoutDock();
+                UI.initLayoutDockResize();
                 UI.initSidebarSplitters();
                 document.getElementById('ui-columns').addEventListener('change', (e) => {
                     UI.setColumnsMode(e.target.checked);
@@ -2389,7 +2591,7 @@
                 UI.applyLayoutSettings({
                     chordSize: 1, lyricSize: 1.15, lineHeight: 2.8,
                     globalX: 0, globalY: 0, rubyX: -9, rubyY: -18,
-                    canvasPad: 10, lsCols: 8, columns: false
+                    canvasPad: 6, lsCols: 8, columns: false
                 });
             }
 
