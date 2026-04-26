@@ -42,13 +42,15 @@
             /* 和弦全域 X 軸微調偏移量 (左右平移) */
             --dyn-chord-global-y: 0px;
             /* 和弦全域 Y 軸微調偏移量 (上下平移) */
-            --dyn-ruby-global-x: -9px;
+            --dyn-ruby-global-x: 0px;
             /* 註釋 (Ruby) 全域 X 軸微調 */
             --dyn-ruby-global-y: -18px;
             /* 註釋 (Ruby) 全域 Y 軸微調 */
             --dyn-canvas-padding: 6%;
             --workspace-scale: 1;
             --layout-dock-height: 240px;
+            --layout-dock-collapsed-height: 42px;
+            --layout-dock-visible-height: var(--layout-dock-collapsed-height);
             /* 畫布兩側留白比例 (對應右側面板: 畫布左右內邊距) */
         }
 
@@ -64,7 +66,9 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+            height: 100dvh;
             overflow: hidden;
+            position: relative;
         }
 
         /* ==========================================
@@ -219,6 +223,7 @@
             flex: 1;
             overflow: hidden;
             min-height: 0;
+            padding-bottom: var(--layout-dock-visible-height);
         }
 
         .main-canvas {
@@ -363,6 +368,16 @@
             column-fill: balance !important;
             -webkit-column-fill: balance !important;
             width: 100%;
+        }
+
+        body.columns-enabled #editor-canvas.mode-ruby {
+            padding-left: 0.8em;
+            padding-right: 0.8em;
+        }
+
+        body.columns-enabled #editor-canvas.mode-ruby .lyric-ruby {
+            margin-left: 0.25em;
+            margin-right: 0.25em;
         }
 
         body.columns-enabled .view-panel {
@@ -618,14 +633,19 @@
         }
 
         .layout-dock {
-            flex: 0 0 var(--layout-dock-height);
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: var(--layout-dock-height);
             display: flex;
             flex-direction: column;
             min-height: 0;
             border-top: 1px solid var(--border);
             background: #fafafa;
             box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.04);
-            z-index: 60;
+            z-index: 160;
+            padding-bottom: env(safe-area-inset-bottom);
         }
 
         .layout-dock-resizer {
@@ -690,7 +710,7 @@
         }
 
         .layout-dock.collapsed {
-            flex: 0 0 auto;
+            height: var(--layout-dock-collapsed-height);
         }
 
         .layout-dock.collapsed .layout-dock-resizer {
@@ -1261,6 +1281,7 @@
 
         body.zen-mode .workspace {
             height: 100vh !important;
+            padding-bottom: 0 !important;
         }
 
         body.zen-mode header {
@@ -1485,7 +1506,7 @@
                 </div>
                 <div class="range-group">
                     <label>註釋全域 X</label><input type="range" id="ui-ruby-x" min="-30" max="30" step="1"
-                        value="-9"><span class="range-val" id="val-ruby-x">-9px</span>
+                        value="0"><span class="range-val" id="val-ruby-x">0</span>
                 </div>
                 <div class="range-group">
                     <label>註釋全域 Y</label><input type="range" id="ui-ruby-y" min="-30" max="30" step="1"
@@ -1629,7 +1650,7 @@
                     'ui-line-height': { val: settings.lineHeight, var: '--dyn-line-height', unit: '', valId: 'val-line-height' },
                     'ui-global-x': { val: settings.globalX, var: '--dyn-chord-global-x', unit: 'px', valId: 'val-global-x' },
                     'ui-global-y': { val: settings.globalY, var: '--dyn-chord-global-y', unit: 'px', valId: 'val-global-y' },
-                    'ui-ruby-x': { val: settings.rubyX !== undefined ? settings.rubyX : -9, var: '--dyn-ruby-global-x', unit: 'px', valId: 'val-ruby-x' },
+                    'ui-ruby-x': { val: (settings.rubyX !== undefined && String(settings.rubyX) !== '-9') ? settings.rubyX : 0, var: '--dyn-ruby-global-x', unit: 'px', valId: 'val-ruby-x' },
                     'ui-ruby-y': { val: settings.rubyY !== undefined ? settings.rubyY : -18, var: '--dyn-ruby-global-y', unit: 'px', valId: 'val-ruby-y' },
                     'ui-canvas-pad': { val: settings.canvasPad, var: '--dyn-canvas-padding', unit: '%', valId: 'val-canvas-pad' },
                     'ui-leadsheet-cols': { val: settings.lsCols !== undefined ? settings.lsCols : 8, var: null, unit: '', valId: 'val-leadsheet-cols' }
@@ -1670,6 +1691,8 @@
                 const btn = document.getElementById('layout-dock-toggle');
                 if (!dock) return;
                 dock.classList.toggle('collapsed', collapsed);
+                const visibleHeight = collapsed ? 'var(--layout-dock-collapsed-height)' : getComputedStyle(document.documentElement).getPropertyValue('--layout-dock-height').trim();
+                document.documentElement.style.setProperty('--layout-dock-visible-height', visibleHeight || '42px');
                 if (btn) {
                     btn.innerHTML = collapsed ? '⬆️' : '⬇️';
                     btn.title = collapsed ? '展開版面設定' : '收折版面設定';
@@ -1682,6 +1705,10 @@
                 const maxHeight = Math.max(190, Math.min(Math.round(viewport * 0.55), viewport - 220));
                 const nextHeight = Math.max(minHeight, Math.min(maxHeight, Math.round(height)));
                 document.documentElement.style.setProperty('--layout-dock-height', `${nextHeight}px`);
+                const dock = document.getElementById('layout-dock');
+                if (!dock || !dock.classList.contains('collapsed')) {
+                    document.documentElement.style.setProperty('--layout-dock-visible-height', `${nextHeight}px`);
+                }
                 if (persist) localStorage.setItem('runsoLayoutDockHeight', String(nextHeight));
             },
             toggleLayoutDock: function () {
@@ -2590,7 +2617,7 @@
             if (!initialLayoutApplied) {
                 UI.applyLayoutSettings({
                     chordSize: 1, lyricSize: 1.15, lineHeight: 2.8,
-                    globalX: 0, globalY: 0, rubyX: -9, rubyY: -18,
+                    globalX: 0, globalY: 0, rubyX: 0, rubyY: -18,
                     canvasPad: 6, lsCols: 8, columns: false
                 });
             }
