@@ -11,7 +11,7 @@
 ## 五大版型區域
 
 1. `Global Toolbar`：上方主控制列，控制弦數、調弦、材質、Key Root、Scale、顯示模式、指板文字、格數、縮放與長寬比。
-2. `FORM`：畫布上方的 Pattern / Chord / Arpeggio 選單區，先做外殼，之後接和弦、琶音、pattern 資料。
+2. `FORM`：畫布上方的雙圖層 Scale / Chord / Pattern 區，負責定義要顯示的音集合與比較層。
 3. `Canvas Stage`：主要畫布區，目前是指板；未來可替換成鍵盤、五線譜或其他互動畫布。
 4. `SCOPE`：畫布下方的選取分析區，未來分析圈選音、音程、和弦可能性、級數關係。
 5. `Info Panel`：資訊顯示區，顯示位置、音名、唱名、級數、調性關係等即時資訊。
@@ -43,6 +43,19 @@
   - `JPG`：輸出目前指板本體，不包含上方控制列、右側調色盤與下方工具列
 - `Hi` 之後如重新點選 Key Root 或 Scale，即使選到同一個值，也要回到目前 Key/Scale 的調內音顯示。
 
+## FORM 雙圖層規則
+
+- `FORM` 使用 `Layer A / Layer B`，不是單一 Chord/Arp 選單。
+- `Layer A` 是主分析層，右上 Current Key、音名拼法、級數與唱名預設依 A 層為準。
+- `Layer B` 是比較層，預設可關閉；適合放 Dorian、Blues、Pentatonic、另一個 chord tone 等。
+- 每層固定結構為：Enabled、Type、Root、Variant、Formula、Pattern。
+- `Type` 決定 `Variant` 下拉內容：Scale 時顯示音階/調式，Chord 時顯示和弦品質。
+- Type 為 `Scale` 時，Formula 由 Variant 自動產生，例如 Dorian = `1 2 b3 4 5 6 b7`。
+- Type 為 `Chord` 時，Formula 由 Variant 自動產生，例如 m7b5 = `1 b3 b5 b7`。
+- 不要同時顯示 Scale 與 Chord 兩個下拉，避免學生誤以為兩者會同時作用於同一層。
+- A-only 使用原音名色，B-only 使用 B 層對比色，A+B 重疊音使用雙圈外環。
+- 不使用位移圓點作為主要重疊視覺，避免學生誤判音的位置。
+
 ## 色彩規則
 
 預設低彩音名色：
@@ -60,10 +73,9 @@
 ## 功能規劃
 
 - Key / Scale：依調性正確顯示升降記號，不同 Key 不能同時顯示等音名稱。
-- Pattern：支援常用 box、線性 pattern、把位練習。
-- Chord：第一版已支援 Scale Map、Triad、7th、Extended，Quality 包含 Major、minor、dominant、dim。
-- Arpeggio：第一版已支援 Off、1-3-5、1-3-5-7、Spread；目前以 pitch class 顯示和弦音，之後再補路徑與指法。
-- Pattern：第一版已支援 All Neck、Box A、Box B、Linear。Box A/B 以目前調性根音附近的五格範圍計算，Linear 以目前選取弦作單弦橫向顯示。
+- Scale：支援 Major、minor、harmonic minor、melodic minor、major/minor pentatonic、blues、Ionian、Dorian、Phrygian、Lydian、Mixolydian、Aeolian、Locrian。
+- Chord：支援 Maj、min、dim、aug、sus、7、Maj7、min7、m7b5、dim7。
+- Pattern：第一版支援 All、Box A-F、Linear。Box 以各層 Root 附近的五格範圍計算，Linear 以目前選取弦作單弦橫向顯示。
 - Selection Analysis：從圈選音分析音程、和弦候選、級數與調性關係。
 - Export：先支援 JPG，後續加入 A4 / PDF。JPG 以純 SVG 重新繪製目前指板再轉圖，避免 DOM foreignObject 截圖失敗。輸出按鈕屬於畫布工具列，不放在畫布左側。
 - Persistence：所有設定暫存瀏覽器，避免重新整理後消失。

@@ -17,43 +17,53 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       { name: "B", pitch: "B", spelling: "sharp" }
     ];
     const SCALES = {
-      major: {
-        label: "Major",
-        intervals: [0, 2, 4, 5, 7, 9, 11],
-        degrees: ["1", "2", "3", "4", "5", "6", "7"],
-        romans: ["I", "ii", "iii", "IV", "V", "vi", "vii°"],
-        solfege: ["Do", "Re", "Mi", "Fa", "Sol", "La", "Ti"]
-      },
-      minor: {
-        label: "minor",
-        intervals: [0, 2, 3, 5, 7, 8, 10],
-        degrees: ["1", "2", "♭3", "4", "5", "♭6", "♭7"],
-        romans: ["i", "ii°", "III", "iv", "v", "VI", "VII"],
-        solfege: ["Do", "Re", "Me", "Fa", "Sol", "Le", "Te"]
-      }
+      major: { label: "Major", formula: "1 2 3 4 5 6 7", intervals: [0, 2, 4, 5, 7, 9, 11], degrees: ["1", "2", "3", "4", "5", "6", "7"], romans: ["I", "ii", "iii", "IV", "V", "vi", "vii°"], solfege: ["Do", "Re", "Mi", "Fa", "Sol", "La", "Ti"] },
+      minor: { label: "minor", formula: "1 2 b3 4 5 b6 b7", intervals: [0, 2, 3, 5, 7, 8, 10], degrees: ["1", "2", "♭3", "4", "5", "♭6", "♭7"], romans: ["i", "ii°", "III", "iv", "v", "VI", "VII"], solfege: ["Do", "Re", "Me", "Fa", "Sol", "Le", "Te"] },
+      harmonicMinor: { label: "Harmonic minor", formula: "1 2 b3 4 5 b6 7", intervals: [0, 2, 3, 5, 7, 8, 11], degrees: ["1", "2", "♭3", "4", "5", "♭6", "7"], romans: ["i", "ii°", "III+", "iv", "V", "VI", "vii°"], solfege: ["Do", "Re", "Me", "Fa", "Sol", "Le", "Ti"] },
+      melodicMinor: { label: "Melodic minor", formula: "1 2 b3 4 5 6 7", intervals: [0, 2, 3, 5, 7, 9, 11], degrees: ["1", "2", "♭3", "4", "5", "6", "7"], romans: ["i", "ii", "III+", "IV", "V", "vi°", "vii°"], solfege: ["Do", "Re", "Me", "Fa", "Sol", "La", "Ti"] },
+      majorPentatonic: { label: "Major pentatonic", formula: "1 2 3 5 6", intervals: [0, 2, 4, 7, 9], degrees: ["1", "2", "3", "5", "6"], romans: ["I", "ii", "iii", "V", "vi"], solfege: ["Do", "Re", "Mi", "Sol", "La"] },
+      minorPentatonic: { label: "Minor pentatonic", formula: "1 b3 4 5 b7", intervals: [0, 3, 5, 7, 10], degrees: ["1", "♭3", "4", "5", "♭7"], romans: ["i", "III", "iv", "v", "VII"], solfege: ["Do", "Me", "Fa", "Sol", "Te"] },
+      blues: { label: "Blues", formula: "1 b3 4 b5 5 b7", intervals: [0, 3, 5, 6, 7, 10], degrees: ["1", "♭3", "4", "♭5", "5", "♭7"], romans: ["i", "III", "IV", "♭V", "V", "VII"], solfege: ["Do", "Me", "Fa", "Se", "Sol", "Te"] },
+      ionian: { label: "Ionian", formula: "1 2 3 4 5 6 7", intervals: [0, 2, 4, 5, 7, 9, 11], degrees: ["1", "2", "3", "4", "5", "6", "7"], romans: ["I", "ii", "iii", "IV", "V", "vi", "vii°"], solfege: ["Do", "Re", "Mi", "Fa", "Sol", "La", "Ti"] },
+      dorian: { label: "Dorian", formula: "1 2 b3 4 5 6 b7", intervals: [0, 2, 3, 5, 7, 9, 10], degrees: ["1", "2", "♭3", "4", "5", "6", "♭7"], romans: ["i", "ii", "III", "IV", "v", "vi°", "VII"], solfege: ["Do", "Re", "Me", "Fa", "Sol", "La", "Te"] },
+      phrygian: { label: "Phrygian", formula: "1 b2 b3 4 5 b6 b7", intervals: [0, 1, 3, 5, 7, 8, 10], degrees: ["1", "♭2", "♭3", "4", "5", "♭6", "♭7"], romans: ["i", "II", "III", "iv", "v°", "VI", "vii"], solfege: ["Do", "Ra", "Me", "Fa", "Sol", "Le", "Te"] },
+      lydian: { label: "Lydian", formula: "1 2 3 #4 5 6 7", intervals: [0, 2, 4, 6, 7, 9, 11], degrees: ["1", "2", "3", "♯4", "5", "6", "7"], romans: ["I", "II", "iii", "iv°", "V", "vi", "vii"], solfege: ["Do", "Re", "Mi", "Fi", "Sol", "La", "Ti"] },
+      mixolydian: { label: "Mixolydian", formula: "1 2 3 4 5 6 b7", intervals: [0, 2, 4, 5, 7, 9, 10], degrees: ["1", "2", "3", "4", "5", "6", "♭7"], romans: ["I", "ii", "iii°", "IV", "v", "vi", "VII"], solfege: ["Do", "Re", "Mi", "Fa", "Sol", "La", "Te"] },
+      aeolian: { label: "Aeolian", formula: "1 2 b3 4 5 b6 b7", intervals: [0, 2, 3, 5, 7, 8, 10], degrees: ["1", "2", "♭3", "4", "5", "♭6", "♭7"], romans: ["i", "ii°", "III", "iv", "v", "VI", "VII"], solfege: ["Do", "Re", "Me", "Fa", "Sol", "Le", "Te"] },
+      locrian: { label: "Locrian", formula: "1 b2 b3 4 b5 b6 b7", intervals: [0, 1, 3, 5, 6, 8, 10], degrees: ["1", "♭2", "♭3", "4", "♭5", "♭6", "♭7"], romans: ["i°", "II", "iii", "iv", "V", "VI", "vii"], solfege: ["Do", "Ra", "Me", "Fa", "Se", "Le", "Te"] }
     };
-    const CHORD_QUALITIES = {
-      major: {
-        triad: [0, 4, 7],
-        seventh: [0, 4, 7, 11],
-        extended: [0, 4, 7, 11, 14]
-      },
-      minor: {
-        triad: [0, 3, 7],
-        seventh: [0, 3, 7, 10],
-        extended: [0, 3, 7, 10, 14]
-      },
-      dominant: {
-        triad: [0, 4, 7],
-        seventh: [0, 4, 7, 10],
-        extended: [0, 4, 7, 10, 14]
-      },
-      dim: {
-        triad: [0, 3, 6],
-        seventh: [0, 3, 6, 9],
-        extended: [0, 3, 6, 9, 14]
-      }
+    const SCALE_GROUPS = [
+      { label: "Diatonic", values: ["major", "minor"] },
+      { label: "Minor family", values: ["harmonicMinor", "melodicMinor"] },
+      { label: "Pentatonic / Blues", values: ["majorPentatonic", "minorPentatonic", "blues"] },
+      { label: "Modes", values: ["ionian", "dorian", "phrygian", "lydian", "mixolydian", "aeolian", "locrian"] }
+    ];
+    const ARPEGGIO_TYPES = {
+      major: { label: "Maj", formula: "1 3 5", intervals: [0, 4, 7] },
+      minor: { label: "min", formula: "1 b3 5", intervals: [0, 3, 7] },
+      dim: { label: "dim", formula: "1 b3 b5", intervals: [0, 3, 6] },
+      aug: { label: "aug", formula: "1 3 #5", intervals: [0, 4, 8] },
+      dominant7: { label: "7", formula: "1 3 5 b7", intervals: [0, 4, 7, 10] },
+      major7: { label: "Maj7", formula: "1 3 5 7", intervals: [0, 4, 7, 11] },
+      minor7: { label: "min7", formula: "1 b3 5 b7", intervals: [0, 3, 7, 10] },
+      halfDiminished7: { label: "m7b5", formula: "1 b3 b5 b7", intervals: [0, 3, 6, 10] },
+      diminished7: { label: "dim7", formula: "1 b3 b5 bb7", intervals: [0, 3, 6, 9] }
     };
+    const ARPEGGIO_GROUPS = [
+      { label: "Triads", values: ["major", "minor", "dim", "aug"] },
+      { label: "7th chords", values: ["dominant7", "major7", "minor7", "halfDiminished7", "diminished7"] }
+    ];
+    const PATTERN_OPTIONS = [
+      { value: "all", label: "All" },
+      { value: "box-a", label: "Box A" },
+      { value: "box-b", label: "Box B" },
+      { value: "box-c", label: "Box C" },
+      { value: "box-d", label: "Box D" },
+      { value: "box-e", label: "Box E" },
+      { value: "box-f", label: "Box F" },
+      { value: "linear", label: "Linear" }
+    ];
+    const LAYER_IDS = ["a", "b"];
     const THEME_TOKENS = {
       white: { board: "#ffffff", fret: "#e0e2e3", string: "#8f9492", ink: "#1f2423", muted: "rgba(31, 36, 35, .62)" },
       ebony: { board: "#202423", fret: "rgba(220, 232, 228, .58)", string: "rgba(245, 248, 247, .72)", ink: "#f4faf8", muted: "rgba(244, 250, 248, .62)" },
@@ -108,9 +118,15 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       boardTheme: document.querySelector("#board-theme"),
       keyRoot: document.querySelector("#key-root"),
       scaleType: document.querySelector("#scale-type"),
-      chordType: document.querySelector("#chord-type"),
-      chordQuality: document.querySelector("#chord-quality"),
-      arpMode: document.querySelector("#arp-mode"),
+      layerControls: document.querySelectorAll("[data-layer][data-layer-field]"),
+      layerRows: document.querySelectorAll("[data-layer-row]"),
+      variantSelects: document.querySelectorAll("[data-layer-variant]"),
+      variantLabels: document.querySelectorAll("[data-layer-variant-label]"),
+      formulaLabels: document.querySelectorAll("[data-layer-formula-label]"),
+      formulaOutputs: {
+        a: document.querySelector("#layer-a-formula"),
+        b: document.querySelector("#layer-b-formula")
+      },
       patternShape: document.querySelector("#pattern-shape"),
       noteSwitchboard: document.querySelector("#note-switchboard"),
       fretCount: document.querySelector("#fret-count"),
@@ -121,18 +137,20 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       zoomOut: document.querySelector("#zoom-out"),
       zoomIn: document.querySelector("#zoom-in"),
       zoomOutput: document.querySelector("#zoom-output"),
-      keyBadge: document.querySelector("#key-badge"),
       modeButtons: document.querySelectorAll("[data-mode]"),
       labelButtons: document.querySelectorAll("[data-label-mode]"),
+      secondaryLabelButtons: document.querySelectorAll("[data-secondary-label]"),
       colorPickers: document.querySelectorAll("[data-note-color]"),
       paletteButtons: document.querySelectorAll("[data-palette-dot]"),
-      showBoth: document.querySelector("#show-both"),
       infoPosition: document.querySelector("#info-position"),
       infoNote: document.querySelector("#info-note"),
       infoSolfege: document.querySelector("#info-solfege"),
       infoDegree: document.querySelector("#info-degree"),
       infoRelation: document.querySelector("#info-relation"),
-      infoString: document.querySelector("#info-string")
+      infoString: document.querySelector("#info-string"),
+      scopeSelection: document.querySelector("#scope-selection"),
+      scopeSuggestions: document.querySelector("#scope-suggestions"),
+      scopeViewToggle: document.querySelector("#scope-view-toggle")
     };
 
     const state = {
@@ -146,22 +164,30 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       scale: "major",
       mode: "scale",
       labelMode: "note",
+      secondaryLabels: new Set(["solfege"]),
       boardTheme: "white",
       displayScale: 100,
       pageScale: 100,
       aspectScale: 100,
-      chordType: "scale",
-      chordQuality: "major",
-      arpMode: "off",
-      patternShape: "all",
+      fretOffset: 0,
+      layers: {
+        a: { enabled: true, kind: "scale", keyName: "C", scale: "major", arpeggio: "major", pattern: "all" },
+        b: { enabled: false, kind: "scale", keyName: "D", scale: "dorian", arpeggio: "minor7", pattern: "all" }
+      },
+      emphasisTarget: "a",
+      emphasisDegrees: new Set(),
       pitchListMode: "all",
       soloPitches: new Set(),
       pitchOverrides: {},
       markerTool: "cycle",
       colorMode: "color",
+      accidentalMode: "auto",
+      hideSnapshot: null,
       manualOn: new Set(),
       manualOff: new Set(),
       manualSelected: new Set(),
+      selectionLog: [],
+      scopeView: "simple",
       selected: { stringIndex: 5, fret: 1 }
     };
 
@@ -206,7 +232,38 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       return byPitch;
     }
 
+    function tokenDegree(token) {
+      const match = String(token).match(/\d+/);
+      return match ? Number(match[0]) : 1;
+    }
+
+    function layerSpellings(layer) {
+      const definition = layerDefinition(layer);
+      const rootName = layer.keyName || state.keyName;
+      const rootPitch = layerRoot(layer);
+      const rootLetter = rootName[0];
+      const letters = ["C", "D", "E", "F", "G", "A", "B"];
+      const rootLetterIndex = letters.indexOf(rootLetter);
+      const byPitch = new Map();
+      const tokens = definition.formula.split(/\s+/);
+      definition.intervals.forEach((interval, index) => {
+        const degree = tokenDegree(tokens[index]);
+        const letter = letters[(rootLetterIndex + degree - 1) % letters.length];
+        const targetPitch = (rootPitch + interval) % 12;
+        const naturalPitch = LETTER_PITCH[letter];
+        const accidental = (targetPitch - naturalPitch + 12) % 12;
+        byPitch.set(NOTES[targetPitch], `${letter}${accidentalSymbol(accidental)}`);
+      });
+      return byPitch;
+    }
+
     function displayPitch(note) {
+      if (state.accidentalMode === "sharp") return SHARP_NAMES[noteIndex(note)];
+      if (state.accidentalMode === "flat") return FLAT_NAMES[noteIndex(note)];
+      if (state.layers.a.kind === "arpeggio") {
+        const arpeggioName = layerSpellings(state.layers.a).get(note);
+        if (arpeggioName) return arpeggioName;
+      }
       const inScaleName = scaleSpellings().get(note);
       if (inScaleName) return inScaleName;
       const pitch = noteIndex(note);
@@ -284,6 +341,34 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       });
     }
 
+    function keyByName(name) {
+      return KEY_OPTIONS.find(item => item.name === name) || KEY_OPTIONS[0];
+    }
+
+    function normalizeLayer(layer, fallback) {
+      const next = { ...fallback, ...(layer || {}) };
+      next.enabled = Boolean(next.enabled);
+      next.kind = ["arpeggio", "chord"].includes(next.kind) ? "arpeggio" : "scale";
+      next.keyName = keyByName(next.keyName).name;
+      next.scale = SCALES[next.scale] ? next.scale : fallback.scale;
+      next.arpeggio = ARPEGGIO_TYPES[next.arpeggio || next.quality] ? (next.arpeggio || next.quality) : fallback.arpeggio;
+      next.pattern = PATTERN_OPTIONS.some(option => option.value === next.pattern) ? next.pattern : fallback.pattern;
+      return next;
+    }
+
+    function layerRoot(layer) {
+      return keyByName(layer.keyName).pitch;
+    }
+
+    function syncPrimaryLayer() {
+      const primary = state.layers.a;
+      const key = keyByName(primary.keyName);
+      state.keyName = key.name;
+      state.root = key.pitch;
+      state.keySpelling = key.spelling;
+      state.scale = primary.scale;
+    }
+
     function saveSettings() {
       const payload = {
         strings: state.strings,
@@ -297,20 +382,22 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         displayScale: state.displayScale,
         aspectScale: state.aspectScale,
         pageScale: state.pageScale,
-        chordType: state.chordType,
-        chordQuality: state.chordQuality,
-        arpMode: state.arpMode,
-        patternShape: state.patternShape,
+        layers: state.layers,
+        emphasisTarget: state.emphasisTarget,
+        emphasisDegrees: [...state.emphasisDegrees],
         pitchListMode: state.pitchListMode,
         pitchOverrides: state.pitchOverrides,
         soloPitches: [...state.soloPitches],
         markerTool: state.markerTool,
         colorMode: state.colorMode,
+        accidentalMode: state.accidentalMode,
+        secondaryLabels: [...state.secondaryLabels],
+        selectionLog: state.selectionLog,
+        scopeView: state.scopeView,
         manualOn: [...state.manualOn],
         manualOff: [...state.manualOff],
         manualSelected: [...state.manualSelected],
         selected: state.selected,
-        showBoth: dom.showBoth.checked,
         noteColors: { ...NOTE_COLORS },
         recentNoteColors: { ...RECENT_NOTE_COLORS }
       };
@@ -347,13 +434,38 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       state.displayScale = validNumber(saved.displayScale, state.displayScale, 70, 130);
       state.aspectScale = validNumber(saved.aspectScale, state.aspectScale, 55, 150);
       state.pageScale = validNumber(saved.pageScale, state.pageScale, 70, 130);
-      if (["scale", "triad", "seventh", "extended"].includes(saved.chordType)) state.chordType = saved.chordType;
-      if (Object.hasOwn(CHORD_QUALITIES, saved.chordQuality)) state.chordQuality = saved.chordQuality;
-      if (["off", "triad", "seventh", "spread"].includes(saved.arpMode)) state.arpMode = saved.arpMode;
-      if (["all", "box-a", "box-b", "linear"].includes(saved.patternShape)) state.patternShape = saved.patternShape;
+      state.fretOffset = 0;
+      if (saved.layers && typeof saved.layers === "object") {
+        state.layers.a = normalizeLayer(saved.layers.a, state.layers.a);
+        state.layers.b = normalizeLayer(saved.layers.b, state.layers.b);
+      } else {
+        state.layers.a = normalizeLayer({
+          enabled: true,
+          kind: saved.chordType && saved.chordType !== "scale" ? "arpeggio" : "scale",
+          keyName: saved.keyName,
+          scale: saved.scale,
+          arpeggio: saved.chordQuality,
+          pattern: saved.patternShape
+        }, state.layers.a);
+      }
+      syncPrimaryLayer();
       if (["all", "scale"].includes(saved.pitchListMode)) state.pitchListMode = saved.pitchListMode;
       if (["cycle", "draw", "erase"].includes(saved.markerTool)) state.markerTool = saved.markerTool;
       if (["color", "mono"].includes(saved.colorMode)) state.colorMode = saved.colorMode;
+      if (["auto", "sharp", "flat"].includes(saved.accidentalMode)) state.accidentalMode = saved.accidentalMode;
+      if (["a", "b"].includes(saved.emphasisTarget)) state.emphasisTarget = saved.emphasisTarget;
+      if (Array.isArray(saved.emphasisDegrees)) {
+        state.emphasisDegrees = new Set(saved.emphasisDegrees.filter(item => ["1", "3", "5", "7", "9", "11", "13", "rel"].includes(item)));
+      }
+      if (Array.isArray(saved.secondaryLabels)) {
+        state.secondaryLabels = new Set(saved.secondaryLabels.filter(item => ["note", "solfege", "degree"].includes(item) && item !== state.labelMode));
+      }
+      if (Array.isArray(saved.selectionLog)) {
+        state.selectionLog = saved.selectionLog
+          .filter(item => item && Number.isInteger(item.stringIndex) && Number.isInteger(item.fret) && NOTES.includes(item.note))
+          .slice(0, 12);
+      }
+      if (["simple", "detail"].includes(saved.scopeView)) state.scopeView = saved.scopeView;
       state.pitchOverrides = saved.pitchOverrides && typeof saved.pitchOverrides === "object" ? saved.pitchOverrides : {};
       state.soloPitches = new Set(Array.isArray(saved.soloPitches) ? saved.soloPitches.filter(note => NOTES.includes(note)) : []);
       state.manualOn = new Set(Array.isArray(saved.manualOn) ? saved.manualOn : []);
@@ -365,7 +477,6 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           fret: Math.max(1, Math.min(state.frets, saved.selected.fret))
         };
       }
-      dom.showBoth.checked = Boolean(saved.showBoth);
       applyColorMap(NOTE_COLORS, saved.noteColors);
       applyColorMap(RECENT_NOTE_COLORS, saved.recentNoteColors);
     }
@@ -376,47 +487,43 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       dom.boardTheme.value = state.boardTheme;
       syncStageClass();
       dom.keyRoot.value = state.keyName;
-      dom.scaleType.value = state.scale;
       dom.fretCount.value = String(state.frets);
       dom.displayScale.value = state.displayScale;
       dom.displayOutput.textContent = `${state.displayScale}%`;
       dom.aspectScale.value = state.aspectScale;
       dom.aspectOutput.textContent = `${state.aspectScale}%`;
-      dom.chordType.value = state.chordType;
-      dom.chordQuality.value = state.chordQuality;
-      dom.arpMode.value = state.arpMode;
-      dom.patternShape.value = state.patternShape;
+      LAYER_IDS.forEach(layerId => syncLayerControls(layerId));
       dom.modeButtons.forEach(item => item.classList.toggle("is-active", item.dataset.mode === state.mode));
       dom.labelButtons.forEach(item => item.classList.toggle("is-active", item.dataset.labelMode === state.labelMode));
+      syncSecondaryLabelButtons();
     }
 
     function syncStageClass() {
       dom.stage.className = `stage theme-${state.boardTheme}${state.colorMode === "mono" ? " is-mono" : ""}`;
     }
 
-    function activeChordIntervals() {
-      const quality = CHORD_QUALITIES[state.chordQuality] || CHORD_QUALITIES.major;
-      if (state.arpMode === "triad") return quality.triad;
-      if (state.arpMode === "seventh") return quality.seventh;
-      if (state.arpMode === "spread") return quality.extended;
-      if (state.chordType === "triad") return quality.triad;
-      if (state.chordType === "seventh") return quality.seventh;
-      if (state.chordType === "extended") return quality.extended;
-      return null;
+    function layerDefinition(layer) {
+      if (layer.kind === "arpeggio") return ARPEGGIO_TYPES[layer.arpeggio] || ARPEGGIO_TYPES.major;
+      return SCALES[layer.scale] || SCALES.major;
     }
 
-    function isChordTone(note) {
-      const intervals = activeChordIntervals();
-      if (!intervals) return true;
-      const distance = (noteIndex(note) - noteIndex(state.root) + 12) % 12;
+    function layerFormula(layer) {
+      return layerDefinition(layer).formula;
+    }
+
+    function layerContains(layer, note) {
+      const root = layerRoot(layer);
+      const intervals = layerDefinition(layer).intervals;
+      const distance = (noteIndex(note) - noteIndex(root) + 12) % 12;
       return intervals.some(interval => interval % 12 === distance);
     }
 
-    function rootPocketStart(offset = 0) {
+    function rootPocketStart(layer = state.layers.a, offset = 0) {
+      const root = layerRoot(layer);
       const rootFrets = [];
       state.tuning.forEach(openNote => {
         for (let fret = 1; fret <= state.frets; fret += 1) {
-          if (noteAt(openNote, fret) === state.root) rootFrets.push(fret);
+          if (noteAt(openNote, fret) === root) rootFrets.push(fret);
         }
       });
       const firstRoot = rootFrets.length ? Math.min(...rootFrets) : 1;
@@ -424,29 +531,38 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       return Math.max(1, Math.min(maxStart, firstRoot - 2 + offset));
     }
 
-    function patternAllows(stringIndex, fret) {
-      if (state.patternShape === "box-a") {
-        const start = rootPocketStart(0);
+    function patternAllows(layer, stringIndex, fret) {
+      const boxOffsets = {
+        "box-a": 0,
+        "box-b": 3,
+        "box-c": 6,
+        "box-d": 9,
+        "box-e": 12,
+        "box-f": 15
+      };
+      if (Object.hasOwn(boxOffsets, layer.pattern)) {
+        const start = rootPocketStart(layer, boxOffsets[layer.pattern]);
         return fret >= start && fret <= start + 4;
       }
-      if (state.patternShape === "box-b") {
-        const start = rootPocketStart(4);
-        return fret >= start && fret <= start + 4;
-      }
-      if (state.patternShape === "linear") {
+      if (layer.pattern === "linear") {
         return stringIndex === state.selected.stringIndex;
       }
       return true;
     }
 
+    function markerSources(note, stringIndex, fret) {
+      if (state.mode === "custom") return [];
+      return LAYER_IDS.filter(layerId => {
+        const layer = state.layers[layerId];
+        return layer.enabled && patternAllows(layer, stringIndex, fret) && layerContains(layer, note);
+      });
+    }
+
     function baseShouldShow(note, stringIndex, fret) {
-      const info = scaleInfo(note);
-      if (state.mode === "custom") return false;
-      if (!patternAllows(stringIndex, fret)) return false;
-      if (activeChordIntervals()) return isChordTone(note);
+      if (markerSources(note, stringIndex, fret).length) return true;
       if (state.mode === "all") return true;
       if (state.mode === "root") return note === state.root;
-      return info.inKey;
+      return false;
     }
 
     function markerKey(stringIndex, fret) {
@@ -502,14 +618,271 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       state.soloPitches.clear();
     }
 
-    function keyLabel() {
-      if (state.scale === "minor") return `${state.keyName}m minor`;
-      return `${state.keyName} Major`;
+    function cloneLayer(layer) {
+      return { ...layer };
     }
 
-    function keyBadgeLabel() {
-      if (state.scale === "minor") return `${state.keyName}m`;
-      return state.keyName;
+    function snapshotView() {
+      return {
+        mode: state.mode,
+        markerTool: state.markerTool,
+        pitchOverrides: { ...state.pitchOverrides },
+        soloPitches: [...state.soloPitches],
+        manualOn: [...state.manualOn],
+        manualOff: [...state.manualOff],
+        manualSelected: [...state.manualSelected],
+        layers: {
+          a: cloneLayer(state.layers.a),
+          b: cloneLayer(state.layers.b)
+        }
+      };
+    }
+
+    function restoreSnapshot(snapshot) {
+      state.mode = snapshot.mode;
+      state.markerTool = snapshot.markerTool;
+      state.pitchOverrides = { ...snapshot.pitchOverrides };
+      state.soloPitches = new Set(snapshot.soloPitches);
+      state.manualOn = new Set(snapshot.manualOn);
+      state.manualOff = new Set(snapshot.manualOff);
+      state.manualSelected = new Set(snapshot.manualSelected);
+      state.layers.a = normalizeLayer(snapshot.layers.a, state.layers.a);
+      state.layers.b = normalizeLayer(snapshot.layers.b, state.layers.b);
+      syncPrimaryLayer();
+      syncControlsFromState();
+    }
+
+    function keyLabel() {
+      const scale = SCALES[state.scale] || SCALES.major;
+      if (state.scale === "minor") return `${state.keyName}m minor`;
+      return `${state.keyName} ${scale.label}`;
+    }
+
+    function accidentalToolLabel() {
+      if (state.accidentalMode === "sharp") return "♯";
+      if (state.accidentalMode === "flat") return "♭";
+      return "🎵";
+    }
+
+    function cycleAccidentalMode() {
+      const order = ["auto", "sharp", "flat"];
+      state.accidentalMode = order[(order.indexOf(state.accidentalMode) + 1) % order.length];
+    }
+
+    function transposeKeyName(keyName, semitones) {
+      const key = keyByName(keyName);
+      const nextPitch = NOTES[(noteIndex(key.pitch) + semitones + 12) % 12];
+      const preferFlat = state.accidentalMode === "flat" || key.spelling === "flat";
+      const names = preferFlat ? FLAT_NAMES : SHARP_NAMES;
+      const label = names[noteIndex(nextPitch)];
+      const match = KEY_OPTIONS.find(item => item.name === label || item.pitch === nextPitch);
+      return (match || KEY_OPTIONS[0]).name;
+    }
+
+    function transposeLayers(semitones) {
+      LAYER_IDS.forEach(layerId => {
+        state.layers[layerId].keyName = transposeKeyName(state.layers[layerId].keyName, semitones);
+      });
+      syncPrimaryLayer();
+      syncControlsFromState();
+    }
+
+    function labelText(kind, note, info) {
+      if (kind === "solfege") return info.solfege;
+      if (kind === "degree") return info.degree;
+      return displayNote(note);
+    }
+
+    function syncSecondaryLabelButtons() {
+      dom.secondaryLabelButtons.forEach(button => {
+        const kind = button.dataset.secondaryLabel;
+        const disabled = kind === state.labelMode;
+        if (disabled) state.secondaryLabels.delete(kind);
+        button.disabled = disabled;
+        button.classList.toggle("is-disabled", disabled);
+        button.classList.toggle("is-active", state.secondaryLabels.has(kind));
+      });
+    }
+
+    function emphasisIntervalFor(layer, target) {
+      const definition = layerDefinition(layer);
+      const tokens = definition.formula.split(/\s+/);
+      const targetDegree = { "9": 2, "11": 4, "13": 6 }[target] || Number(target);
+      const index = tokens.findIndex(token => tokenDegree(token) === targetDegree);
+      return index >= 0 ? definition.intervals[index] % 12 : null;
+    }
+
+    function relativeIntervalFor(layer) {
+      const third = emphasisIntervalFor(layer, "3");
+      if (third === 3) return 3;
+      if (third === 4) return 9;
+      return null;
+    }
+
+    function shouldEmphasize(note) {
+      if (!state.emphasisDegrees.size) return false;
+      const layer = state.layers[state.emphasisTarget];
+      if (!layer || !layer.enabled) return false;
+      const distance = (noteIndex(note) - noteIndex(layerRoot(layer)) + 12) % 12;
+      for (const target of state.emphasisDegrees) {
+        const interval = target === "rel" ? relativeIntervalFor(layer) : emphasisIntervalFor(layer, target);
+        if (interval !== null && distance === interval) return true;
+      }
+      return false;
+    }
+
+    function chordRootLabel(note) {
+      const pitch = noteIndex(note);
+      if (state.accidentalMode === "flat" || state.keySpelling === "flat") return FLAT_NAMES[pitch];
+      return SHARP_NAMES[pitch];
+    }
+
+    function chordQualityLabel(key) {
+      const labels = {
+        major: "",
+        minor: "m",
+        dim: "dim",
+        aug: "aug",
+        dominant7: "7",
+        major7: "maj7",
+        minor7: "m7",
+        halfDiminished7: "m7b5",
+        diminished7: "dim7"
+      };
+      return labels[key] ?? key;
+    }
+
+    function chordCandidates() {
+      const selectedPitches = [...new Set(state.selectionLog.map(item => noteIndex(item.note)))];
+      if (selectedPitches.length < 2) return [];
+      const selectedSet = new Set(selectedPitches);
+      const qualities = ["major", "minor", "dim", "aug", "dominant7", "major7", "minor7", "halfDiminished7", "diminished7"];
+      const candidates = [];
+      NOTES.forEach(root => {
+        const rootPitch = noteIndex(root);
+        qualities.forEach(quality => {
+          const definition = ARPEGGIO_TYPES[quality];
+          const chordPitches = definition.intervals.map(interval => (rootPitch + interval) % 12);
+          const chordSet = new Set(chordPitches);
+          const containsAll = selectedPitches.every(pitch => chordSet.has(pitch));
+          if (!containsAll) return;
+          const exact = chordSet.size === selectedSet.size;
+          const rootBonus = selectedSet.has(rootPitch) ? 5 : 0;
+          const score = (exact ? 100 : 82 - ((chordSet.size - selectedSet.size) * 7)) + rootBonus;
+          candidates.push({
+            name: `${chordRootLabel(root)}${chordQualityLabel(quality)}`,
+            formula: definition.formula,
+            quality: definition.label,
+            score,
+            exact
+          });
+        });
+      });
+      return candidates
+        .sort((a, b) => b.score - a.score || a.name.length - b.name.length)
+        .slice(0, 6);
+    }
+
+    function renderScopeSuggestions() {
+      if (!dom.scopeSuggestions) return;
+      const candidates = chordCandidates();
+      dom.scopeSuggestions.innerHTML = "<strong>Chord Suggestions</strong>";
+      if (!candidates.length) {
+        const empty = document.createElement("span");
+        empty.textContent = state.selectionLog.length < 2 ? "選 2 個以上音，這裡會顯示可能和弦。" : "目前沒有明確候選和弦。";
+        dom.scopeSuggestions.append(empty);
+        return;
+      }
+      const list = document.createElement("div");
+      list.className = "scope-chord-list";
+      candidates.forEach(candidate => {
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = ["scope-chord", candidate.exact ? "is-exact" : ""].filter(Boolean).join(" ");
+        item.innerHTML = `
+          <strong>${candidate.name}</strong>
+          <span>${candidate.formula}</span>
+        `;
+        list.append(item);
+      });
+      dom.scopeSuggestions.append(list);
+    }
+
+    function recordScopeSelection(stringIndex, fret, note) {
+      const info = scaleInfo(note);
+      const entry = {
+        id: `${stringIndex}:${fret}`,
+        stringIndex,
+        fret,
+        note,
+        noteLabel: displayNote(note),
+        solfege: info.solfege,
+        degree: info.degree,
+        relation: info.inKey ? "in" : "out"
+      };
+      state.selectionLog = [...state.selectionLog.filter(item => item.id !== entry.id), entry].slice(-12);
+    }
+
+    function renderScopeSelection() {
+      if (!dom.scopeSelection) return;
+      dom.scopeSelection.innerHTML = "";
+      if (dom.scopeViewToggle) {
+        dom.scopeViewToggle.textContent = state.scopeView === "simple" ? "Detail" : "Simple";
+        dom.scopeViewToggle.classList.toggle("is-active", state.scopeView === "detail");
+      }
+      if (!state.selectionLog.length) {
+        const empty = document.createElement("span");
+        empty.className = "scope-empty";
+        empty.textContent = "點擊指板上的音，這裡會先記錄選取內容。";
+        dom.scopeSelection.append(empty);
+        renderScopeSuggestions();
+        return;
+      }
+      state.selectionLog.forEach((item, index) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.draggable = true;
+        chip.dataset.scopeIndex = String(index);
+        chip.className = ["scope-chip", item.relation === "out" ? "is-out" : ""].filter(Boolean).join(" ");
+        chip.style.setProperty("--note-color", colorForNote(item.note));
+        const noteLabel = displayPitch(item.note);
+        chip.innerHTML = state.scopeView === "detail"
+          ? `<strong>${noteLabel}</strong><span>${item.solfege} / ${item.degree}</span><small>S${item.stringIndex + 1} F${item.fret}</small>`
+          : `<strong>${noteLabel}</strong>`;
+        chip.addEventListener("click", () => {
+          state.selected = { stringIndex: item.stringIndex, fret: item.fret };
+          updateInfo(item.stringIndex, item.fret);
+        });
+        chip.addEventListener("dblclick", event => {
+          event.preventDefault();
+          event.stopPropagation();
+          state.selectionLog = state.selectionLog.filter(entry => entry.id !== item.id);
+          render();
+        });
+        chip.addEventListener("dragstart", event => {
+          event.dataTransfer?.setData("text/plain", String(index));
+          chip.classList.add("is-dragging");
+        });
+        chip.addEventListener("dragend", () => {
+          chip.classList.remove("is-dragging");
+        });
+        chip.addEventListener("dragover", event => {
+          event.preventDefault();
+        });
+        chip.addEventListener("drop", event => {
+          event.preventDefault();
+          const fromIndex = Number(event.dataTransfer?.getData("text/plain"));
+          const toIndex = index;
+          if (!Number.isInteger(fromIndex) || fromIndex === toIndex) return;
+          const next = [...state.selectionLog];
+          const [moved] = next.splice(fromIndex, 1);
+          next.splice(toIndex, 0, moved);
+          state.selectionLog = next;
+          render();
+        });
+        dom.scopeSelection.append(chip);
+      });
+      renderScopeSuggestions();
     }
 
     function togglePitch(note) {
@@ -531,7 +904,19 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const notes = state.pitchListMode === "scale"
         ? NOTES.filter(note => scaleInfo(note).inKey)
         : NOTES;
-      dom.noteSwitchboard.style.gridTemplateColumns = `repeat(${notes.length}, minmax(3.3rem, 4.2rem)) 3.3rem`;
+      const switchColumns = Math.max(notes.length + 1, 9);
+      dom.noteSwitchboard.style.gridTemplateColumns = `repeat(${switchColumns}, minmax(3.3rem, 4.2rem))`;
+      let switchItemCount = 0;
+      const addSwitchSpacers = () => {
+        const fillerCount = (switchColumns - (switchItemCount % switchColumns)) % switchColumns;
+        for (let index = 0; index < fillerCount; index += 1) {
+          const spacer = document.createElement("span");
+          spacer.className = "switch-spacer";
+          spacer.setAttribute("aria-hidden", "true");
+          dom.noteSwitchboard.append(spacer);
+          switchItemCount += 1;
+        }
+      };
       notes.forEach(note => {
         const info = scaleInfo(note);
         const button = document.createElement("button");
@@ -547,6 +932,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         button.innerHTML = `<strong>${displayPitch(note)}</strong><span>${info.roman}</span>`;
         button.addEventListener("click", () => togglePitch(note));
         dom.noteSwitchboard.append(button);
+        switchItemCount += 1;
       });
       const collapse = document.createElement("button");
       collapse.type = "button";
@@ -559,20 +945,53 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         saveSettings();
       });
       dom.noteSwitchboard.append(collapse);
+      switchItemCount += 1;
+      addSwitchSpacers();
 
       const tools = [
-        { id: "clear", label: "Hi", title: "Hide all notes / custom mode" },
+        { id: "clear", label: "CLN", title: "Clear notes / toggle hidden canvas" },
         { id: "cycle", label: "✏️", title: "Draw / select / hide" },
         { id: "erase", label: "🧽", title: "Erase clicked note" },
-        { id: "color", label: state.colorMode === "color" ? "SAT" : "BLU", title: "切換彩色/低彩藍色模式" },
-        { id: "export", label: "JPG", title: "輸出目前畫布為 JPG" }
+        { id: "color", label: state.colorMode === "color" ? "LIG" : "BLU", title: "切換彩色/低彩藍色模式" },
+        { id: "accidental", label: accidentalToolLabel(), title: "音名升降記號：自動 / 強制升 / 強制降" },
+        { id: "export", label: "JPG", title: "輸出目前畫布為 JPG" },
+        { id: "transpose-down", label: "-1", title: "Main/Sub 整體降半音" },
+        { id: "transpose-up", label: "+1", title: "Main/Sub 整體升半音" }
       ];
       tools.forEach(tool => {
         const button = document.createElement("button");
         button.type = "button";
         button.className = [
           "pitch-tool",
-          (tool.id === state.markerTool || (tool.id === "color" && state.colorMode === "mono")) ? "is-active" : ""
+          (tool.id === state.markerTool || (tool.id === "clear" && state.hideSnapshot) || (tool.id === "color" && state.colorMode === "mono") || (tool.id === "accidental" && state.accidentalMode !== "auto")) ? "is-active" : ""
+        ].filter(Boolean).join(" ");
+        button.textContent = tool.label;
+        button.title = tool.title;
+        button.addEventListener("click", () => handleToolClick(tool.id));
+        dom.noteSwitchboard.append(button);
+        switchItemCount += 1;
+      });
+      addSwitchSpacers();
+
+      const emphasisTools = [
+        { id: "emphasis-target", label: state.emphasisTarget === "a" ? "MAIN" : "SUB", title: "切換強調目標：MAIN / SUB" },
+        { id: "em-1", label: "R", degree: "1", title: "強調 Root" },
+        { id: "em-3", label: "3rd", degree: "3", title: "強調 3rd" },
+        { id: "em-5", label: "5th", degree: "5", title: "強調 5th" },
+        { id: "em-7", label: "7th", degree: "7", title: "強調 7th" },
+        { id: "em-9", label: "9th", degree: "9", title: "強調 9th" },
+        { id: "em-11", label: "11th", degree: "11", title: "強調 11th" },
+        { id: "em-13", label: "13th", degree: "13", title: "強調 13th" },
+        { id: "em-rel", label: "Rel", degree: "rel", title: "強調 Relative Major / Minor" }
+      ];
+      emphasisTools.forEach(tool => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = [
+          "pitch-tool",
+          "emphasis-tool",
+          tool.id === "emphasis-target" ? "is-target" : "",
+          tool.degree && state.emphasisDegrees.has(tool.degree) ? "is-active" : ""
         ].filter(Boolean).join(" ");
         button.textContent = tool.label;
         button.title = tool.title;
@@ -583,19 +1002,36 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
     function handleToolClick(toolId) {
       if (toolId === "clear") {
-        state.manualOn.clear();
-        state.manualOff.clear();
-        state.manualSelected.clear();
-        state.pitchOverrides = {};
-        state.soloPitches.clear();
-        state.mode = "custom";
-        state.markerTool = "cycle";
-        state.chordType = "scale";
-        state.arpMode = "off";
-        state.patternShape = "all";
-        syncControlsFromState();
+        if (state.hideSnapshot) {
+          const snapshot = state.hideSnapshot;
+          state.hideSnapshot = null;
+          restoreSnapshot(snapshot);
+          state.manualSelected.clear();
+          state.selectionLog = [];
+        } else {
+          state.hideSnapshot = snapshotView();
+          resetManualMarkers();
+          state.selectionLog = [];
+          state.mode = "custom";
+          state.markerTool = "cycle";
+        }
       } else if (toolId === "color") {
         state.colorMode = state.colorMode === "color" ? "mono" : "color";
+      } else if (toolId === "accidental") {
+        cycleAccidentalMode();
+      } else if (toolId === "transpose-down") {
+        transposeLayers(-1);
+      } else if (toolId === "transpose-up") {
+        transposeLayers(1);
+      } else if (toolId === "emphasis-target") {
+        state.emphasisTarget = state.emphasisTarget === "a" ? "b" : "a";
+      } else if (toolId.startsWith("em-")) {
+        const degree = toolId.replace("em-", "");
+        if (state.emphasisDegrees.has(degree)) {
+          state.emphasisDegrees.delete(degree);
+        } else {
+          state.emphasisDegrees.add(degree);
+        }
       } else if (toolId === "export") {
         exportCanvasJpg().catch(error => {
           console.warn("Unable to export canvas JPG", error);
@@ -659,21 +1095,35 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       state.tuning.forEach((openNote, stringIndex) => {
         const y = firstY + (stringIndex * rowHeight);
         for (let fret = 1; fret <= state.frets; fret += 1) {
-          const note = noteAt(openNote, fret);
+          const actualFret = fret;
+          const note = noteAt(openNote, actualFret);
           const info = scaleInfo(note);
-          if (!shouldShow(stringIndex, fret, note)) continue;
+          const sources = markerSources(note, stringIndex, actualFret);
+          if (!shouldShow(stringIndex, actualFret, note)) continue;
 
-          const selected = state.manualSelected.has(markerKey(stringIndex, fret));
+          const selected = state.manualSelected.has(markerKey(stringIndex, actualFret));
           const x = boardX + ((fret - .5) * fretWidth);
           const labels = markerLabels(note, info);
           const noteColor = colorForNote(note);
-          const fill = state.colorMode === "mono" ? "#ffffff" : (info.inKey ? noteColor : "#9da5aa");
-          const stroke = state.colorMode === "mono" ? "#151918" : "none";
-          const textColor = state.colorMode === "mono" ? "#6e93db" : "#ffffff";
+          const emphasis = shouldEmphasize(note);
+          const subOnly = sources.length === 1 && sources[0] === "b";
+          const fill = state.colorMode === "mono" ? (subOnly ? "#00a99d" : "#ffffff") : (subOnly ? "#ffffff" : (info.inKey ? noteColor : "#9da5aa"));
+          const stroke = state.colorMode === "mono" ? (subOnly ? "none" : "#151918") : (subOnly ? "#00a99d" : "none");
+          const textColor = state.colorMode === "mono" ? (subOnly ? "#ffffff" : "#6e93db") : (subOnly ? "#00a99d" : "#ffffff");
 
+          if (sources.length > 1) {
+            parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius + 8}" fill="none" stroke="#6e93db" stroke-width="1.875"/>`);
+            parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius + 12}" fill="none" stroke="#00a99d" stroke-width="1.875" opacity=".78"/>`);
+          }
           if (selected) {
-            parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius + 5}" fill="none" stroke="#ffffff" stroke-width="5"/>`);
-            parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius + 7}" fill="none" stroke="rgba(31,36,35,.22)" stroke-width="2"/>`);
+            parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius + 5}" fill="none" stroke="#ffffff" stroke-width="3.125"/>`);
+            parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius + 7}" fill="none" stroke="#343b38" stroke-width="1.25" opacity=".22"/>`);
+          }
+          if (emphasis) {
+            parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius + 6}" fill="none" stroke="#d986a0" stroke-width="2.5"/>`);
+          }
+          if (emphasis && selected) {
+            parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius + 9}" fill="none" stroke="#ffffff" stroke-width="2.5"/>`);
           }
           parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius}" fill="${fill}" stroke="${stroke}" stroke-width="${state.colorMode === "mono" ? 2 : 0}"/>`);
           parts.push(`<text x="${x}" y="${labels.secondary ? y - 1 : y + 5}" text-anchor="middle" font-size="${markerFont}" font-weight="900" fill="${textColor}">${svgEscape(labels.primary)}</text>`);
@@ -717,14 +1167,71 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
     }
 
     function rebuildKeyOptions() {
-      dom.keyRoot.innerHTML = "";
-      KEY_OPTIONS.forEach(key => {
-        const option = document.createElement("option");
-        option.value = key.name;
-        option.textContent = key.name;
-        dom.keyRoot.append(option);
+      document.querySelectorAll('[data-layer-field="keyName"]').forEach(select => {
+        select.innerHTML = "";
+        KEY_OPTIONS.forEach(key => {
+          const option = document.createElement("option");
+          option.value = key.name;
+          option.textContent = key.name;
+          select.append(option);
+        });
       });
-      dom.keyRoot.value = state.keyName;
+    }
+
+    function rebuildFormOptions() {
+      document.querySelectorAll('[data-layer-field="pattern"]').forEach(select => {
+        select.innerHTML = "";
+        PATTERN_OPTIONS.forEach(pattern => {
+          const option = document.createElement("option");
+          option.value = pattern.value;
+          option.textContent = pattern.label;
+          select.append(option);
+        });
+      });
+    }
+
+    function rebuildVariantOptions(layerId) {
+      const layer = state.layers[layerId];
+      const select = document.querySelector(`[data-layer="${layerId}"][data-layer-field="variant"]`);
+      if (!select) return;
+      const source = layer.kind === "arpeggio" ? ARPEGGIO_TYPES : SCALES;
+      const groups = layer.kind === "arpeggio" ? ARPEGGIO_GROUPS : SCALE_GROUPS;
+      select.innerHTML = "";
+      groups.forEach(group => {
+        const optgroup = document.createElement("optgroup");
+        optgroup.label = group.label;
+        group.values.forEach(value => {
+          const item = source[value];
+          if (!item) return;
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = item.label;
+          optgroup.append(option);
+        });
+        select.append(optgroup);
+      });
+    }
+
+    function syncLayerControls(layerId) {
+      const layer = state.layers[layerId];
+      rebuildVariantOptions(layerId);
+      document.querySelectorAll(`[data-layer="${layerId}"][data-layer-field]`).forEach(control => {
+        const field = control.dataset.layerField;
+        if (control.type === "checkbox") {
+          control.checked = Boolean(layer[field]);
+        } else if (field === "variant") {
+          control.value = layer.kind === "arpeggio" ? layer.arpeggio : layer.scale;
+        } else {
+          control.value = layer[field];
+        }
+      });
+      const row = document.querySelector(`[data-layer-row="${layerId}"]`);
+      if (row) row.classList.toggle("is-muted", !layer.enabled);
+      const label = document.querySelector(`[data-layer-variant-label="${layerId}"]`);
+      if (label) label.textContent = layer.kind === "arpeggio" ? "Arp." : "Scale";
+      const formulaLabel = document.querySelector(`[data-layer-formula-label="${layerId}"]`);
+      if (formulaLabel) formulaLabel.textContent = layer.kind === "arpeggio" ? "Chord Tones" : "Formula";
+      if (dom.formulaOutputs[layerId]) dom.formulaOutputs[layerId].textContent = layerFormula(layer);
     }
 
     function rebuildTuningOptions() {
@@ -744,11 +1251,14 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
     }
 
     function markerLabels(note, info) {
-      const primary = state.labelMode === "note" ? displayNote(note) : info.solfege;
-      const secondary = state.labelMode === "note" ? info.solfege : displayNote(note);
+      const secondary = ["note", "solfege", "degree"]
+        .filter(kind => kind !== state.labelMode && state.secondaryLabels.has(kind))
+        .map(kind => labelText(kind, note, info))
+        .filter(Boolean)
+        .join(" / ");
       return {
-        primary,
-        secondary: dom.showBoth.checked ? secondary : ""
+        primary: labelText(state.labelMode, note, info),
+        secondary
       };
     }
 
@@ -777,7 +1287,6 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       dom.fretboard.style.setProperty("--board-width", `${state.frets * fretWidth}rem`);
       document.querySelector("#stage-layout").style.setProperty("--frets", state.frets);
       document.querySelector("#stage-layout").style.minWidth = `${18.5 + (state.frets * fretWidth)}rem`;
-      dom.keyBadge.textContent = keyBadgeLabel();
       dom.modeButtons.forEach(item => item.classList.toggle("is-active", item.dataset.mode === state.mode));
 
       const nut = document.createElement("div");
@@ -796,9 +1305,11 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         dom.fretboard.append(label);
 
         for (let fret = 1; fret <= state.frets; fret += 1) {
-          const note = noteAt(openNote, fret);
+          const actualFret = fret;
+          const note = noteAt(openNote, actualFret);
           const info = scaleInfo(note);
-          const visible = shouldShow(stringIndex, fret, note);
+          const sources = markerSources(note, stringIndex, actualFret);
+          const visible = shouldShow(stringIndex, actualFret, note);
           const cell = document.createElement("button");
           cell.type = "button";
           cell.className = [
@@ -808,10 +1319,11 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           ].filter(Boolean).join(" ");
           cell.style.gridRow = stringIndex + 1;
           cell.style.gridColumn = fret + 2;
-          cell.setAttribute("aria-label", `${openNote} 弦第 ${fret} 格，${displayNote(note)}，${info.solfege}`);
+          cell.setAttribute("aria-label", `${openNote} 弦第 ${actualFret} 格，${displayNote(note)}，${info.solfege}`);
           cell.addEventListener("click", () => {
-            toggleMarker(stringIndex, fret, note);
-            updateInfo(stringIndex, fret);
+            toggleMarker(stringIndex, actualFret, note);
+            recordScopeSelection(stringIndex, actualFret, note);
+            updateInfo(stringIndex, actualFret);
             render();
           });
 
@@ -820,8 +1332,11 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
             const marker = document.createElement("span");
             marker.className = [
               "marker",
+              sources.length === 1 && sources[0] === "b" ? "is-layer-b" : "",
+              sources.length > 1 ? "is-overlap" : "",
               info.inKey ? "" : "is-out",
-              state.manualSelected.has(markerKey(stringIndex, fret)) ? "is-selected" : ""
+              shouldEmphasize(note) ? "is-emphasis" : "",
+              state.manualSelected.has(markerKey(stringIndex, actualFret)) ? "is-selected" : ""
             ].filter(Boolean).join(" ");
             marker.style.setProperty("--note-color", colorForNote(note));
             marker.style.setProperty("--in-key-scale", 1);
@@ -846,16 +1361,19 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       });
 
       renderNoteSwitchboard();
+      renderScopeSelection();
       updateInfo(state.selected.stringIndex, state.selected.fret);
       saveSettings();
     }
 
     function syncKeyFromControl() {
-      const key = KEY_OPTIONS.find(item => item.name === dom.keyRoot.value) || KEY_OPTIONS[0];
-      state.keyName = key.name;
-      state.root = key.pitch;
-      state.keySpelling = key.spelling;
-      state.scale = dom.scaleType.value;
+      state.layers.a.keyName = dom.keyRoot.value;
+      if (state.layers.a.kind === "arpeggio") {
+        state.layers.a.arpeggio = dom.scaleType.value;
+      } else {
+        state.layers.a.scale = dom.scaleType.value;
+      }
+      syncPrimaryLayer();
     }
 
     function restoreTheoryViewFromCustom() {
@@ -866,12 +1384,24 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       render();
     }
 
-    function applyFormControls() {
-      state.chordType = dom.chordType.value;
-      state.chordQuality = dom.chordQuality.value;
-      state.arpMode = dom.arpMode.value;
-      state.patternShape = dom.patternShape.value;
+    function applyLayerControl(control) {
+      const layerId = control.dataset.layer;
+      const field = control.dataset.layerField;
+      const layer = state.layers[layerId];
+      if (control.type === "checkbox") {
+        layer[field] = control.checked;
+      } else if (field === "variant") {
+        if (layer.kind === "arpeggio") {
+          layer.arpeggio = control.value;
+        } else {
+          layer.scale = control.value;
+        }
+      } else {
+        layer[field] = control.value;
+      }
+      if (layerId === "a") syncPrimaryLayer();
       if (state.mode === "custom") state.mode = "scale";
+      syncLayerControls(layerId);
       resetManualMarkers();
       render();
     }
@@ -898,27 +1428,10 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       saveSettings();
     });
 
-    dom.keyRoot.addEventListener("pointerdown", restoreTheoryViewFromCustom);
-    dom.scaleType.addEventListener("pointerdown", restoreTheoryViewFromCustom);
-
-    dom.keyRoot.addEventListener("change", () => {
-      syncKeyFromControl();
-      if (state.mode === "custom") state.mode = "scale";
-      resetManualMarkers();
-      render();
+    dom.layerControls.forEach(control => {
+      control.addEventListener("pointerdown", restoreTheoryViewFromCustom);
+      control.addEventListener("change", () => applyLayerControl(control));
     });
-
-    dom.scaleType.addEventListener("change", () => {
-      syncKeyFromControl();
-      if (state.mode === "custom") state.mode = "scale";
-      resetManualMarkers();
-      render();
-    });
-
-    dom.chordType.addEventListener("change", applyFormControls);
-    dom.chordQuality.addEventListener("change", applyFormControls);
-    dom.arpMode.addEventListener("change", applyFormControls);
-    dom.patternShape.addEventListener("change", applyFormControls);
 
     dom.fretCount.addEventListener("change", event => {
       state.frets = Number(event.target.value);
@@ -943,11 +1456,30 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       button.addEventListener("click", () => {
         dom.labelButtons.forEach(item => item.classList.toggle("is-active", item === button));
         state.labelMode = button.dataset.labelMode;
+        state.secondaryLabels.delete(state.labelMode);
+        syncSecondaryLabelButtons();
         render();
       });
     });
 
-    dom.showBoth.addEventListener("change", render);
+    dom.secondaryLabelButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        const kind = button.dataset.secondaryLabel;
+        if (kind === state.labelMode) return;
+        if (state.secondaryLabels.has(kind)) {
+          state.secondaryLabels.delete(kind);
+        } else {
+          state.secondaryLabels.add(kind);
+        }
+        syncSecondaryLabelButtons();
+        render();
+      });
+    });
+
+    dom.scopeViewToggle?.addEventListener("click", () => {
+      state.scopeView = state.scopeView === "simple" ? "detail" : "simple";
+      render();
+    });
 
     dom.colorPickers.forEach(picker => {
       picker.addEventListener("input", event => {
@@ -979,6 +1511,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
     loadSettings();
     rebuildKeyOptions();
+    rebuildFormOptions();
     rebuildTuningOptions();
     syncControlsFromState();
     syncPalette();

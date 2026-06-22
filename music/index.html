@@ -36,15 +36,10 @@
     <main class="main">
       <header class="hero">
         <section>
-          <p class="crumbs">樂理筆記 / 吉他 / 指板</p>
-          <h1>調性指板地圖</h1>
-          <p>以調性為核心，把音名、唱名、級數放到同一張指板上。這版先建立基礎互動，後續可接和弦、琶音、五聲音階與不同 pattern。</p>
+          <p class="crumbs">Theory Notes / Guitar / Fretboard</p>
+          <h1>Key Fretboard Map</h1>
         </section>
         <div class="hero-actions">
-          <aside class="key-chip" aria-live="polite">
-            <span>Current Key</span>
-            <strong id="key-badge">C</strong>
-          </aside>
           <div class="page-zoom" aria-label="頁面縮放">
             <button type="button" id="zoom-out" aria-label="縮小">-</button>
             <output id="zoom-output">100%</output>
@@ -81,19 +76,6 @@
         </div>
 
         <div class="control">
-          <label for="key-root">Key Root</label>
-          <select id="key-root"></select>
-        </div>
-
-        <div class="control">
-          <label for="scale-type">Scale</label>
-          <select id="scale-type">
-            <option value="major">Major</option>
-            <option value="minor">minor</option>
-          </select>
-        </div>
-
-        <div class="control">
           <label>顯示模式</label>
           <div class="segmented" role="group" aria-label="顯示模式">
             <button type="button" class="is-active" data-mode="scale">調內音</button>
@@ -107,15 +89,17 @@
           <div class="segmented name-toggle" role="group" aria-label="指板文字顯示">
             <button type="button" class="is-active" data-label-mode="note">音名</button>
             <button type="button" data-label-mode="solfege">唱名</button>
+            <button type="button" data-label-mode="degree">級數</button>
           </div>
         </div>
 
         <div class="control">
-          <label for="show-both">標籤選項</label>
-          <label class="check-row" for="show-both">
-            <input id="show-both" type="checkbox">
-            <span>同時顯示</span>
-          </label>
+          <label>標籤選項</label>
+          <div class="tag-options" role="group" aria-label="副標籤顯示">
+            <button type="button" data-secondary-label="note">音名</button>
+            <button type="button" data-secondary-label="solfege" class="is-active">唱名</button>
+            <button type="button" data-secondary-label="degree">級數</button>
+          </div>
         </div>
 
         <div class="control">
@@ -150,45 +134,68 @@
       <section class="pattern-panel panel-shell" aria-label="Pattern 與琶音面板">
         <div class="panel-title">
           <strong>FORM</strong>
-          <span>Pattern / Arp / Voicing shell</span>
+          <span>Layered Scale / Arp. / Pattern</span>
         </div>
-        <div class="pattern-grid">
-          <label>
-            <span>Chord</span>
-            <select id="chord-type">
-              <option value="scale" selected>Scale Map</option>
-              <option value="triad">Triad</option>
-              <option value="seventh">7th</option>
-              <option value="extended">Extended</option>
-            </select>
-          </label>
-          <label>
-            <span>Quality</span>
-            <select id="chord-quality">
-              <option value="major" selected>Major</option>
-              <option value="minor">minor</option>
-              <option value="dominant">dominant</option>
-              <option value="dim">dim</option>
-            </select>
-          </label>
-          <label>
-            <span>Arp</span>
-            <select id="arp-mode">
-              <option value="off" selected>Off</option>
-              <option value="triad">1-3-5</option>
-              <option value="seventh">1-3-5-7</option>
-              <option value="spread">Spread</option>
-            </select>
-          </label>
-          <label>
-            <span>Pattern</span>
-            <select id="pattern-shape">
-              <option value="all" selected>All Neck</option>
-              <option value="box-a">Box A</option>
-              <option value="box-b">Box B</option>
-              <option value="linear">Linear</option>
-            </select>
-          </label>
+        <div class="layer-grid" id="form-layers">
+          <div class="layer-row" data-layer-row="a">
+            <label class="layer-enable">
+              <input id="layer-a-enabled" type="checkbox" data-layer="a" data-layer-field="enabled" checked>
+              <span>Main</span>
+            </label>
+            <label>
+              <span>Type</span>
+              <select id="layer-a-kind" data-layer="a" data-layer-field="kind">
+                <option value="scale" selected>Scale</option>
+                <option value="arpeggio">Arp.</option>
+              </select>
+            </label>
+            <label>
+              <span>Root</span>
+              <select id="key-root" data-layer="a" data-layer-field="keyName"></select>
+            </label>
+            <label>
+              <span data-layer-variant-label="a">Scale</span>
+              <select id="scale-type" data-layer="a" data-layer-field="variant" data-layer-variant></select>
+            </label>
+            <label>
+              <span data-layer-formula-label="a">Formula</span>
+              <output id="layer-a-formula" class="formula-output">1 2 3 4 5 6 7</output>
+            </label>
+            <label>
+              <span>Pattern</span>
+              <select id="pattern-shape" data-layer="a" data-layer-field="pattern"></select>
+            </label>
+          </div>
+
+          <div class="layer-row is-muted" data-layer-row="b">
+            <label class="layer-enable">
+              <input id="layer-b-enabled" type="checkbox" data-layer="b" data-layer-field="enabled">
+              <span>B</span>
+            </label>
+            <label>
+              <span>Type</span>
+              <select id="layer-b-kind" data-layer="b" data-layer-field="kind">
+                <option value="scale" selected>Scale</option>
+                <option value="arpeggio">Arp.</option>
+              </select>
+            </label>
+            <label>
+              <span>Root</span>
+              <select id="layer-b-root" data-layer="b" data-layer-field="keyName"></select>
+            </label>
+            <label>
+              <span data-layer-variant-label="b">Scale</span>
+              <select id="layer-b-variant" data-layer="b" data-layer-field="variant" data-layer-variant></select>
+            </label>
+            <label>
+              <span data-layer-formula-label="b">Formula</span>
+              <output id="layer-b-formula" class="formula-output">1 2 b3 4 5 6 b7</output>
+            </label>
+            <label>
+              <span>Pattern</span>
+              <select id="layer-b-pattern" data-layer="b" data-layer-field="pattern"></select>
+            </label>
+          </div>
         </div>
       </section>
 
@@ -220,8 +227,19 @@
           <span>Selection analysis shell</span>
         </div>
         <div class="analysis-placeholder">
-          <b>Selected Notes</b>
-          <span>尚未啟用分析。未來會顯示圈選音、音程、和弦可能性與級數關係。</span>
+          <div class="scope-head">
+            <b>Selected Notes</b>
+            <button type="button" id="scope-view-toggle">Detail</button>
+          </div>
+          <div class="scope-body">
+            <div id="scope-selection" class="scope-selection">
+              <span class="scope-empty">點擊指板上的音，這裡會先記錄選取內容。</span>
+            </div>
+            <div id="scope-suggestions" class="scope-suggestions">
+              <strong>Chord Suggestions</strong>
+              <span>選 2 個以上音，這裡會顯示可能和弦。</span>
+            </div>
+          </div>
         </div>
       </section>
 

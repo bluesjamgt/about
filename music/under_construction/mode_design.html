@@ -13,18 +13,19 @@ Pattern / Arp / Voicing shell 模組
 例如自然音階中 又搭配了顯示Dorian mode 就會在指版上同時顯示兩者的音階位置，重疊的部分就會有雙圈效果。
 這樣更能看見特徵音的位置，對於學習者來說也更有幫助。
 
-#1 
-Scale,Chord
-To Scale #2, To Chord #2
+#1 Type
+Scale,arpeggio  
+To Scale #2, To arpeggio #2
+※ Scale和arpeggio的選項選擇後
+#2~#5的名稱會變化
 
+#2 Root
+[if Scale] C, C#,Db, D, D#,Eb, E, F, F#,Gb, G, G#,Ab, A, A#,Bb, B
 
-#2
-[if Chord] C, C#,Db, D, D#,Eb, E, F, F#,Gb, G, G#,Ab, A, A#,Bb, B
-
-#2 Mode
+#2 Scale Mode
 [if Scale] 自然調 , 和聲調 , 旋律調 , 藍調, 五聲音階,調式音階 Ionic, Dorian, Phrygian, Lydian, Mixolydian, Aeolian, Locrian
 
-#3 
+#3 Formula
 [if Scale] 1234567,1234#567,123#4567,1234567,12356
 
 #4 Pattern
@@ -32,14 +33,46 @@ To Scale #2, To Chord #2
 
 
 
-#2
-[if Chord] C, C#,Db, D, D#,Eb, E, F, F#,Gb, G, G#,Ab, A, A#,Bb, B
-#3
-[if Chord] Major, Minor, Diminished, Augmented, Suspended, Dominant7, Major7, Minor7, Half-diminished7, Diminished7  
-           用簡寫顯示 例如 Maj, min, dim, aug, sus, 7, Maj7, min7, m7b5, dim7
-#4
-[if Chord] 顯示級數語音程 1-b3-b5-7, 1-3-5-7, 1-b3-5-7, 1-3-b5-7, 1-3-5-b7, 1-b3-5-b7, 1-3-#5-7, 1-b3-b5-7
+#2 Root
+[if arpeggio] C, C#,Db, D, D#,Eb, E, F, F#,Gb, G, G#,Ab, A, A#,Bb, B
+
+#3 (先只設計3和弦 七和弦) traid,7th,
+[if arpeggio] Major, Minor, Diminished, Augmented, Suspended, Dominant7, Major7, Minor7, Half-diminished7, Diminished7  
+           用簡寫顯示 例如 Maj, min, dim,, Maj7, min7, dim7
+#4 Formula
+[if arpeggio] 顯示級數語音程 1-b3-b5-7, 1-3-5-7, 1-b3-5-7, 1-3-b5-7, 1-3-5-b7, 1-b3-5-b7, 1-3-#5-7, 1-b3-b5-7
 #5
-[if Chord] Box A , Box B , Box C , Box D , Box E , Box F , 
+[if arpeggio] Box A , Box B , Box C , Box D , Box E , Box F , 
 
+Canvas Tool Trial / 2026-06-22
 
+1. [-1] [+1]
+- 不是水平移動 fret。
+- 功能定義為 Main/Sub 兩層同時移調半音。
+- [-1] = 所有 Form root 降半音。
+- [+1] = 所有 Form root 升半音。
+- 指板格位維持原位置，只改變被顯示/分析的音集合。
+
+2. Hi
+- 第一次按下：暫存目前最後顯示狀態，進入全隱藏 Custom 狀態。
+- 第二次按下：復原剛剛暫存的顯示狀態。
+- 不重置 Main/Sub 的 Type、Root、Scale/Arp、Pattern 設定。
+
+3. LIG / BLU
+- 原 SAT 文字改為 LIG。
+- LIG 表示目前彩色光譜模式。
+- BLU 表示低彩藍色對比模式。
+
+4. Main/Sub 對比色
+- Main 使用目前主要顯示模式。
+- Sub 暫時採用與 Main 相反的呈現方式。
+- 例如 Main 是七彩填色時，Sub 使用白底線框。
+- 例如 Main 是低彩無底色時，Sub 可用填色作為對比。
+
+5. Emphasis Tools
+- 第三排畫布工具列設計同寬方框。
+- 目標切換：MAIN / SUB。
+- 可複選強調項目：R, 3rd, 5th, 7th, 9th, 11th, 13th, Rel。
+- Rel = Relative Major / Minor。
+- 試作視覺：粗體紅底白字，用來測試強調效果。
+- 目前只做顯示強調，不做音程分析結論。
