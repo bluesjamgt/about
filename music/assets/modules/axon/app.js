@@ -30,13 +30,23 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       lydian: { label: "Lydian", formula: "1 2 3 #4 5 6 7", intervals: [0, 2, 4, 6, 7, 9, 11], degrees: ["1", "2", "3", "♯4", "5", "6", "7"], romans: ["I", "II", "iii", "iv°", "V", "vi", "vii"], solfege: ["Do", "Re", "Mi", "Fi", "Sol", "La", "Ti"] },
       mixolydian: { label: "Mixolydian", formula: "1 2 3 4 5 6 b7", intervals: [0, 2, 4, 5, 7, 9, 10], degrees: ["1", "2", "3", "4", "5", "6", "♭7"], romans: ["I", "ii", "iii°", "IV", "v", "vi", "VII"], solfege: ["Do", "Re", "Mi", "Fa", "Sol", "La", "Te"] },
       aeolian: { label: "Aeolian", formula: "1 2 b3 4 5 b6 b7", intervals: [0, 2, 3, 5, 7, 8, 10], degrees: ["1", "2", "♭3", "4", "5", "♭6", "♭7"], romans: ["i", "ii°", "III", "iv", "v", "VI", "VII"], solfege: ["Do", "Re", "Me", "Fa", "Sol", "Le", "Te"] },
-      locrian: { label: "Locrian", formula: "1 b2 b3 4 b5 b6 b7", intervals: [0, 1, 3, 5, 6, 8, 10], degrees: ["1", "♭2", "♭3", "4", "♭5", "♭6", "♭7"], romans: ["i°", "II", "iii", "iv", "V", "VI", "vii"], solfege: ["Do", "Ra", "Me", "Fa", "Se", "Le", "Te"] }
+      locrian: { label: "Locrian", formula: "1 b2 b3 4 b5 b6 b7", intervals: [0, 1, 3, 5, 6, 8, 10], degrees: ["1", "♭2", "♭3", "4", "♭5", "♭6", "♭7"], romans: ["i°", "II", "iii", "iv", "V", "VI", "vii"], solfege: ["Do", "Ra", "Me", "Fa", "Se", "Le", "Te"] },
+      hirajoshi: { label: "Hirajoshi", formula: "1 2 b3 5 b6", intervals: [0, 2, 3, 7, 8], degrees: ["1", "2", "♭3", "5", "♭6"], romans: ["i", "II", "III", "v", "VI"], solfege: ["Do", "Re", "Me", "Sol", "Le"] },
+      inSen: { label: "In Sen", formula: "1 b2 4 5 b7", intervals: [0, 1, 5, 7, 10], degrees: ["1", "♭2", "4", "5", "♭7"], romans: ["i", "II", "iv", "v", "VII"], solfege: ["Do", "Ra", "Fa", "Sol", "Te"] },
+      iwato: { label: "Iwato", formula: "1 b2 4 b5 b7", intervals: [0, 1, 5, 6, 10], degrees: ["1", "♭2", "4", "♭5", "♭7"], romans: ["i", "II", "iv", "♭V", "VII"], solfege: ["Do", "Ra", "Fa", "Se", "Te"] },
+      kumoi: { label: "Kumoi", formula: "1 2 b3 5 6", intervals: [0, 2, 3, 7, 9], degrees: ["1", "2", "♭3", "5", "6"], romans: ["i", "II", "III", "v", "VI"], solfege: ["Do", "Re", "Me", "Sol", "La"] },
+      yo: { label: "Yo", formula: "1 2 4 5 6", intervals: [0, 2, 5, 7, 9], degrees: ["1", "2", "4", "5", "6"], romans: ["I", "ii", "IV", "V", "vi"], solfege: ["Do", "Re", "Fa", "Sol", "La"] },
+      bhairav: { label: "Bhairav", formula: "1 b2 3 4 5 b6 7", intervals: [0, 1, 4, 5, 7, 8, 11], degrees: ["1", "♭2", "3", "4", "5", "♭6", "7"], romans: ["I", "♭II", "III", "IV", "V", "♭VI", "VII"], solfege: ["Do", "Ra", "Mi", "Fa", "Sol", "Le", "Ti"] },
+      kafi: { label: "Kafi", formula: "1 2 b3 4 5 6 b7", intervals: [0, 2, 3, 5, 7, 9, 10], degrees: ["1", "2", "♭3", "4", "5", "6", "♭7"], romans: ["i", "ii", "III", "IV", "v", "vi°", "VII"], solfege: ["Do", "Re", "Me", "Fa", "Sol", "La", "Te"] },
+      todi: { label: "Todi", formula: "1 b2 b3 #4 5 b6 7", intervals: [0, 1, 3, 6, 7, 8, 11], degrees: ["1", "♭2", "♭3", "♯4", "5", "♭6", "7"], romans: ["i", "II", "III", "♯IV", "V", "VI", "VII"], solfege: ["Do", "Ra", "Me", "Fi", "Sol", "Le", "Ti"] },
+      oriental: { label: "Oriental", formula: "1 b2 3 4 b5 6 b7", intervals: [0, 1, 4, 5, 6, 9, 10], degrees: ["1", "♭2", "3", "4", "♭5", "6", "♭7"], romans: ["I", "♭II", "III", "IV", "♭V", "VI", "♭VII"], solfege: ["Do", "Ra", "Mi", "Fa", "Se", "La", "Te"] }
     };
     const SCALE_GROUPS = [
       { label: "Diatonic", values: ["major", "minor"] },
       { label: "Minor family", values: ["harmonicMinor", "melodicMinor"] },
       { label: "Pentatonic / Blues", values: ["majorPentatonic", "minorPentatonic", "blues"] },
-      { label: "Modes", values: ["ionian", "dorian", "phrygian", "lydian", "mixolydian", "aeolian", "locrian"] }
+      { label: "Modes", values: ["ionian", "dorian", "phrygian", "lydian", "mixolydian", "aeolian", "locrian"] },
+      { label: "Exotic / Asia", values: ["hirajoshi", "inSen", "iwato", "kumoi", "yo", "bhairav", "kafi", "todi", "oriental"] }
     ];
     const ARPEGGIO_TYPES = {
       major: { label: "Maj", formula: "1 3 5", intervals: [0, 4, 7] },
@@ -102,6 +112,16 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         "8-String Guitar": ["E", "B", "G", "D", "A", "E", "B", "F#"]
       }
     };
+    const TUNING_OCTAVES = {
+      "Bass Standard": [2, 2, 1, 1],
+      "Ukulele High G": [4, 4, 4, 4],
+      "5-String Bass": [2, 2, 1, 1, 0],
+      "Guitar Standard": [4, 3, 3, 3, 2, 2],
+      "Drop D": [4, 3, 3, 3, 2, 2],
+      "Open G": [4, 3, 3, 3, 2, 2],
+      "7-String Guitar": [4, 3, 3, 3, 2, 2, 1],
+      "8-String Guitar": [4, 3, 3, 3, 2, 2, 1, 1]
+    };
     const FUTURE_LAYERS = {
       chord: null,
       arpeggio: null,
@@ -109,8 +129,124 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       pentatonic: null,
       noteLanguage: "movable-do"
     };
+    const THEORY_PAGES = [
+      {
+        id: "scales",
+        title: "音階",
+        subtitle: "Scale map",
+        cue: "先把音階當成旋律的材料庫：知道哪些音能用，再慢慢練成聽得見的語感。",
+        rows: [
+          ["Major scale", "1 2 3 4 5 6 7", "自然大調、調性中心、基本七聲音階"],
+          ["Minor family", "Natural / Harmonic / Melodic", "自然小調、和聲小調、旋律小調的比較"],
+          ["Pentatonic", "1 2 3 5 6 / 1 b3 4 5 b7", "五聲音階與 Blues 語彙的入口"]
+        ],
+        tags: ["Major", "minor", "Modes", "Pentatonic", "Blues"]
+      },
+      {
+        id: "chords",
+        title: "和弦",
+        subtitle: "Chord tones",
+        cue: "和弦不是一串名字，而是 1、3、5、7 的堆疊關係；先看懂結構，再看懂指型。",
+        rows: [
+          ["Triads", "1 3 5 / 1 b3 5", "大三和弦、小三和弦、減三和弦、增三和弦"],
+          ["7th chords", "1 3 5 7 / b7", "Maj7、7、m7、m7b5、dim7 的基本辨識"],
+          ["Extensions", "9 11 13", "延伸音與張力音先作為後續頁面規劃"]
+        ],
+        tags: ["Triad", "7th", "Tension", "Voicing", "Inversion"]
+      },
+      {
+        id: "key-center",
+        title: "調性",
+        subtitle: "Key center",
+        cue: "調性是音樂的重力中心。先找到主音，再觀察其他音如何靠近或離開它。",
+        rows: [
+          ["Key root", "Tonic", "主音是聽感回家的位置"],
+          ["Diatonic notes", "7 notes", "調內音構成旋律與和聲的基本範圍"],
+          ["Relative key", "Major / minor", "關係大小調共用音群，但重心不同"]
+        ],
+        tags: ["Tonic", "Diatonic", "Relative", "Cadence", "Function"]
+      },
+      {
+        id: "intervals",
+        title: "音程",
+        subtitle: "Intervals",
+        cue: "音程是兩個音之間的距離，也是旋律、和弦、轉位分析的共同語言。",
+        rows: [
+          ["Steps", "Half / Whole", "半音與全音是最小的距離單位"],
+          ["Quality", "Major / minor / Perfect", "大小、完全、增減音程的命名方式"],
+          ["Ear training", "Sing / hear", "後續可接聽力練習與指板對照"]
+        ],
+        tags: ["m2", "M3", "P5", "Octave", "Ear"]
+      },
+      {
+        id: "staff",
+        title: "五線譜",
+        subtitle: "Staff reading",
+        cue: "五線譜先不用怕，先把線間位置、節奏符號、調號當作地圖來看。",
+        rows: [
+          ["Pitch", "Line / Space", "線與間對應音高位置"],
+          ["Clef", "Treble / Bass", "高音譜號與低音譜號的讀法"],
+          ["Rhythm", "Note value", "音符時值、休止符、拍號會另開頁整理"]
+        ],
+        tags: ["Treble", "Bass", "Rhythm", "Key signature", "Reading"]
+      },
+      {
+        id: "circle",
+        title: "五度圈",
+        subtitle: "Circle of fifths",
+        cue: "五度圈是調號、關係調、和弦進行的總覽羅盤，先用來找方向就好。",
+        rows: [
+          ["Clockwise", "+ sharp", "順時針每次多一個升記號"],
+          ["Counter", "+ flat", "逆時針每次多一個降記號"],
+          ["Relative", "Major / minor", "同一格可對應關係大小調"]
+        ],
+        tags: ["Sharps", "Flats", "Relative", "Dominant", "Subdominant"]
+      },
+      {
+        id: "meme",
+        title: "meme",
+        subtitle: "Memory hooks",
+        cue: "這區先放有趣記憶法、梗圖式口訣、學生容易卡住的提醒，讓嚴肅樂理比較好入口。",
+        rows: [
+          ["Mnemonic", "口訣", "把難背的規則變成好記的短句"],
+          ["Common traps", "易錯點", "例如 Cb、E#、轉位命名等小陷阱"],
+          ["Teaching notes", "課堂素材", "後續可放圖片、短影音或投影片"]
+        ],
+        tags: ["口訣", "梗圖", "易錯", "課堂", "素材"]
+      },
+      {
+        id: "progressions",
+        title: "和弦進行",
+        subtitle: "Progressions",
+        cue: "和弦進行是時間裡的和聲路線。先用級數看功能，再回到實際調性的和弦名。",
+        rows: [
+          ["Diatonic chords", "I ii iii IV V vi vii°", "自然大調順階和弦"],
+          ["Cadence", "V - I / IV - I", "終止式與回家的聽感"],
+          ["Common loops", "I V vi IV", "流行歌常見循環之後可做播放範例"]
+        ],
+        tags: ["I-V-vi-IV", "ii-V-I", "Cadence", "Function", "Loop"]
+      },
+      {
+        id: "rhythm",
+        title: "節奏",
+        subtitle: "Rhythm basics",
+        cue: "節奏先看脈搏與分割：拍子穩，音高才有地方站。",
+        rows: [
+          ["Pulse", "Beat", "穩定拍點與速度感"],
+          ["Subdivision", "2 / 3 / 4", "二分、三連、十六分音符的切分"],
+          ["Groove", "Feel", "後續可接節奏訓練與 Loop 模組"]
+        ],
+        tags: ["Beat", "Subdivision", "Swing", "Groove", "Loop"]
+      }
+    ];
 
     const dom = {
+      main: document.querySelector(".main"),
+      heroCrumbs: document.querySelector(".crumbs"),
+      heroTitle: document.querySelector(".hero h1"),
+      libraryHome: document.querySelector("[data-library-home]"),
+      theoryLibraryMenu: document.querySelector("#theory-library-menu"),
+      theoryPage: document.querySelector("#theory-page"),
       fretboard: document.querySelector("#fretboard"),
       stage: document.querySelector("#stage"),
       stringCount: document.querySelector("#string-count"),
@@ -142,6 +278,8 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       secondaryLabelButtons: document.querySelectorAll("[data-secondary-label]"),
       colorPickers: document.querySelectorAll("[data-note-color]"),
       paletteButtons: document.querySelectorAll("[data-palette-dot]"),
+      quickMapMenu: document.querySelector("#fingerboard-map-menu"),
+      quickMapToggle: document.querySelector("#fingerboard-map-toggle"),
       infoPosition: document.querySelector("#info-position"),
       infoNote: document.querySelector("#info-note"),
       infoSolfege: document.querySelector("#info-solfege"),
@@ -188,8 +326,11 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       manualSelected: new Set(),
       selectionLog: [],
       scopeView: "simple",
+      quickMapOpen: true,
+      activeLibraryPage: "fretboard",
       selected: { stringIndex: 5, fret: 1 }
     };
+    let scopeDragIndex = null;
 
     function noteIndex(note) {
       return NOTES.indexOf(note);
@@ -197,6 +338,15 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
     function noteAt(openNote, fret) {
       return NOTES[(noteIndex(openNote) + fret) % NOTES.length];
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
     }
 
     function displayNote(note) {
@@ -394,6 +544,8 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         secondaryLabels: [...state.secondaryLabels],
         selectionLog: state.selectionLog,
         scopeView: state.scopeView,
+        quickMapOpen: state.quickMapOpen,
+        activeLibraryPage: state.activeLibraryPage,
         manualOn: [...state.manualOn],
         manualOff: [...state.manualOff],
         manualSelected: [...state.manualSelected],
@@ -466,6 +618,10 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           .slice(0, 12);
       }
       if (["simple", "detail"].includes(saved.scopeView)) state.scopeView = saved.scopeView;
+      if (typeof saved.quickMapOpen === "boolean") state.quickMapOpen = saved.quickMapOpen;
+      if (saved.activeLibraryPage === "fretboard" || THEORY_PAGES.some(page => page.id === saved.activeLibraryPage)) {
+        state.activeLibraryPage = saved.activeLibraryPage;
+      }
       state.pitchOverrides = saved.pitchOverrides && typeof saved.pitchOverrides === "object" ? saved.pitchOverrides : {};
       state.soloPitches = new Set(Array.isArray(saved.soloPitches) ? saved.soloPitches.filter(note => NOTES.includes(note)) : []);
       state.manualOn = new Set(Array.isArray(saved.manualOn) ? saved.manualOn : []);
@@ -631,6 +787,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         manualOn: [...state.manualOn],
         manualOff: [...state.manualOff],
         manualSelected: [...state.manualSelected],
+        selectionLog: [...state.selectionLog],
         layers: {
           a: cloneLayer(state.layers.a),
           b: cloneLayer(state.layers.b)
@@ -646,6 +803,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       state.manualOn = new Set(snapshot.manualOn);
       state.manualOff = new Set(snapshot.manualOff);
       state.manualSelected = new Set(snapshot.manualSelected);
+      state.selectionLog = Array.isArray(snapshot.selectionLog) ? [...snapshot.selectionLog] : [];
       state.layers.a = normalizeLayer(snapshot.layers.a, state.layers.a);
       state.layers.b = normalizeLayer(snapshot.layers.b, state.layers.b);
       syncPrimaryLayer();
@@ -752,9 +910,28 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       return labels[key] ?? key;
     }
 
+    function chordExtensionLabel(interval) {
+      const labels = {
+        1: "b9",
+        2: "add9",
+        3: "#9",
+        5: "add11",
+        6: "#11",
+        8: "b13",
+        9: "add13"
+      };
+      return labels[interval] || null;
+    }
+
+    function chordRequiredIntervals(quality, intervals) {
+      if (intervals.length >= 4) return intervals.filter(interval => interval !== 7);
+      return intervals;
+    }
+
     function chordCandidates() {
       const selectedPitches = [...new Set(state.selectionLog.map(item => noteIndex(item.note)))];
       if (selectedPitches.length < 2) return [];
+      const bassPitch = noteIndex(state.selectionLog[0].note);
       const selectedSet = new Set(selectedPitches);
       const qualities = ["major", "minor", "dim", "aug", "dominant7", "major7", "minor7", "halfDiminished7", "diminished7"];
       const candidates = [];
@@ -765,13 +942,27 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           const chordPitches = definition.intervals.map(interval => (rootPitch + interval) % 12);
           const chordSet = new Set(chordPitches);
           const containsAll = selectedPitches.every(pitch => chordSet.has(pitch));
-          if (!containsAll) return;
+          const requiredPitches = chordRequiredIntervals(quality, definition.intervals).map(interval => (rootPitch + interval) % 12);
+          const hasRequired = requiredPitches.every(pitch => selectedSet.has(pitch));
+          if (!containsAll && !hasRequired) return;
           const exact = chordSet.size === selectedSet.size;
+          const bassLabel = bassPitch !== rootPitch && chordSet.has(bassPitch) ? `/${chordRootLabel(NOTES[bassPitch])}` : "";
+          const extraIntervals = selectedPitches
+            .filter(pitch => !chordSet.has(pitch))
+            .map(pitch => ((pitch - rootPitch) + 12) % 12)
+            .map(chordExtensionLabel)
+            .filter(Boolean);
+          const missingIntervals = definition.intervals
+            .filter(interval => !selectedSet.has((rootPitch + interval) % 12))
+            .map(interval => interval === 7 ? "no5" : null)
+            .filter(Boolean);
+          const formulaTail = [...extraIntervals, ...missingIntervals].join(" ");
           const rootBonus = selectedSet.has(rootPitch) ? 5 : 0;
-          const score = (exact ? 100 : 82 - ((chordSet.size - selectedSet.size) * 7)) + rootBonus;
+          const bassBonus = bassPitch === rootPitch ? 5 : bassLabel ? 3 : 0;
+          const score = (exact ? 100 : containsAll ? 88 - Math.abs(chordSet.size - selectedSet.size) * 5 : 74 - extraIntervals.length * 3 - missingIntervals.length * 4) + rootBonus + bassBonus;
           candidates.push({
-            name: `${chordRootLabel(root)}${chordQualityLabel(quality)}`,
-            formula: definition.formula,
+            name: `${chordRootLabel(root)}${chordQualityLabel(quality)}${bassLabel}`,
+            formula: [definition.formula, formulaTail].filter(Boolean).join(" "),
             quality: definition.label,
             score,
             exact
@@ -816,6 +1007,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         fret,
         note,
         noteLabel: displayNote(note),
+        absoluteLabel: absoluteNoteLabel(stringIndex, fret),
         solfege: info.solfege,
         degree: info.degree,
         relation: info.inKey ? "in" : "out"
@@ -823,9 +1015,54 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       state.selectionLog = [...state.selectionLog.filter(item => item.id !== entry.id), entry].slice(-12);
     }
 
+    function removeScopeSelection(stringIndex, fret) {
+      const id = `${stringIndex}:${fret}`;
+      state.selectionLog = state.selectionLog.filter(item => item.id !== id);
+    }
+
+    function clearScopeSelectionItem(item) {
+      state.selectionLog = state.selectionLog.filter(entry => entry.id !== item.id);
+      state.manualSelected.delete(markerKey(item.stringIndex, item.fret));
+    }
+
+    function pruneScopeSelection() {
+      state.selectionLog = state.selectionLog.filter(item => {
+        const note = noteAt(state.tuning[item.stringIndex] || item.note, item.fret);
+        return shouldShow(item.stringIndex, item.fret, note);
+      });
+    }
+
+    function absoluteNoteLabel(stringIndex, fret) {
+      const openNote = state.tuning[stringIndex] || "C";
+      const octaveMap = TUNING_OCTAVES[state.tuningPresetName] || [];
+      const openOctave = Number.isFinite(octaveMap[stringIndex]) ? octaveMap[stringIndex] : Math.max(1, 4 - Math.floor(stringIndex / 2));
+      const midi = noteIndex(openNote) + ((openOctave + 1) * 12) + fret;
+      const note = NOTES[midi % 12];
+      const octave = Math.floor(midi / 12) - 1;
+      return `${displayPitch(note)}${octave}`;
+    }
+
     function renderScopeSelection() {
       if (!dom.scopeSelection) return;
+      pruneScopeSelection();
       dom.scopeSelection.innerHTML = "";
+      dom.scopeSelection.ondragover = event => {
+        if (scopeDragIndex === null) return;
+        event.preventDefault();
+        if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
+      };
+      dom.scopeSelection.ondrop = event => {
+        const targetChip = event.target instanceof Element ? event.target.closest(".scope-chip") : null;
+        if (scopeDragIndex === null || targetChip) return;
+        event.preventDefault();
+        const next = [...state.selectionLog];
+        const [moved] = next.splice(scopeDragIndex, 1);
+        if (!moved) return;
+        next.push(moved);
+        state.selectionLog = next;
+        scopeDragIndex = null;
+        render();
+      };
       if (dom.scopeViewToggle) {
         dom.scopeViewToggle.textContent = state.scopeView === "simple" ? "Detail" : "Simple";
         dom.scopeViewToggle.classList.toggle("is-active", state.scopeView === "detail");
@@ -845,9 +1082,9 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         chip.dataset.scopeIndex = String(index);
         chip.className = ["scope-chip", item.relation === "out" ? "is-out" : ""].filter(Boolean).join(" ");
         chip.style.setProperty("--note-color", colorForNote(item.note));
-        const noteLabel = displayPitch(item.note);
+        const noteLabel = absoluteNoteLabel(item.stringIndex, item.fret);
         chip.innerHTML = state.scopeView === "detail"
-          ? `<strong>${noteLabel}</strong><span>${item.solfege} / ${item.degree}</span><small>S${item.stringIndex + 1} F${item.fret}</small>`
+          ? `<strong>${noteLabel}</strong><span>${displayPitch(item.note)} / ${item.solfege} / ${item.degree}</span><small>S${item.stringIndex + 1} F${item.fret}</small>`
           : `<strong>${noteLabel}</strong>`;
         chip.addEventListener("click", () => {
           state.selected = { stringIndex: item.stringIndex, fret: item.fret };
@@ -856,33 +1093,185 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         chip.addEventListener("dblclick", event => {
           event.preventDefault();
           event.stopPropagation();
-          state.selectionLog = state.selectionLog.filter(entry => entry.id !== item.id);
+          clearScopeSelectionItem(item);
           render();
         });
         chip.addEventListener("dragstart", event => {
+          scopeDragIndex = index;
           event.dataTransfer?.setData("text/plain", String(index));
+          if (event.dataTransfer) event.dataTransfer.effectAllowed = "move";
           chip.classList.add("is-dragging");
         });
         chip.addEventListener("dragend", () => {
+          scopeDragIndex = null;
           chip.classList.remove("is-dragging");
         });
         chip.addEventListener("dragover", event => {
           event.preventDefault();
+          if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
         });
         chip.addEventListener("drop", event => {
           event.preventDefault();
-          const fromIndex = Number(event.dataTransfer?.getData("text/plain"));
+          event.stopPropagation();
+          const droppedIndex = Number(event.dataTransfer?.getData("text/plain"));
+          const fromIndex = Number.isInteger(scopeDragIndex) ? scopeDragIndex : droppedIndex;
           const toIndex = index;
           if (!Number.isInteger(fromIndex) || fromIndex === toIndex) return;
           const next = [...state.selectionLog];
           const [moved] = next.splice(fromIndex, 1);
           next.splice(toIndex, 0, moved);
           state.selectionLog = next;
+          scopeDragIndex = null;
           render();
         });
         dom.scopeSelection.append(chip);
       });
       renderScopeSuggestions();
+    }
+
+    function quickMapItemLabel(kind, value) {
+      return kind === "arpeggio" ? ARPEGGIO_TYPES[value]?.label : SCALES[value]?.label;
+    }
+
+    function renderQuickMapMenu() {
+      if (!dom.quickMapMenu) return;
+      dom.quickMapMenu.hidden = !state.quickMapOpen;
+      if (dom.quickMapToggle) {
+        dom.quickMapToggle.setAttribute("aria-expanded", String(state.quickMapOpen));
+        const label = dom.quickMapToggle.querySelector("span");
+        if (label) label.textContent = state.quickMapOpen ? "收合" : "展開";
+      }
+      dom.quickMapMenu.innerHTML = "";
+      if (!state.quickMapOpen) return;
+      const sections = [
+        { title: "Scale", kind: "scale", groups: SCALE_GROUPS },
+        { title: "Arp.", kind: "arpeggio", groups: ARPEGGIO_GROUPS }
+      ];
+      sections.forEach(section => {
+        const sectionEl = document.createElement("section");
+        sectionEl.className = "quick-map-section";
+        sectionEl.innerHTML = `<strong>${section.title}</strong>`;
+        section.groups.forEach(group => {
+          const groupEl = document.createElement("div");
+          groupEl.className = "quick-map-group";
+          groupEl.innerHTML = `<span>${group.label}</span>`;
+          const list = document.createElement("div");
+          list.className = "quick-map-list";
+          group.values.forEach(value => {
+            const label = quickMapItemLabel(section.kind, value);
+            if (!label) return;
+            const button = document.createElement("button");
+            button.type = "button";
+            button.dataset.quickKind = section.kind;
+            button.dataset.quickValue = value;
+            button.textContent = label;
+            const active = state.layers.a.kind === section.kind && (section.kind === "scale" ? state.layers.a.scale === value : state.layers.a.arpeggio === value);
+            button.classList.toggle("is-active", active);
+            button.addEventListener("click", () => applyQuickMap(section.kind, value));
+            list.append(button);
+          });
+          groupEl.append(list);
+          sectionEl.append(groupEl);
+        });
+        dom.quickMapMenu.append(sectionEl);
+      });
+    }
+
+    function renderTheoryLibraryMenu() {
+      if (!dom.theoryLibraryMenu) return;
+      dom.theoryLibraryMenu.innerHTML = "";
+      THEORY_PAGES.forEach(page => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "theory-link";
+        button.dataset.theoryPage = page.id;
+        button.textContent = page.title;
+        button.addEventListener("click", () => setLibraryPage(page.id));
+        dom.theoryLibraryMenu.append(button);
+      });
+    }
+
+    function updateLibraryActiveStates() {
+      dom.main?.classList.toggle("is-theory-page", state.activeLibraryPage !== "fretboard");
+      dom.libraryHome?.classList.toggle("is-active", state.activeLibraryPage === "fretboard");
+      dom.quickMapToggle?.classList.toggle("is-active", state.activeLibraryPage === "fretboard");
+      document.querySelectorAll("[data-theory-page]").forEach(button => {
+        button.classList.toggle("is-active", button.dataset.theoryPage === state.activeLibraryPage);
+      });
+    }
+
+    function renderTheoryPage(page) {
+      if (!dom.theoryPage) return;
+      const rows = page.rows.map(row => `
+        <div class="theory-row">
+          <div class="theory-cell"><strong>${escapeHtml(row[0])}</strong></div>
+          <div class="theory-cell">${escapeHtml(row[1])}</div>
+          <div class="theory-cell"><span>${escapeHtml(row[2])}</span></div>
+        </div>
+      `).join("");
+      const tags = page.tags.map(tag => `<span class="theory-pill">${escapeHtml(tag)}</span>`).join("");
+      dom.theoryPage.innerHTML = `
+        <div class="theory-note-card">
+          <b>💡</b>
+          <p>${escapeHtml(page.cue)}</p>
+        </div>
+        <div class="theory-layout">
+          <article class="theory-section">
+            <h2>${escapeHtml(page.title)}</h2>
+            <p>${escapeHtml(page.subtitle)}，目前先建立精簡頁框架；後續可以補範例、圖片、練習題與指板/鋼琴連動。</p>
+            <div class="theory-table" aria-label="${escapeHtml(page.title)} 基本表格">
+              ${rows}
+            </div>
+          </article>
+          <aside class="theory-section">
+            <h3>Index Tags</h3>
+            <div class="theory-pill-list">${tags}</div>
+            <div class="theory-placeholder">
+              待補內容：課堂講義、互動練習、聽力範例、常見問題、學生作業入口。
+            </div>
+          </aside>
+        </div>
+      `;
+    }
+
+    function renderLibraryView() {
+      const page = THEORY_PAGES.find(item => item.id === state.activeLibraryPage);
+      updateLibraryActiveStates();
+      if (!dom.theoryPage) return;
+      if (!page) {
+        dom.theoryPage.hidden = true;
+        if (dom.heroCrumbs) dom.heroCrumbs.textContent = "Theory Notes / Guitar / Fretboard";
+        if (dom.heroTitle) dom.heroTitle.textContent = "Key Fretboard Map";
+        return;
+      }
+      dom.theoryPage.hidden = false;
+      if (dom.heroCrumbs) dom.heroCrumbs.textContent = `Theory Notes / ${page.title}`;
+      if (dom.heroTitle) dom.heroTitle.textContent = page.title;
+      renderTheoryPage(page);
+    }
+
+    function setLibraryPage(pageId) {
+      state.activeLibraryPage = pageId;
+      renderLibraryView();
+      saveSettings();
+    }
+
+    function applyQuickMap(kind, value) {
+      state.activeLibraryPage = "fretboard";
+      const layer = state.layers.a;
+      layer.enabled = true;
+      layer.kind = kind;
+      if (kind === "arpeggio") {
+        layer.arpeggio = value;
+      } else {
+        layer.scale = value;
+      }
+      state.mode = "scale";
+      state.hideSnapshot = null;
+      resetManualMarkers();
+      syncPrimaryLayer();
+      syncControlsFromState();
+      render();
     }
 
     function togglePitch(note) {
@@ -1006,8 +1395,6 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           const snapshot = state.hideSnapshot;
           state.hideSnapshot = null;
           restoreSnapshot(snapshot);
-          state.manualSelected.clear();
-          state.selectionLog = [];
         } else {
           state.hideSnapshot = snapshotView();
           resetManualMarkers();
@@ -1106,29 +1493,28 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           const labels = markerLabels(note, info);
           const noteColor = colorForNote(note);
           const emphasis = shouldEmphasize(note);
+          const overlap = sources.length > 1;
           const subOnly = sources.length === 1 && sources[0] === "b";
           const fill = state.colorMode === "mono" ? (subOnly ? "#00a99d" : "#ffffff") : (subOnly ? "#ffffff" : (info.inKey ? noteColor : "#9da5aa"));
           const stroke = state.colorMode === "mono" ? (subOnly ? "none" : "#151918") : (subOnly ? "#00a99d" : "none");
-          const textColor = state.colorMode === "mono" ? (subOnly ? "#ffffff" : "#6e93db") : (subOnly ? "#00a99d" : "#ffffff");
+          const textColor = overlap ? "#111615" : (state.colorMode === "mono" ? (subOnly ? "#ffffff" : "#6e93db") : (subOnly ? "#00a99d" : "#ffffff"));
+          const labelFont = overlap ? markerFont + 4 : markerFont;
+          const textStroke = overlap ? ` stroke="#ffffff" stroke-width="${Math.max(2, labelFont * .16)}" paint-order="stroke fill"` : "";
+          const subTextStroke = overlap ? ` stroke="#ffffff" stroke-width="${Math.max(1, subFont * .16)}" paint-order="stroke fill"` : "";
 
-          if (sources.length > 1) {
-            parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius + 8}" fill="none" stroke="#6e93db" stroke-width="1.875"/>`);
-            parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius + 12}" fill="none" stroke="#00a99d" stroke-width="1.875" opacity=".78"/>`);
+          if (emphasis) {
+            const boxSize = (markerRadius + 7) * 2;
+            parts.push(`<rect x="${x - (boxSize / 2)}" y="${y - (boxSize / 2)}" width="${boxSize}" height="${boxSize}" rx="8" fill="none" stroke="#d986a0" stroke-width="2.35"/>`);
           }
           if (selected) {
-            parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius + 5}" fill="none" stroke="#ffffff" stroke-width="3.125"/>`);
-            parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius + 7}" fill="none" stroke="#343b38" stroke-width="1.25" opacity=".22"/>`);
-          }
-          if (emphasis) {
-            parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius + 6}" fill="none" stroke="#d986a0" stroke-width="2.5"/>`);
-          }
-          if (emphasis && selected) {
-            parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius + 9}" fill="none" stroke="#ffffff" stroke-width="2.5"/>`);
+            const selectedBoxSize = (markerRadius + 7) * 2;
+            parts.push(`<rect x="${x - (selectedBoxSize / 2)}" y="${y - (selectedBoxSize / 2)}" width="${selectedBoxSize}" height="${selectedBoxSize}" rx="8" fill="none" stroke="#ffffff" stroke-width="3"/>`);
+            parts.push(`<rect x="${x - (selectedBoxSize / 2)}" y="${y - (selectedBoxSize / 2)}" width="${selectedBoxSize}" height="${selectedBoxSize}" rx="8" fill="none" stroke="#343b38" stroke-width="1" opacity=".18"/>`);
           }
           parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius}" fill="${fill}" stroke="${stroke}" stroke-width="${state.colorMode === "mono" ? 2 : 0}"/>`);
-          parts.push(`<text x="${x}" y="${labels.secondary ? y - 1 : y + 5}" text-anchor="middle" font-size="${markerFont}" font-weight="900" fill="${textColor}">${svgEscape(labels.primary)}</text>`);
+          parts.push(`<text x="${x}" y="${labels.secondary ? y - 1 : y + 5}" text-anchor="middle" font-size="${labelFont}" font-weight="${overlap ? 950 : 900}" fill="${textColor}"${textStroke}>${svgEscape(labels.primary)}</text>`);
           if (labels.secondary) {
-            parts.push(`<text x="${x}" y="${y + 14}" text-anchor="middle" font-size="${subFont}" font-weight="800" fill="${textColor}" opacity=".75">${svgEscape(labels.secondary)}</text>`);
+            parts.push(`<text x="${x}" y="${y + 14}" text-anchor="middle" font-size="${subFont}" font-weight="${overlap ? 950 : 800}" fill="${textColor}" opacity=".75"${subTextStroke}>${svgEscape(labels.secondary)}</text>`);
           }
         }
       });
@@ -1322,7 +1708,11 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           cell.setAttribute("aria-label", `${openNote} 弦第 ${actualFret} 格，${displayNote(note)}，${info.solfege}`);
           cell.addEventListener("click", () => {
             toggleMarker(stringIndex, actualFret, note);
-            recordScopeSelection(stringIndex, actualFret, note);
+            if (shouldShow(stringIndex, actualFret, note)) {
+              recordScopeSelection(stringIndex, actualFret, note);
+            } else {
+              removeScopeSelection(stringIndex, actualFret);
+            }
             updateInfo(stringIndex, actualFret);
             render();
           });
@@ -1362,6 +1752,8 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
       renderNoteSwitchboard();
       renderScopeSelection();
+      renderQuickMapMenu();
+      renderLibraryView();
       updateInfo(state.selected.stringIndex, state.selected.fret);
       saveSettings();
     }
@@ -1481,6 +1873,20 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       render();
     });
 
+    dom.quickMapToggle?.addEventListener("click", () => {
+      if (state.activeLibraryPage !== "fretboard") {
+        setLibraryPage("fretboard");
+        return;
+      }
+      state.quickMapOpen = !state.quickMapOpen;
+      renderQuickMapMenu();
+      saveSettings();
+    });
+
+    dom.libraryHome?.addEventListener("click", () => {
+      setLibraryPage("fretboard");
+    });
+
     dom.colorPickers.forEach(picker => {
       picker.addEventListener("input", event => {
         const note = picker.dataset.noteColor;
@@ -1510,6 +1916,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
     });
 
     loadSettings();
+    renderTheoryLibraryMenu();
     rebuildKeyOptions();
     rebuildFormOptions();
     rebuildTuningOptions();

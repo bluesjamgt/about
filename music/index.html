@@ -15,17 +15,17 @@
       </div>
 
       <nav>
-        <p class="nav-title">樂理筆記</p>
-        <a class="nav-item is-open" href="#">吉他 <span>展開</span></a>
-        <a class="nav-item is-child is-active" href="#">指板</a>
-        <a class="nav-item is-child" href="#">音程</a>
-        <a class="nav-item is-child" href="#">和弦組成</a>
+        <p class="nav-title">Theory Notes <span>9</span></p>
+        <button class="nav-item is-open nav-toggle" type="button" data-library-home>Fingerboard Map <span>Board</span></button>
+        <button id="fingerboard-map-toggle" class="nav-item is-child is-active nav-toggle" type="button" aria-expanded="true">Scale / Arp. Library <span>收合</span></button>
+        <div id="fingerboard-map-menu" class="quick-map" aria-label="Fingerboard Map 快速選單"></div>
+        <div id="theory-library-menu" class="theory-library-menu" aria-label="樂理筆記清單"></div>
 
-        <p class="nav-title">樂器練習</p>
+        <p class="nav-title">Practice</p>
         <a class="nav-item" href="#">節奏訓練 <span>soon</span></a>
         <a class="nav-item" href="#">即興語彙 <span>soon</span></a>
 
-        <p class="nav-title">錄音知識</p>
+        <p class="nav-title">Recording</p>
         <a class="nav-item" href="#">吉他音色 <span>soon</span></a>
         <a class="nav-item" href="#">混音筆記 <span>soon</span></a>
       </nav>
@@ -48,7 +48,7 @@
         </div>
       </header>
 
-      <section class="toolbar" aria-label="指板控制列">
+      <section class="toolbar workbench-panel" aria-label="指板控制列">
         <div class="control">
           <label for="string-count">弦數</label>
           <select id="string-count">
@@ -131,7 +131,7 @@
         </div>
       </section>
 
-      <section class="pattern-panel panel-shell" aria-label="Pattern 與琶音面板">
+      <section class="pattern-panel panel-shell workbench-panel" aria-label="Pattern 與琶音面板">
         <div class="panel-title">
           <strong>FORM</strong>
           <span>Layered Scale / Arp. / Pattern</span>
@@ -199,7 +199,7 @@
         </div>
       </section>
 
-      <section id="stage" class="stage theme-white" aria-label="互動式指板">
+      <section id="stage" class="stage theme-white workbench-panel" aria-label="互動式指板">
         <div id="canvas-work" class="canvas-work">
           <div id="stage-layout" class="stage-layout">
             <div id="fretboard" class="fretboard"></div>
@@ -221,7 +221,7 @@
         </div>
       </section>
 
-      <section class="analysis-panel panel-shell" aria-label="選取分析區">
+      <section class="analysis-panel panel-shell workbench-panel" aria-label="選取分析區">
         <div class="panel-title">
           <strong>SCOPE</strong>
           <span>Selection analysis shell</span>
@@ -243,7 +243,7 @@
         </div>
       </section>
 
-      <section class="info-bar" aria-label="點選音符資訊">
+      <section class="info-bar workbench-panel" aria-label="點選音符資訊">
         <div class="info-item"><span>位置</span><strong id="info-position">第 6 弦 / 第 0 格</strong></div>
         <div class="info-item"><span>音名</span><strong id="info-note">E</strong></div>
         <div class="info-item"><span>唱名</span><strong id="info-solfege">Mi</strong></div>
@@ -251,6 +251,8 @@
         <div class="info-item"><span>調性關係</span><strong id="info-relation">C 大調內音</strong></div>
         <div class="info-item"><span>開放弦</span><strong id="info-string">E</strong></div>
       </section>
+
+      <section id="theory-page" class="theory-page panel-shell" aria-label="樂理筆記內頁" hidden></section>
     </main>
   </div>
 
