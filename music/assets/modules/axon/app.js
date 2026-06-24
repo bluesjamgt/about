@@ -329,7 +329,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       pitchListMode: "all",
       soloPitches: new Set(),
       pitchOverrides: {},
-      markerTool: "cycle",
+      markerTool: "draw",
       colorMode: "color",
       accidentalMode: "auto",
       hideSnapshot: null,
@@ -646,7 +646,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       }
       syncPrimaryLayer();
       if (["all", "scale"].includes(saved.pitchListMode)) state.pitchListMode = saved.pitchListMode;
-      if (["cycle", "draw", "erase"].includes(saved.markerTool)) state.markerTool = saved.markerTool;
+      if (["select", "cycle", "draw", "erase"].includes(saved.markerTool)) state.markerTool = saved.markerTool === "cycle" ? "draw" : saved.markerTool;
       if (["color", "mono"].includes(saved.colorMode)) state.colorMode = saved.colorMode;
       if (["auto", "sharp", "flat"].includes(saved.accidentalMode)) state.accidentalMode = saved.accidentalMode;
       if (["a", "b"].includes(saved.emphasisTarget)) state.emphasisTarget = saved.emphasisTarget;
@@ -794,7 +794,6 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const key = markerKey(stringIndex, fret);
       const baseVisible = baseShouldShow(note, stringIndex, fret);
       if (state.soloPitches.size) return state.soloPitches.has(note);
-      if (state.manualSelected.has(key)) return true;
       if (state.manualOn.has(key)) return true;
       if (state.manualOff.has(key)) return false;
       if (state.pitchOverrides[note] === true) return true;
@@ -806,7 +805,6 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const key = keyboardMarkerKey(midi);
       const baseVisible = keyboardSources(note).length || state.mode === "all" || (state.mode === "root" && note === state.root);
       if (state.soloPitches.size) return state.soloPitches.has(note);
-      if (state.manualSelected.has(key)) return true;
       if (state.manualOn.has(key)) return true;
       if (state.manualOff.has(key)) return false;
       if (state.pitchOverrides[note] === true) return true;
@@ -820,22 +818,30 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const currentlySelected = state.manualSelected.has(key);
       state.selected = { stringIndex, fret };
 
-      if (state.markerTool === "draw") {
-        state.manualOn.add(key);
-        state.manualOff.delete(key);
+      if (state.markerTool === "select") {
+        if (currentlySelected) {
+          state.manualSelected.delete(key);
+        } else {
+          state.manualOff.delete(key);
+          state.manualSelected.add(key);
+        }
+      } else if (state.markerTool === "draw") {
+        if (currentlyVisible) {
+          state.manualOn.delete(key);
+          state.manualOff.add(key);
+        } else {
+          state.manualOn.add(key);
+          state.manualOff.delete(key);
+        }
         state.manualSelected.delete(key);
       } else if (state.markerTool === "erase") {
         state.manualSelected.delete(key);
         state.manualOn.delete(key);
         state.manualOff.add(key);
-      } else if (currentlySelected) {
+      } else if (currentlyVisible) {
         state.manualSelected.delete(key);
         state.manualOff.add(key);
         state.manualOn.delete(key);
-      } else if (currentlyVisible) {
-        state.manualSelected.add(key);
-        state.manualOn.delete(key);
-        state.manualOff.delete(key);
       } else {
         state.manualOn.add(key);
         state.manualOff.delete(key);
@@ -848,26 +854,72 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const currentlyVisible = keyboardShouldShow(midi, note);
       const currentlySelected = state.manualSelected.has(key);
 
-      if (state.markerTool === "draw") {
-        state.manualOn.add(key);
-        state.manualOff.delete(key);
+      if (state.markerTool === "select") {
+        if (currentlySelected) {
+          state.manualSelected.delete(key);
+        } else {
+          state.manualOff.delete(key);
+          state.manualSelected.add(key);
+        }
+      } else if (state.markerTool === "draw") {
+        if (currentlyVisible) {
+          state.manualOn.delete(key);
+          state.manualOff.add(key);
+        } else {
+          state.manualOn.add(key);
+          state.manualOff.delete(key);
+        }
         state.manualSelected.delete(key);
       } else if (state.markerTool === "erase") {
         state.manualSelected.delete(key);
         state.manualOn.delete(key);
         state.manualOff.add(key);
-      } else if (currentlySelected) {
+      } else if (currentlyVisible) {
         state.manualSelected.delete(key);
         state.manualOff.add(key);
         state.manualOn.delete(key);
-      } else if (currentlyVisible) {
-        state.manualSelected.add(key);
-        state.manualOn.delete(key);
-        state.manualOff.delete(key);
       } else {
         state.manualOn.add(key);
         state.manualOff.delete(key);
         state.manualSelected.delete(key);
+      }
+    }
+
+    function activeMarkerTools() {
+      return ["select", "draw"];
+    }
+
+    function cycleMarkerTool() {
+      const tools = activeMarkerTools();
+      const currentIndex = tools.indexOf(state.markerTool);
+      state.markerTool = tools[(currentIndex + 1) % tools.length];
+      render();
+    }
+
+    function setAccidentalMode(mode) {
+      state.accidentalMode = mode;
+      render();
+    }
+
+    function isTypingTarget(target) {
+      return target instanceof HTMLElement && ["INPUT", "SELECT", "TEXTAREA"].includes(target.tagName);
+    }
+
+    function handleShortcut(event) {
+      if (isTypingTarget(event.target) || event.altKey || event.ctrlKey || event.metaKey) return;
+      const key = event.key.toLowerCase();
+      if (key === "tab") {
+        event.preventDefault();
+        cycleMarkerTool();
+      } else if (key === "c") {
+        event.preventDefault();
+        handleToolClick("clear");
+      } else if (key === "s") {
+        event.preventDefault();
+        setAccidentalMode("sharp");
+      } else if (key === "f") {
+        event.preventDefault();
+        setAccidentalMode("flat");
       }
     }
 
@@ -902,7 +954,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
     function restoreSnapshot(snapshot) {
       state.mode = snapshot.mode;
-      state.markerTool = snapshot.markerTool;
+      state.markerTool = snapshot.markerTool === "cycle" ? "draw" : snapshot.markerTool;
       state.pitchOverrides = { ...snapshot.pitchOverrides };
       state.soloPitches = new Set(snapshot.soloPitches);
       state.manualOn = new Set(snapshot.manualOn);
@@ -922,9 +974,9 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
     }
 
     function accidentalToolLabel() {
-      if (state.accidentalMode === "sharp") return "♯";
-      if (state.accidentalMode === "flat") return "♭";
-      return "🎵";
+      if (state.accidentalMode === "sharp") return "#";
+      if (state.accidentalMode === "flat") return "b";
+      return "#/b";
     }
 
     function cycleAccidentalMode() {
@@ -1162,11 +1214,11 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           if (!Number.isInteger(item.midi)) return false;
           if (!keyboardRangeContains(item.midi)) return false;
           const note = noteFromMidi(item.midi);
-          return keyboardShouldShow(item.midi, note);
+          return state.manualSelected.has(keyboardMarkerKey(item.midi)) || keyboardShouldShow(item.midi, note);
         }
         if (!Number.isInteger(item.stringIndex) || !Number.isInteger(item.fret)) return false;
         const note = noteAt(state.tuning[item.stringIndex] || item.note, item.fret);
-        return shouldShow(item.stringIndex, item.fret, note);
+        return state.manualSelected.has(markerKey(item.stringIndex, item.fret)) || shouldShow(item.stringIndex, item.fret, note);
       });
     }
 
@@ -1506,9 +1558,10 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
       const tools = [
         { id: "clear", label: "CLN", title: "Clear notes / toggle hidden canvas" },
-        { id: "cycle", label: "✏️", title: "Draw / select / hide" },
+        { id: "select", label: "🎯", title: "選取 / 取消分析框選" },
+        { id: "draw", label: "✏️", title: "顯示音名 / 點擊隱藏" },
         { id: "erase", label: "🧽", title: "Erase clicked note" },
-        { id: "color", label: state.colorMode === "color" ? "LIG" : "BLU", title: "切換彩色/低彩藍色模式" },
+        { id: "color", label: "◐", title: "切換彩色/低彩藍色模式" },
         { id: "accidental", label: accidentalToolLabel(), title: "音名升降記號：自動 / 強制升 / 強制降" },
         { id: "export", label: "JPG", title: "輸出目前畫布為 JPG" },
         { id: "transpose-down", label: "-1", title: "Main/Sub 整體降半音" },
@@ -1567,7 +1620,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           resetManualMarkers();
           state.selectionLog = [];
           state.mode = "custom";
-          state.markerTool = "cycle";
+          state.markerTool = "draw";
         }
       } else if (toolId === "color") {
         state.colorMode = state.colorMode === "color" ? "mono" : "color";
@@ -1653,13 +1706,23 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           const note = noteAt(openNote, actualFret);
           const info = scaleInfo(note);
           const sources = markerSources(note, stringIndex, actualFret);
-          if (!shouldShow(stringIndex, actualFret, note)) continue;
-
           const selected = state.manualSelected.has(markerKey(stringIndex, actualFret));
+          const emphasis = shouldEmphasize(note);
           const x = boardX + ((fret - .5) * fretWidth);
+          const frameSize = (markerRadius + 7) * 2;
+          if (!shouldShow(stringIndex, actualFret, note)) {
+            if (emphasis) {
+              parts.push(`<rect x="${x - (frameSize / 2)}" y="${y - (frameSize / 2)}" width="${frameSize}" height="${frameSize}" rx="8" fill="#d986a0" fill-opacity=".045" stroke="#d986a0" stroke-width="2.35"/>`);
+            }
+            if (selected) {
+              parts.push(`<rect x="${x - (frameSize / 2)}" y="${y - (frameSize / 2)}" width="${frameSize}" height="${frameSize}" rx="8" fill="none" stroke="#ffffff" stroke-width="3"/>`);
+              parts.push(`<rect x="${x - (frameSize / 2)}" y="${y - (frameSize / 2)}" width="${frameSize}" height="${frameSize}" rx="8" fill="none" stroke="#343b38" stroke-width="1" opacity=".18"/>`);
+            }
+            continue;
+          }
+
           const labels = markerLabels(note, info);
           const noteColor = colorForNote(note);
-          const emphasis = shouldEmphasize(note);
           const overlap = sources.length > 1;
           const subOnly = sources.length === 1 && sources[0] === "b";
           const fill = state.colorMode === "mono" ? (subOnly ? "#00a99d" : "#ffffff") : (subOnly ? "#ffffff" : (info.inKey ? noteColor : "#9da5aa"));
@@ -1670,13 +1733,11 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           const subTextStroke = overlap ? ` stroke="#ffffff" stroke-width="${Math.max(1, subFont * .16)}" paint-order="stroke fill"` : "";
 
           if (emphasis) {
-            const boxSize = (markerRadius + 7) * 2;
-            parts.push(`<rect x="${x - (boxSize / 2)}" y="${y - (boxSize / 2)}" width="${boxSize}" height="${boxSize}" rx="8" fill="none" stroke="#d986a0" stroke-width="2.35"/>`);
+            parts.push(`<rect x="${x - (frameSize / 2)}" y="${y - (frameSize / 2)}" width="${frameSize}" height="${frameSize}" rx="8" fill="none" stroke="#d986a0" stroke-width="2.35"/>`);
           }
           if (selected) {
-            const selectedBoxSize = (markerRadius + 7) * 2;
-            parts.push(`<rect x="${x - (selectedBoxSize / 2)}" y="${y - (selectedBoxSize / 2)}" width="${selectedBoxSize}" height="${selectedBoxSize}" rx="8" fill="none" stroke="#ffffff" stroke-width="3"/>`);
-            parts.push(`<rect x="${x - (selectedBoxSize / 2)}" y="${y - (selectedBoxSize / 2)}" width="${selectedBoxSize}" height="${selectedBoxSize}" rx="8" fill="none" stroke="#343b38" stroke-width="1" opacity=".18"/>`);
+            parts.push(`<rect x="${x - (frameSize / 2)}" y="${y - (frameSize / 2)}" width="${frameSize}" height="${frameSize}" rx="8" fill="none" stroke="#ffffff" stroke-width="3"/>`);
+            parts.push(`<rect x="${x - (frameSize / 2)}" y="${y - (frameSize / 2)}" width="${frameSize}" height="${frameSize}" rx="8" fill="none" stroke="#343b38" stroke-width="1" opacity=".18"/>`);
           }
           parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius}" fill="${fill}" stroke="${stroke}" stroke-width="${state.colorMode === "mono" ? 2 : 0}"/>`);
           parts.push(`<text x="${x}" y="${labels.secondary ? y - 1 : y + 5}" text-anchor="middle" font-size="${labelFont}" font-weight="${overlap ? 950 : 900}" fill="${textColor}"${textStroke}>${svgEscape(labels.primary)}</text>`);
@@ -1941,6 +2002,8 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const info = scaleInfo(note);
       const sources = keyboardSources(note);
       const visible = keyboardShouldShow(midi, note);
+      const emphasized = shouldEmphasize(note);
+      const selected = state.manualSelected.has(keyboardMarkerKey(midi));
       const key = document.createElement("button");
       key.type = "button";
       key.className = `piano-key ${kind}`;
@@ -1949,7 +2012,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         toggleKeyboardMarker(midi, note);
         state.selectedKeyboardMidi = midi;
         playKeyboardTone(midi);
-        if (keyboardShouldShow(midi, note)) {
+        if (state.markerTool === "select" && state.manualSelected.has(keyboardMarkerKey(midi))) {
           recordKeyboardScopeSelection(midi, note);
         } else {
           removeKeyboardScopeSelection(midi);
@@ -1965,8 +2028,8 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           sources.length === 1 && sources[0] === "b" ? "is-layer-b" : "",
           sources.length > 1 ? "is-overlap" : "",
           info.inKey ? "" : "is-out",
-          shouldEmphasize(note) ? "is-emphasis" : "",
-          state.manualSelected.has(keyboardMarkerKey(midi)) ? "is-selected" : ""
+          emphasized ? "is-emphasis" : "",
+          selected ? "is-selected" : ""
         ].filter(Boolean).join(" ");
         marker.style.setProperty("--note-color", colorForNote(note));
         marker.style.setProperty("--in-key-scale", 1);
@@ -1975,6 +2038,17 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           <span class="marker-solfege">${labels.secondary}</span>
         `;
         key.append(marker);
+      } else {
+        if (emphasized) {
+          const frame = document.createElement("span");
+          frame.className = "emphasis-frame";
+          key.append(frame);
+        }
+        if (selected) {
+          const frame = document.createElement("span");
+          frame.className = "selection-frame";
+          key.append(frame);
+        }
       }
 
       return key;
@@ -2036,6 +2110,8 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           const info = scaleInfo(note);
           const sources = markerSources(note, stringIndex, actualFret);
           const visible = shouldShow(stringIndex, actualFret, note);
+          const emphasized = shouldEmphasize(note);
+          const selected = state.manualSelected.has(markerKey(stringIndex, actualFret));
           const cell = document.createElement("button");
           cell.type = "button";
           cell.className = [
@@ -2048,7 +2124,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           cell.setAttribute("aria-label", `${openNote} 弦第 ${actualFret} 格，${displayNote(note)}，${info.solfege}`);
           cell.addEventListener("click", () => {
             toggleMarker(stringIndex, actualFret, note);
-            if (shouldShow(stringIndex, actualFret, note)) {
+            if (state.markerTool === "select" && state.manualSelected.has(markerKey(stringIndex, actualFret))) {
               recordScopeSelection(stringIndex, actualFret, note);
             } else {
               removeScopeSelection(stringIndex, actualFret);
@@ -2065,8 +2141,8 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
               sources.length === 1 && sources[0] === "b" ? "is-layer-b" : "",
               sources.length > 1 ? "is-overlap" : "",
               info.inKey ? "" : "is-out",
-              shouldEmphasize(note) ? "is-emphasis" : "",
-              state.manualSelected.has(markerKey(stringIndex, actualFret)) ? "is-selected" : ""
+              emphasized ? "is-emphasis" : "",
+              selected ? "is-selected" : ""
             ].filter(Boolean).join(" ");
             marker.style.setProperty("--note-color", colorForNote(note));
             marker.style.setProperty("--in-key-scale", 1);
@@ -2075,6 +2151,17 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
               <span class="marker-solfege">${labels.secondary}</span>
             `;
             cell.append(marker);
+          } else {
+            if (emphasized) {
+              const frame = document.createElement("span");
+              frame.className = "emphasis-frame";
+              cell.append(frame);
+            }
+            if (selected) {
+              const frame = document.createElement("span");
+              frame.className = "selection-frame";
+              cell.append(frame);
+            }
           }
           dom.fretboard.append(cell);
         }
@@ -2273,6 +2360,8 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         saveSettings();
       });
     });
+
+    document.addEventListener("keydown", handleShortcut);
 
     loadSettings();
     renderTheoryLibraryMenu();

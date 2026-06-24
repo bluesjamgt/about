@@ -16,8 +16,16 @@
 
       <nav>
         <p class="nav-title">Instruments <span>2</span></p>
-        <button class="nav-item is-open nav-toggle" type="button" data-library-home>Fingerboard Map <span>Board</span></button>
-        <button id="keyboard-map-home" class="nav-item nav-toggle" type="button">Piano / Keyboard Map <span>Keys</span></button>
+        <div class="instrument-tabs" aria-label="樂器地圖切換">
+          <button class="nav-item nav-toggle instrument-tab" type="button" data-library-home>
+            <span class="instrument-name">Fingerboard Map</span>
+            <span class="instrument-code">GT</span>
+          </button>
+          <button id="keyboard-map-home" class="nav-item nav-toggle instrument-tab" type="button">
+            <span class="instrument-name">Keyboard Map</span>
+            <span class="instrument-code">PI</span>
+          </button>
+        </div>
         <p class="nav-subtitle">Map Library</p>
         <button id="fingerboard-map-toggle" class="nav-item is-child nav-toggle is-library-toggle" type="button" aria-expanded="true">Scale / Arp. Library <span>收合</span></button>
         <div id="fingerboard-map-menu" class="quick-map" aria-label="Fingerboard Map 快速選單"></div>
@@ -279,6 +287,14 @@
       <section id="theory-page" class="theory-page panel-shell" aria-label="樂理筆記內頁" hidden></section>
     </main>
   </div>
+
+  <aside class="shortcut-help" aria-label="快捷鍵說明">
+    <strong>快捷鍵</strong>
+    <span><kbd>Tab</kbd> 選取 / 畫筆</span>
+    <span><kbd>C</kbd> 清除畫布</span>
+    <span><kbd>S</kbd> 升記號</span>
+    <span><kbd>F</kbd> 降記號</span>
+  </aside>
 
   <script src="assets/modules/axon/app.js" defer></script>
 </body>
