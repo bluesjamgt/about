@@ -15,10 +15,14 @@
       </div>
 
       <nav>
-        <p class="nav-title">Theory Notes <span>9</span></p>
+        <p class="nav-title">Instruments <span>2</span></p>
         <button class="nav-item is-open nav-toggle" type="button" data-library-home>Fingerboard Map <span>Board</span></button>
-        <button id="fingerboard-map-toggle" class="nav-item is-child is-active nav-toggle" type="button" aria-expanded="true">Scale / Arp. Library <span>收合</span></button>
+        <button id="keyboard-map-home" class="nav-item nav-toggle" type="button">Piano / Keyboard Map <span>Keys</span></button>
+        <p class="nav-subtitle">Map Library</p>
+        <button id="fingerboard-map-toggle" class="nav-item is-child nav-toggle is-library-toggle" type="button" aria-expanded="true">Scale / Arp. Library <span>收合</span></button>
         <div id="fingerboard-map-menu" class="quick-map" aria-label="Fingerboard Map 快速選單"></div>
+        <p class="nav-title">Theory Notes <span>9</span></p>
+        <p class="nav-subtitle">Basic Pages</p>
         <div id="theory-library-menu" class="theory-library-menu" aria-label="樂理筆記清單"></div>
 
         <p class="nav-title">Practice</p>
@@ -48,8 +52,8 @@
         </div>
       </header>
 
-      <section class="toolbar workbench-panel" aria-label="指板控制列">
-        <div class="control">
+      <section class="toolbar workbench-panel" aria-label="樂器控制列">
+        <div class="control fretboard-only">
           <label for="string-count">弦數</label>
           <select id="string-count">
             <option value="4">4 弦</option>
@@ -60,12 +64,12 @@
           </select>
         </div>
 
-        <div class="control">
+        <div class="control fretboard-only">
           <label for="tuning-preset">樂器 / 調弦</label>
           <select id="tuning-preset"></select>
         </div>
 
-        <div class="control">
+        <div class="control fretboard-only">
           <label for="board-theme">指板材質</label>
           <select id="board-theme">
             <option value="white" selected>白色</option>
@@ -84,9 +88,17 @@
           </div>
         </div>
 
+        <div class="control keyboard-only">
+          <label>點擊音效</label>
+          <div class="segmented sound-toggle" role="group" aria-label="鋼琴點擊音效">
+            <button type="button" class="is-active" data-keyboard-sound="on">開</button>
+            <button type="button" data-keyboard-sound="off">關</button>
+          </div>
+        </div>
+
         <div class="control">
-          <label>指板文字</label>
-          <div class="segmented name-toggle" role="group" aria-label="指板文字顯示">
+          <label>音符文字</label>
+          <div class="segmented name-toggle" role="group" aria-label="音符文字顯示">
             <button type="button" class="is-active" data-label-mode="note">音名</button>
             <button type="button" data-label-mode="solfege">唱名</button>
             <button type="button" data-label-mode="degree">級數</button>
@@ -102,7 +114,7 @@
           </div>
         </div>
 
-        <div class="control">
+        <div class="control fretboard-only">
           <label for="fret-count">格數</label>
           <select id="fret-count">
             <option value="12" selected>12 格</option>
@@ -117,7 +129,7 @@
         <div class="control">
           <label for="display-scale">顯示百分比</label>
           <div class="range-row">
-            <input id="display-scale" type="range" min="70" max="130" step="5" value="100">
+            <input id="display-scale" type="range" min="70" max="150" step="5" value="100">
             <output id="display-output" class="range-value">100%</output>
           </div>
         </div>
@@ -125,9 +137,20 @@
         <div class="control">
           <label for="aspect-scale">長寬比</label>
           <div class="range-row">
-            <input id="aspect-scale" type="range" min="55" max="150" step="5" value="100">
+            <input id="aspect-scale" type="range" min="70" max="150" step="5" value="100">
             <output id="aspect-output" class="range-value">100%</output>
           </div>
+        </div>
+
+        <div class="control keyboard-only">
+          <label for="keyboard-size">鍵盤範圍</label>
+          <select id="keyboard-size">
+            <option value="12">1 octave</option>
+            <option value="24" selected>2 octaves</option>
+            <option value="49">49 keys</option>
+            <option value="61">61 keys</option>
+            <option value="88">88 keys</option>
+          </select>
         </div>
       </section>
 
@@ -199,10 +222,11 @@
         </div>
       </section>
 
-      <section id="stage" class="stage theme-white workbench-panel" aria-label="互動式指板">
+      <section id="stage" class="stage theme-white workbench-panel" aria-label="互動式樂器地圖">
         <div id="canvas-work" class="canvas-work">
           <div id="stage-layout" class="stage-layout">
             <div id="fretboard" class="fretboard"></div>
+            <div id="keyboard-map" class="keyboard-map" hidden></div>
             <aside class="palette-legend" aria-label="音名色票">
               <div class="palette-title">
                 <strong>音名調色盤</strong>
@@ -233,7 +257,7 @@
           </div>
           <div class="scope-body">
             <div id="scope-selection" class="scope-selection">
-              <span class="scope-empty">點擊指板上的音，這裡會先記錄選取內容。</span>
+              <span class="scope-empty">點擊指板或鍵盤上的音，這裡會先記錄選取內容。</span>
             </div>
             <div id="scope-suggestions" class="scope-suggestions">
               <strong>Chord Suggestions</strong>
@@ -249,7 +273,7 @@
         <div class="info-item"><span>唱名</span><strong id="info-solfege">Mi</strong></div>
         <div class="info-item"><span>級數</span><strong id="info-degree">3</strong></div>
         <div class="info-item"><span>調性關係</span><strong id="info-relation">C 大調內音</strong></div>
-        <div class="info-item"><span>開放弦</span><strong id="info-string">E</strong></div>
+        <div class="info-item"><span>位置細節</span><strong id="info-string">E</strong></div>
       </section>
 
       <section id="theory-page" class="theory-page panel-shell" aria-label="樂理筆記內頁" hidden></section>

@@ -73,6 +73,14 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       { value: "box-f", label: "Box F" },
       { value: "linear", label: "Linear" }
     ];
+    const KEYBOARD_PRESETS = {
+      12: { label: "1 octave", startMidi: 60, keyCount: 12 },
+      24: { label: "2 octaves", startMidi: 48, keyCount: 24 },
+      49: { label: "49 keys", startMidi: 36, keyCount: 49 },
+      61: { label: "61 keys", startMidi: 36, keyCount: 61 },
+      88: { label: "88 keys", startMidi: 21, keyCount: 88 }
+    };
+    const WHITE_PITCHES = new Set([0, 2, 4, 5, 7, 9, 11]);
     const LAYER_IDS = ["a", "b"];
     const THEME_TOKENS = {
       white: { board: "#ffffff", fret: "#e0e2e3", string: "#8f9492", ink: "#1f2423", muted: "rgba(31, 36, 35, .62)" },
@@ -245,9 +253,11 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       heroCrumbs: document.querySelector(".crumbs"),
       heroTitle: document.querySelector(".hero h1"),
       libraryHome: document.querySelector("[data-library-home]"),
+      keyboardHome: document.querySelector("#keyboard-map-home"),
       theoryLibraryMenu: document.querySelector("#theory-library-menu"),
       theoryPage: document.querySelector("#theory-page"),
       fretboard: document.querySelector("#fretboard"),
+      keyboardMap: document.querySelector("#keyboard-map"),
       stage: document.querySelector("#stage"),
       stringCount: document.querySelector("#string-count"),
       tuningPreset: document.querySelector("#tuning-preset"),
@@ -270,10 +280,12 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       displayOutput: document.querySelector("#display-output"),
       aspectScale: document.querySelector("#aspect-scale"),
       aspectOutput: document.querySelector("#aspect-output"),
+      keyboardSize: document.querySelector("#keyboard-size"),
       zoomOut: document.querySelector("#zoom-out"),
       zoomIn: document.querySelector("#zoom-in"),
       zoomOutput: document.querySelector("#zoom-output"),
       modeButtons: document.querySelectorAll("[data-mode]"),
+      keyboardSoundButtons: document.querySelectorAll("[data-keyboard-sound]"),
       labelButtons: document.querySelectorAll("[data-label-mode]"),
       secondaryLabelButtons: document.querySelectorAll("[data-secondary-label]"),
       colorPickers: document.querySelectorAll("[data-note-color]"),
@@ -327,10 +339,14 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       selectionLog: [],
       scopeView: "simple",
       quickMapOpen: true,
+      keyboardSize: 24,
+      keyboardSoundEnabled: true,
       activeLibraryPage: "fretboard",
+      selectedKeyboardMidi: 60,
       selected: { stringIndex: 5, fret: 1 }
     };
     let scopeDragIndex = null;
+    let audioContext = null;
 
     function noteIndex(note) {
       return NOTES.indexOf(note);
@@ -338,6 +354,22 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
     function noteAt(openNote, fret) {
       return NOTES[(noteIndex(openNote) + fret) % NOTES.length];
+    }
+
+    function noteFromMidi(midi) {
+      return NOTES[((midi % 12) + 12) % 12];
+    }
+
+    function octaveFromMidi(midi) {
+      return Math.floor(midi / 12) - 1;
+    }
+
+    function keyboardKeyLabel(midi) {
+      return `${displayPitch(noteFromMidi(midi))}${octaveFromMidi(midi)}`;
+    }
+
+    function isWhitePitch(note) {
+      return WHITE_PITCHES.has(noteIndex(note));
     }
 
     function escapeHtml(value) {
@@ -425,9 +457,10 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const distance = (noteIndex(note) - noteIndex(state.root) + 12) % 12;
       const degreeIndex = scale.intervals.indexOf(distance);
       if (degreeIndex < 0) {
+        const chromaticDegrees = ["1", "b2", "2", "b3", "3", "4", "b5", "5", "b6", "6", "b7", "7"];
         return {
           inKey: false,
-          degree: "非調內",
+          degree: chromaticDegrees[distance] || "-",
           roman: "",
           solfege: "-"
         };
@@ -480,6 +513,14 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const number = Number(value);
       if (!Number.isFinite(number)) return fallback;
       return Math.max(min, Math.min(max, number));
+    }
+
+    function aspectMultiplier() {
+      return 0.7 * (state.aspectScale / 100);
+    }
+
+    function displayMultiplier() {
+      return 1.3 * (state.displayScale / 100);
     }
 
     function applyColorMap(target, source) {
@@ -545,10 +586,13 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         selectionLog: state.selectionLog,
         scopeView: state.scopeView,
         quickMapOpen: state.quickMapOpen,
+        keyboardSize: state.keyboardSize,
+        keyboardSoundEnabled: state.keyboardSoundEnabled,
         activeLibraryPage: state.activeLibraryPage,
         manualOn: [...state.manualOn],
         manualOff: [...state.manualOff],
         manualSelected: [...state.manualSelected],
+        selectedKeyboardMidi: state.selectedKeyboardMidi,
         selected: state.selected,
         noteColors: { ...NOTE_COLORS },
         recentNoteColors: { ...RECENT_NOTE_COLORS }
@@ -581,10 +625,10 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       }
       if (SCALES[saved.scale]) state.scale = saved.scale;
       if (["scale", "all", "root", "custom"].includes(saved.mode)) state.mode = saved.mode;
-      if (["note", "solfege"].includes(saved.labelMode)) state.labelMode = saved.labelMode;
+      if (["note", "solfege", "degree"].includes(saved.labelMode)) state.labelMode = saved.labelMode;
       if (["white", "ebony", "rosewood", "maple"].includes(saved.boardTheme)) state.boardTheme = saved.boardTheme;
-      state.displayScale = validNumber(saved.displayScale, state.displayScale, 70, 130);
-      state.aspectScale = validNumber(saved.aspectScale, state.aspectScale, 55, 150);
+      state.displayScale = validNumber(saved.displayScale, state.displayScale, 70, 150);
+      state.aspectScale = validNumber(saved.aspectScale, state.aspectScale, 70, 150);
       state.pageScale = validNumber(saved.pageScale, state.pageScale, 70, 130);
       state.fretOffset = 0;
       if (saved.layers && typeof saved.layers === "object") {
@@ -614,12 +658,19 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       }
       if (Array.isArray(saved.selectionLog)) {
         state.selectionLog = saved.selectionLog
-          .filter(item => item && Number.isInteger(item.stringIndex) && Number.isInteger(item.fret) && NOTES.includes(item.note))
+          .filter(item => {
+            if (!item || !NOTES.includes(item.note)) return false;
+            if (item.instrument === "keyboard" || String(item.id || "").startsWith("p:")) return Number.isInteger(item.midi);
+            return Number.isInteger(item.stringIndex) && Number.isInteger(item.fret);
+          })
           .slice(0, 12);
       }
       if (["simple", "detail"].includes(saved.scopeView)) state.scopeView = saved.scopeView;
       if (typeof saved.quickMapOpen === "boolean") state.quickMapOpen = saved.quickMapOpen;
-      if (saved.activeLibraryPage === "fretboard" || THEORY_PAGES.some(page => page.id === saved.activeLibraryPage)) {
+      if (Number(saved.keyboardSize) && KEYBOARD_PRESETS[Number(saved.keyboardSize)]) state.keyboardSize = Number(saved.keyboardSize);
+      if (typeof saved.keyboardSoundEnabled === "boolean") state.keyboardSoundEnabled = saved.keyboardSoundEnabled;
+      if (Number.isInteger(saved.selectedKeyboardMidi)) state.selectedKeyboardMidi = saved.selectedKeyboardMidi;
+      if (["fretboard", "keyboard"].includes(saved.activeLibraryPage) || THEORY_PAGES.some(page => page.id === saved.activeLibraryPage)) {
         state.activeLibraryPage = saved.activeLibraryPage;
       }
       state.pitchOverrides = saved.pitchOverrides && typeof saved.pitchOverrides === "object" ? saved.pitchOverrides : {};
@@ -648,8 +699,10 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       dom.displayOutput.textContent = `${state.displayScale}%`;
       dom.aspectScale.value = state.aspectScale;
       dom.aspectOutput.textContent = `${state.aspectScale}%`;
+      if (dom.keyboardSize) dom.keyboardSize.value = String(state.keyboardSize);
       LAYER_IDS.forEach(layerId => syncLayerControls(layerId));
       dom.modeButtons.forEach(item => item.classList.toggle("is-active", item.dataset.mode === state.mode));
+      syncKeyboardSoundButtons();
       dom.labelButtons.forEach(item => item.classList.toggle("is-active", item.dataset.labelMode === state.labelMode));
       syncSecondaryLabelButtons();
     }
@@ -714,6 +767,14 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       });
     }
 
+    function keyboardSources(note) {
+      if (state.mode === "custom") return [];
+      return LAYER_IDS.filter(layerId => {
+        const layer = state.layers[layerId];
+        return layer.enabled && layerContains(layer, note);
+      });
+    }
+
     function baseShouldShow(note, stringIndex, fret) {
       if (markerSources(note, stringIndex, fret).length) return true;
       if (state.mode === "all") return true;
@@ -723,6 +784,10 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
     function markerKey(stringIndex, fret) {
       return `${stringIndex}:${fret}`;
+    }
+
+    function keyboardMarkerKey(midi) {
+      return `p:${midi}`;
     }
 
     function shouldShow(stringIndex, fret, note) {
@@ -737,11 +802,51 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       return baseVisible;
     }
 
+    function keyboardShouldShow(midi, note) {
+      const key = keyboardMarkerKey(midi);
+      const baseVisible = keyboardSources(note).length || state.mode === "all" || (state.mode === "root" && note === state.root);
+      if (state.soloPitches.size) return state.soloPitches.has(note);
+      if (state.manualSelected.has(key)) return true;
+      if (state.manualOn.has(key)) return true;
+      if (state.manualOff.has(key)) return false;
+      if (state.pitchOverrides[note] === true) return true;
+      if (state.pitchOverrides[note] === false) return false;
+      return baseVisible;
+    }
+
     function toggleMarker(stringIndex, fret, note) {
       const key = markerKey(stringIndex, fret);
       const currentlyVisible = shouldShow(stringIndex, fret, note);
       const currentlySelected = state.manualSelected.has(key);
       state.selected = { stringIndex, fret };
+
+      if (state.markerTool === "draw") {
+        state.manualOn.add(key);
+        state.manualOff.delete(key);
+        state.manualSelected.delete(key);
+      } else if (state.markerTool === "erase") {
+        state.manualSelected.delete(key);
+        state.manualOn.delete(key);
+        state.manualOff.add(key);
+      } else if (currentlySelected) {
+        state.manualSelected.delete(key);
+        state.manualOff.add(key);
+        state.manualOn.delete(key);
+      } else if (currentlyVisible) {
+        state.manualSelected.add(key);
+        state.manualOn.delete(key);
+        state.manualOff.delete(key);
+      } else {
+        state.manualOn.add(key);
+        state.manualOff.delete(key);
+        state.manualSelected.delete(key);
+      }
+    }
+
+    function toggleKeyboardMarker(midi, note) {
+      const key = keyboardMarkerKey(midi);
+      const currentlyVisible = keyboardShouldShow(midi, note);
+      const currentlySelected = state.manualSelected.has(key);
 
       if (state.markerTool === "draw") {
         state.manualOn.add(key);
@@ -1003,6 +1108,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const info = scaleInfo(note);
       const entry = {
         id: `${stringIndex}:${fret}`,
+        instrument: "fretboard",
         stringIndex,
         fret,
         note,
@@ -1015,18 +1121,50 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       state.selectionLog = [...state.selectionLog.filter(item => item.id !== entry.id), entry].slice(-12);
     }
 
+    function recordKeyboardScopeSelection(midi, note) {
+      const info = scaleInfo(note);
+      const entry = {
+        id: keyboardMarkerKey(midi),
+        instrument: "keyboard",
+        midi,
+        note,
+        noteLabel: displayNote(note),
+        absoluteLabel: keyboardKeyLabel(midi),
+        solfege: info.solfege,
+        degree: info.degree,
+        relation: info.inKey ? "in" : "out"
+      };
+      state.selectionLog = [...state.selectionLog.filter(item => item.id !== entry.id), entry].slice(-12);
+    }
+
     function removeScopeSelection(stringIndex, fret) {
       const id = `${stringIndex}:${fret}`;
       state.selectionLog = state.selectionLog.filter(item => item.id !== id);
     }
 
+    function removeKeyboardScopeSelection(midi) {
+      const id = keyboardMarkerKey(midi);
+      state.selectionLog = state.selectionLog.filter(item => item.id !== id);
+    }
+
     function clearScopeSelectionItem(item) {
       state.selectionLog = state.selectionLog.filter(entry => entry.id !== item.id);
-      state.manualSelected.delete(markerKey(item.stringIndex, item.fret));
+      if (item.instrument === "keyboard" || String(item.id || "").startsWith("p:")) {
+        state.manualSelected.delete(keyboardMarkerKey(item.midi));
+      } else {
+        state.manualSelected.delete(markerKey(item.stringIndex, item.fret));
+      }
     }
 
     function pruneScopeSelection() {
       state.selectionLog = state.selectionLog.filter(item => {
+        if (item.instrument === "keyboard" || String(item.id || "").startsWith("p:")) {
+          if (!Number.isInteger(item.midi)) return false;
+          if (!keyboardRangeContains(item.midi)) return false;
+          const note = noteFromMidi(item.midi);
+          return keyboardShouldShow(item.midi, note);
+        }
+        if (!Number.isInteger(item.stringIndex) || !Number.isInteger(item.fret)) return false;
         const note = noteAt(state.tuning[item.stringIndex] || item.note, item.fret);
         return shouldShow(item.stringIndex, item.fret, note);
       });
@@ -1040,6 +1178,18 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const note = NOTES[midi % 12];
       const octave = Math.floor(midi / 12) - 1;
       return `${displayPitch(note)}${octave}`;
+    }
+
+    function scopeItemIsKeyboard(item) {
+      return item.instrument === "keyboard" || String(item.id || "").startsWith("p:");
+    }
+
+    function scopeItemLabel(item) {
+      return scopeItemIsKeyboard(item) ? keyboardKeyLabel(item.midi) : absoluteNoteLabel(item.stringIndex, item.fret);
+    }
+
+    function scopeItemDetail(item) {
+      return scopeItemIsKeyboard(item) ? `MIDI ${item.midi}` : `S${item.stringIndex + 1} F${item.fret}`;
     }
 
     function renderScopeSelection() {
@@ -1070,7 +1220,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       if (!state.selectionLog.length) {
         const empty = document.createElement("span");
         empty.className = "scope-empty";
-        empty.textContent = "點擊指板上的音，這裡會先記錄選取內容。";
+        empty.textContent = "點擊指板或鍵盤上的音，這裡會先記錄選取內容。";
         dom.scopeSelection.append(empty);
         renderScopeSuggestions();
         return;
@@ -1082,13 +1232,18 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         chip.dataset.scopeIndex = String(index);
         chip.className = ["scope-chip", item.relation === "out" ? "is-out" : ""].filter(Boolean).join(" ");
         chip.style.setProperty("--note-color", colorForNote(item.note));
-        const noteLabel = absoluteNoteLabel(item.stringIndex, item.fret);
+        const noteLabel = scopeItemLabel(item);
         chip.innerHTML = state.scopeView === "detail"
-          ? `<strong>${noteLabel}</strong><span>${displayPitch(item.note)} / ${item.solfege} / ${item.degree}</span><small>S${item.stringIndex + 1} F${item.fret}</small>`
+          ? `<strong>${noteLabel}</strong><span>${displayPitch(item.note)} / ${item.solfege} / ${item.degree}</span><small>${scopeItemDetail(item)}</small>`
           : `<strong>${noteLabel}</strong>`;
         chip.addEventListener("click", () => {
-          state.selected = { stringIndex: item.stringIndex, fret: item.fret };
-          updateInfo(item.stringIndex, item.fret);
+          if (scopeItemIsKeyboard(item)) {
+            state.selectedKeyboardMidi = item.midi;
+            updateKeyboardInfo(item.midi);
+          } else {
+            state.selected = { stringIndex: item.stringIndex, fret: item.fret };
+            updateInfo(item.stringIndex, item.fret);
+          }
         });
         chip.addEventListener("dblclick", event => {
           event.preventDefault();
@@ -1192,9 +1347,12 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
     }
 
     function updateLibraryActiveStates() {
-      dom.main?.classList.toggle("is-theory-page", state.activeLibraryPage !== "fretboard");
+      const isToolPage = ["fretboard", "keyboard"].includes(state.activeLibraryPage);
+      dom.main?.classList.toggle("is-theory-page", !isToolPage);
+      dom.main?.classList.toggle("is-keyboard-page", state.activeLibraryPage === "keyboard");
       dom.libraryHome?.classList.toggle("is-active", state.activeLibraryPage === "fretboard");
-      dom.quickMapToggle?.classList.toggle("is-active", state.activeLibraryPage === "fretboard");
+      dom.keyboardHome?.classList.toggle("is-active", state.activeLibraryPage === "keyboard");
+      dom.quickMapToggle?.classList.remove("is-active");
       document.querySelectorAll("[data-theory-page]").forEach(button => {
         button.classList.toggle("is-active", button.dataset.theoryPage === state.activeLibraryPage);
       });
@@ -1240,8 +1398,13 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       if (!dom.theoryPage) return;
       if (!page) {
         dom.theoryPage.hidden = true;
-        if (dom.heroCrumbs) dom.heroCrumbs.textContent = "Theory Notes / Guitar / Fretboard";
-        if (dom.heroTitle) dom.heroTitle.textContent = "Key Fretboard Map";
+        if (state.activeLibraryPage === "keyboard") {
+          if (dom.heroCrumbs) dom.heroCrumbs.textContent = "Instruments / Piano / Keyboard";
+          if (dom.heroTitle) dom.heroTitle.textContent = "Piano / Keyboard Map";
+        } else {
+          if (dom.heroCrumbs) dom.heroCrumbs.textContent = "Instruments / Guitar / Fretboard";
+          if (dom.heroTitle) dom.heroTitle.textContent = "Key Fretboard Map";
+        }
         return;
       }
       dom.theoryPage.hidden = false;
@@ -1252,12 +1415,16 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
     function setLibraryPage(pageId) {
       state.activeLibraryPage = pageId;
-      renderLibraryView();
-      saveSettings();
+      if (["fretboard", "keyboard"].includes(pageId)) {
+        render();
+      } else {
+        renderLibraryView();
+        saveSettings();
+      }
     }
 
     function applyQuickMap(kind, value) {
-      state.activeLibraryPage = "fretboard";
+      if (!["fretboard", "keyboard"].includes(state.activeLibraryPage)) state.activeLibraryPage = "fretboard";
       const layer = state.layers.a;
       layer.enabled = true;
       layer.kind = kind;
@@ -1446,8 +1613,8 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const labelWidth = 58;
       const nutWidth = 30;
       const rowHeight = 72;
-      const fretWidth = 100 * (state.aspectScale / 100);
-      const displayScale = state.displayScale / 100;
+      const fretWidth = 100 * aspectMultiplier();
+      const displayScale = displayMultiplier();
       const boardX = padding + labelWidth + nutWidth;
       const firstY = padding + 30;
       const lastY = firstY + ((state.strings - 1) * rowHeight);
@@ -1660,20 +1827,193 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       dom.infoString.textContent = displayNote(openNote);
     }
 
+    function syncKeyboardSoundButtons() {
+      dom.keyboardSoundButtons.forEach(button => {
+        const isOn = button.dataset.keyboardSound === "on";
+        button.classList.toggle("is-active", isOn === state.keyboardSoundEnabled);
+      });
+    }
+
+    function updateKeyboardInfo(midi) {
+      const note = noteFromMidi(midi);
+      const info = scaleInfo(note);
+      dom.infoPosition.textContent = `Keyboard / ${keyboardKeyLabel(midi)}`;
+      dom.infoNote.textContent = displayNote(note);
+      dom.infoSolfege.textContent = info.solfege;
+      dom.infoDegree.textContent = info.degree;
+      dom.infoRelation.textContent = info.inKey ? `${keyLabel()}內音` : `不在 ${keyLabel()} 內`;
+      dom.infoString.textContent = `MIDI ${midi}`;
+    }
+
+    function keyboardRange() {
+      return KEYBOARD_PRESETS[state.keyboardSize] || KEYBOARD_PRESETS[24];
+    }
+
+    function keyboardRangeContains(midi) {
+      const preset = keyboardRange();
+      return midi >= preset.startMidi && midi < preset.startMidi + preset.keyCount;
+    }
+
+    function keyboardFrequency(midi) {
+      return 440 * (2 ** ((midi - 69) / 12));
+    }
+
+    function playKeyboardTone(midi) {
+      if (!state.keyboardSoundEnabled) return;
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+      audioContext ||= new AudioContextClass();
+      if (audioContext.state === "suspended") audioContext.resume();
+      const now = audioContext.currentTime;
+      const destination = audioContext.createGain();
+      const filter = audioContext.createBiquadFilter();
+      const frequency = keyboardFrequency(midi);
+      destination.gain.setValueAtTime(0.0001, now);
+      destination.gain.exponentialRampToValueAtTime(0.2, now + 0.012);
+      destination.gain.exponentialRampToValueAtTime(0.055, now + 0.42);
+      destination.gain.exponentialRampToValueAtTime(0.0001, now + 1.45);
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(Math.min(7600, frequency * 14), now);
+      filter.Q.setValueAtTime(0.85, now);
+      filter.connect(destination);
+      destination.connect(audioContext.destination);
+
+      [
+        { ratio: 1, level: 1 },
+        { ratio: 2, level: 0.34 },
+        { ratio: 3, level: 0.16 },
+        { ratio: 4.02, level: 0.08 }
+      ].forEach(partial => {
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(frequency * partial.ratio, now);
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.22 * partial.level, now + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.35);
+        oscillator.connect(gain);
+        gain.connect(filter);
+        oscillator.start(now);
+        oscillator.stop(now + 1.5);
+      });
+    }
+
+    function renderKeyboard() {
+      if (!dom.keyboardMap) return;
+      dom.keyboardMap.innerHTML = "";
+      dom.keyboardMap.style.setProperty("--display-scale", displayMultiplier());
+      dom.keyboardMap.style.setProperty("--keyboard-aspect", aspectMultiplier());
+      const preset = keyboardRange();
+      const keys = Array.from({ length: preset.keyCount }, (_, index) => preset.startMidi + index);
+      const whiteKeys = keys.filter(midi => isWhitePitch(noteFromMidi(midi)));
+      dom.keyboardMap.dataset.keyCount = String(preset.keyCount);
+      dom.keyboardMap.style.setProperty("--white-count", whiteKeys.length);
+      const whiteDeck = document.createElement("div");
+      whiteDeck.className = "piano-white-deck";
+      const whiteIndexByMidi = new Map();
+      let whiteIndex = 0;
+
+      keys.forEach(midi => {
+        const note = noteFromMidi(midi);
+        if (!isWhitePitch(note)) return;
+        whiteIndexByMidi.set(midi, whiteIndex);
+        const key = createPianoKey(midi, "white");
+        whiteDeck.append(key);
+        whiteIndex += 1;
+      });
+
+      dom.keyboardMap.append(whiteDeck);
+
+      keys.forEach(midi => {
+        const note = noteFromMidi(midi);
+        if (isWhitePitch(note)) return;
+        const previousWhite = keys.slice(0, keys.indexOf(midi)).reverse().find(item => isWhitePitch(noteFromMidi(item)));
+        if (previousWhite === undefined) return;
+        const previousIndex = whiteIndexByMidi.get(previousWhite);
+        const key = createPianoKey(midi, "black");
+        key.style.setProperty("--black-x", previousIndex + 1);
+        dom.keyboardMap.append(key);
+      });
+    }
+
+    function createPianoKey(midi, kind) {
+      const note = noteFromMidi(midi);
+      const info = scaleInfo(note);
+      const sources = keyboardSources(note);
+      const visible = keyboardShouldShow(midi, note);
+      const key = document.createElement("button");
+      key.type = "button";
+      key.className = `piano-key ${kind}`;
+      key.setAttribute("aria-label", `${keyboardKeyLabel(midi)}，${info.solfege}`);
+      key.addEventListener("click", () => {
+        toggleKeyboardMarker(midi, note);
+        state.selectedKeyboardMidi = midi;
+        playKeyboardTone(midi);
+        if (keyboardShouldShow(midi, note)) {
+          recordKeyboardScopeSelection(midi, note);
+        } else {
+          removeKeyboardScopeSelection(midi);
+        }
+        render();
+      });
+
+      if (visible) {
+        const labels = markerLabels(note, info);
+        const marker = document.createElement("span");
+        marker.className = [
+          "marker",
+          sources.length === 1 && sources[0] === "b" ? "is-layer-b" : "",
+          sources.length > 1 ? "is-overlap" : "",
+          info.inKey ? "" : "is-out",
+          shouldEmphasize(note) ? "is-emphasis" : "",
+          state.manualSelected.has(keyboardMarkerKey(midi)) ? "is-selected" : ""
+        ].filter(Boolean).join(" ");
+        marker.style.setProperty("--note-color", colorForNote(note));
+        marker.style.setProperty("--in-key-scale", 1);
+        marker.innerHTML = `
+          <span class="marker-note">${labels.primary}</span>
+          <span class="marker-solfege">${labels.secondary}</span>
+        `;
+        key.append(marker);
+      }
+
+      return key;
+    }
+
     function render() {
       dom.fretboard.innerHTML = "";
+      if (dom.keyboardMap) dom.keyboardMap.innerHTML = "";
       syncStageClass();
       dom.noteSwitchboard.classList.toggle("is-mono", state.colorMode === "mono");
+      const isKeyboardPage = state.activeLibraryPage === "keyboard";
+      const stageLayout = document.querySelector("#stage-layout");
+      dom.main?.classList.toggle("is-keyboard-page", isKeyboardPage);
+      dom.fretboard.hidden = isKeyboardPage;
+      if (dom.keyboardMap) dom.keyboardMap.hidden = !isKeyboardPage;
       dom.fretboard.style.setProperty("--strings", state.strings);
       dom.fretboard.style.setProperty("--frets", state.frets);
-      dom.fretboard.style.setProperty("--display-scale", state.displayScale / 100);
-      const fretWidth = 6.3 * (state.aspectScale / 100);
+      dom.fretboard.style.setProperty("--display-scale", displayMultiplier());
+      const fretWidth = 6.3 * aspectMultiplier();
       dom.fretboard.style.gridTemplateColumns = `3.5rem 1.9rem repeat(${state.frets}, minmax(${fretWidth}rem, ${fretWidth}rem))`;
       dom.fretboard.style.minWidth = `${5.4 + (state.frets * fretWidth)}rem`;
       dom.fretboard.style.setProperty("--board-width", `${state.frets * fretWidth}rem`);
-      document.querySelector("#stage-layout").style.setProperty("--frets", state.frets);
-      document.querySelector("#stage-layout").style.minWidth = `${18.5 + (state.frets * fretWidth)}rem`;
+      stageLayout?.style.setProperty("--frets", state.frets);
       dom.modeButtons.forEach(item => item.classList.toggle("is-active", item.dataset.mode === state.mode));
+
+      if (isKeyboardPage) {
+        stageLayout?.style.removeProperty("min-width");
+        if (!keyboardRangeContains(state.selectedKeyboardMidi)) state.selectedKeyboardMidi = keyboardRange().startMidi;
+        renderKeyboard();
+        renderNoteSwitchboard();
+        renderScopeSelection();
+        renderQuickMapMenu();
+        renderLibraryView();
+        updateKeyboardInfo(state.selectedKeyboardMidi);
+        saveSettings();
+        return;
+      }
+
+      stageLayout.style.minWidth = `${18.5 + (state.frets * fretWidth)}rem`;
 
       const nut = document.createElement("div");
       nut.className = "nut-bar";
@@ -1844,6 +2184,13 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       render();
     });
 
+    dom.keyboardSize?.addEventListener("change", event => {
+      state.keyboardSize = Number(event.target.value);
+      state.selectedKeyboardMidi = keyboardRange().startMidi;
+      resetManualMarkers();
+      render();
+    });
+
     dom.labelButtons.forEach(button => {
       button.addEventListener("click", () => {
         dom.labelButtons.forEach(item => item.classList.toggle("is-active", item === button));
@@ -1874,7 +2221,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
     });
 
     dom.quickMapToggle?.addEventListener("click", () => {
-      if (state.activeLibraryPage !== "fretboard") {
+      if (!["fretboard", "keyboard"].includes(state.activeLibraryPage)) {
         setLibraryPage("fretboard");
         return;
       }
@@ -1885,6 +2232,10 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
     dom.libraryHome?.addEventListener("click", () => {
       setLibraryPage("fretboard");
+    });
+
+    dom.keyboardHome?.addEventListener("click", () => {
+      setLibraryPage("keyboard");
     });
 
     dom.colorPickers.forEach(picker => {
@@ -1912,6 +2263,14 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         state.mode = button.dataset.mode;
         resetManualMarkers();
         render();
+      });
+    });
+
+    dom.keyboardSoundButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        state.keyboardSoundEnabled = button.dataset.keyboardSound === "on";
+        syncKeyboardSoundButtons();
+        saveSettings();
       });
     });
 
