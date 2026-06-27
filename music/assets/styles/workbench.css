@@ -1376,11 +1376,26 @@
 
     .note-switchboard {
       display: grid;
-      grid-template-columns: repeat(12, minmax(3.3rem, 4.2rem)) 3.3rem;
-      justify-content: center;
+      justify-items: center;
       gap: .55rem;
       margin: 1.05rem auto 0;
-      max-width: max-content;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .switch-row {
+      display: flex;
+      justify-content: center;
+      gap: .55rem;
+      max-width: 100%;
+      overflow-x: auto;
+      padding: .05rem .25rem .35rem;
+    }
+
+    .pitch-row,
+    .tools-row,
+    .emphasis-row {
+      flex-wrap: nowrap;
     }
 
     .pitch-button {
@@ -1490,10 +1505,14 @@
     }
 
     .emphasis-tool {
+      width: auto;
+      min-width: 3.3rem;
+      padding: 0 .65rem;
       color: #b95b74;
       border-color: rgba(185, 91, 116, .22);
       background: #fff;
       font-size: .78rem;
+      white-space: nowrap;
     }
 
     .emphasis-tool.is-target {

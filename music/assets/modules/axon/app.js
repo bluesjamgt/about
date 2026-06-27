@@ -63,6 +63,11 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       { label: "Triads", values: ["major", "minor", "dim", "aug"] },
       { label: "7th chords", values: ["dominant7", "major7", "minor7", "halfDiminished7", "diminished7"] }
     ];
+    const DEGREE_DISPLAY_LABELS = {
+      chord: ["R", "b2/b9", "2/9", "b3/#9", "3", "4/11", "#4/b5/#11", "5", "#5/b6/b13", "6/13", "b7", "7"],
+      interval: ["P1", "m2/m9", "M2/M9", "m3/A9", "M3", "P4/P11", "A4/d5/A11", "P5", "A5/m6/m13", "M6/M13", "m7/m14", "M7/M14"]
+    };
+    const EMPHASIS_INTERVAL_KEYS = DEGREE_DISPLAY_LABELS.chord.map((_, interval) => `i:${interval}`);
     const PATTERN_OPTIONS = [
       { value: "all", label: "All" },
       { value: "box-a", label: "Box A" },
@@ -314,6 +319,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       scale: "major",
       mode: "scale",
       labelMode: "note",
+      degreeDisplayMode: "chord",
       secondaryLabels: new Set(["solfege"]),
       boardTheme: "white",
       displayScale: 100,
@@ -456,21 +462,26 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const scale = SCALES[state.scale];
       const distance = (noteIndex(note) - noteIndex(state.root) + 12) % 12;
       const degreeIndex = scale.intervals.indexOf(distance);
+      const degreeLabel = degreeDisplayLabel(distance);
       if (degreeIndex < 0) {
-        const chromaticDegrees = ["1", "b2", "2", "b3", "3", "4", "b5", "5", "b6", "6", "b7", "7"];
         return {
           inKey: false,
-          degree: chromaticDegrees[distance] || "-",
+          degree: degreeLabel,
           roman: "",
           solfege: "-"
         };
       }
       return {
         inKey: true,
-        degree: scale.degrees[degreeIndex],
+        degree: degreeLabel,
         roman: scale.romans[degreeIndex],
         solfege: scale.solfege[degreeIndex]
       };
+    }
+
+    function degreeDisplayLabel(distance) {
+      const labels = DEGREE_DISPLAY_LABELS[state.degreeDisplayMode] || DEGREE_DISPLAY_LABELS.chord;
+      return labels[distance] || "-";
     }
 
     function colorForNote(note) {
@@ -569,6 +580,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         scale: state.scale,
         mode: state.mode,
         labelMode: state.labelMode,
+        degreeDisplayMode: state.degreeDisplayMode,
         boardTheme: state.boardTheme,
         displayScale: state.displayScale,
         aspectScale: state.aspectScale,
@@ -626,6 +638,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       if (SCALES[saved.scale]) state.scale = saved.scale;
       if (["scale", "all", "root", "custom"].includes(saved.mode)) state.mode = saved.mode;
       if (["note", "solfege", "degree"].includes(saved.labelMode)) state.labelMode = saved.labelMode;
+      if (["chord", "interval"].includes(saved.degreeDisplayMode)) state.degreeDisplayMode = saved.degreeDisplayMode;
       if (["white", "ebony", "rosewood", "maple"].includes(saved.boardTheme)) state.boardTheme = saved.boardTheme;
       state.displayScale = validNumber(saved.displayScale, state.displayScale, 70, 150);
       state.aspectScale = validNumber(saved.aspectScale, state.aspectScale, 70, 150);
@@ -651,7 +664,8 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       if (["auto", "sharp", "flat"].includes(saved.accidentalMode)) state.accidentalMode = saved.accidentalMode;
       if (["a", "b"].includes(saved.emphasisTarget)) state.emphasisTarget = saved.emphasisTarget;
       if (Array.isArray(saved.emphasisDegrees)) {
-        state.emphasisDegrees = new Set(saved.emphasisDegrees.filter(item => ["1", "3", "5", "7", "9", "11", "13", "rel"].includes(item)));
+        const legacy = ["1", "3", "5", "7", "9", "11", "13", "rel"];
+        state.emphasisDegrees = new Set(saved.emphasisDegrees.filter(item => legacy.includes(item) || EMPHASIS_INTERVAL_KEYS.includes(item)));
       }
       if (Array.isArray(saved.secondaryLabels)) {
         state.secondaryLabels = new Set(saved.secondaryLabels.filter(item => ["note", "solfege", "degree"].includes(item) && item !== state.labelMode));
@@ -776,10 +790,9 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
     }
 
     function baseShouldShow(note, stringIndex, fret) {
-      if (markerSources(note, stringIndex, fret).length) return true;
       if (state.mode === "all") return true;
       if (state.mode === "root") return note === state.root;
-      return false;
+      return markerSources(note, stringIndex, fret).length > 0;
     }
 
     function markerKey(stringIndex, fret) {
@@ -803,7 +816,11 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
     function keyboardShouldShow(midi, note) {
       const key = keyboardMarkerKey(midi);
-      const baseVisible = keyboardSources(note).length || state.mode === "all" || (state.mode === "root" && note === state.root);
+      const baseVisible = state.mode === "all"
+        ? true
+        : state.mode === "root"
+          ? note === state.root
+          : keyboardSources(note).length > 0;
       if (state.soloPitches.size) return state.soloPitches.has(note);
       if (state.manualOn.has(key)) return true;
       if (state.manualOff.has(key)) return false;
@@ -1034,13 +1051,39 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       return null;
     }
 
+    function emphasisIntervalKey(interval) {
+      return `i:${interval}`;
+    }
+
+    function emphasisIntervalFromKey(target) {
+      const match = String(target).match(/^i:(\d+)$/);
+      if (!match) return null;
+      const interval = Number(match[1]);
+      return interval >= 0 && interval < 12 ? interval : null;
+    }
+
+    function emphasisToolLabel(target) {
+      const layer = state.layers[state.emphasisTarget];
+      const keyedInterval = emphasisIntervalFromKey(target);
+      if (keyedInterval !== null) return degreeDisplayLabel(keyedInterval);
+      if (target === "rel") return "Rel";
+      if (!layer || !layer.enabled) return target === "1" ? (state.degreeDisplayMode === "interval" ? "P1" : "R") : target;
+      const interval = emphasisIntervalFor(layer, target);
+      return interval === null ? target : degreeDisplayLabel(interval);
+    }
+
     function shouldEmphasize(note) {
       if (!state.emphasisDegrees.size) return false;
       const layer = state.layers[state.emphasisTarget];
       if (!layer || !layer.enabled) return false;
       const distance = (noteIndex(note) - noteIndex(layerRoot(layer)) + 12) % 12;
       for (const target of state.emphasisDegrees) {
-        const interval = target === "rel" ? relativeIntervalFor(layer) : emphasisIntervalFor(layer, target);
+        const keyedInterval = emphasisIntervalFromKey(target);
+        const interval = keyedInterval !== null
+          ? keyedInterval
+          : target === "rel"
+            ? relativeIntervalFor(layer)
+            : emphasisIntervalFor(layer, target);
         if (interval !== null && distance === interval) return true;
       }
       return false;
@@ -1285,8 +1328,9 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         chip.className = ["scope-chip", item.relation === "out" ? "is-out" : ""].filter(Boolean).join(" ");
         chip.style.setProperty("--note-color", colorForNote(item.note));
         const noteLabel = scopeItemLabel(item);
+        const degreeLabel = scaleInfo(item.note).degree;
         chip.innerHTML = state.scopeView === "detail"
-          ? `<strong>${noteLabel}</strong><span>${displayPitch(item.note)} / ${item.solfege} / ${item.degree}</span><small>${scopeItemDetail(item)}</small>`
+          ? `<strong>${noteLabel}</strong><span>${displayPitch(item.note)} / ${item.solfege} / ${degreeLabel}</span><small>${scopeItemDetail(item)}</small>`
           : `<strong>${noteLabel}</strong>`;
         chip.addEventListener("click", () => {
           if (scopeItemIsKeyboard(item)) {
@@ -1507,24 +1551,25 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       render();
     }
 
+    function orderedPitchNotes() {
+      const rootIndex = noteIndex(state.root);
+      const rotated = NOTES.slice(rootIndex).concat(NOTES.slice(0, rootIndex));
+      return state.pitchListMode === "scale"
+        ? rotated.filter(note => scaleInfo(note).inKey)
+        : rotated;
+    }
+
     function renderNoteSwitchboard() {
       dom.noteSwitchboard.innerHTML = "";
-      const notes = state.pitchListMode === "scale"
-        ? NOTES.filter(note => scaleInfo(note).inKey)
-        : NOTES;
-      const switchColumns = Math.max(notes.length + 1, 9);
-      dom.noteSwitchboard.style.gridTemplateColumns = `repeat(${switchColumns}, minmax(3.3rem, 4.2rem))`;
-      let switchItemCount = 0;
-      const addSwitchSpacers = () => {
-        const fillerCount = (switchColumns - (switchItemCount % switchColumns)) % switchColumns;
-        for (let index = 0; index < fillerCount; index += 1) {
-          const spacer = document.createElement("span");
-          spacer.className = "switch-spacer";
-          spacer.setAttribute("aria-hidden", "true");
-          dom.noteSwitchboard.append(spacer);
-          switchItemCount += 1;
-        }
-      };
+      const notes = orderedPitchNotes();
+      const pitchRow = document.createElement("div");
+      const toolsRow = document.createElement("div");
+      const emphasisRow = document.createElement("div");
+      pitchRow.className = "switch-row pitch-row";
+      toolsRow.className = "switch-row tools-row";
+      emphasisRow.className = "switch-row emphasis-row";
+      dom.noteSwitchboard.append(pitchRow, toolsRow, emphasisRow);
+
       notes.forEach(note => {
         const info = scaleInfo(note);
         const button = document.createElement("button");
@@ -1539,8 +1584,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         button.style.setProperty("--note-color", colorForNote(note));
         button.innerHTML = `<strong>${displayPitch(note)}</strong><span>${info.roman}</span>`;
         button.addEventListener("click", () => togglePitch(note));
-        dom.noteSwitchboard.append(button);
-        switchItemCount += 1;
+        pitchRow.append(button);
       });
       const collapse = document.createElement("button");
       collapse.type = "button";
@@ -1552,9 +1596,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         renderNoteSwitchboard();
         saveSettings();
       });
-      dom.noteSwitchboard.append(collapse);
-      switchItemCount += 1;
-      addSwitchSpacers();
+      pitchRow.append(collapse);
 
       const tools = [
         { id: "clear", label: "CLN", title: "Clear notes / toggle hidden canvas" },
@@ -1577,21 +1619,19 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         button.textContent = tool.label;
         button.title = tool.title;
         button.addEventListener("click", () => handleToolClick(tool.id));
-        dom.noteSwitchboard.append(button);
-        switchItemCount += 1;
+        toolsRow.append(button);
       });
-      addSwitchSpacers();
 
       const emphasisTools = [
         { id: "emphasis-target", label: state.emphasisTarget === "a" ? "MAIN" : "SUB", title: "切換強調目標：MAIN / SUB" },
-        { id: "em-1", label: "R", degree: "1", title: "強調 Root" },
-        { id: "em-3", label: "3rd", degree: "3", title: "強調 3rd" },
-        { id: "em-5", label: "5th", degree: "5", title: "強調 5th" },
-        { id: "em-7", label: "7th", degree: "7", title: "強調 7th" },
-        { id: "em-9", label: "9th", degree: "9", title: "強調 9th" },
-        { id: "em-11", label: "11th", degree: "11", title: "強調 11th" },
-        { id: "em-13", label: "13th", degree: "13", title: "強調 13th" },
-        { id: "em-rel", label: "Rel", degree: "rel", title: "強調 Relative Major / Minor" }
+        { id: "emphasis-mode", label: state.degreeDisplayMode === "chord" ? "Chord" : "Interval", title: "切換級數顯示語意：Chord / Interval" },
+        ...EMPHASIS_INTERVAL_KEYS.map((key, interval) => ({
+          id: `em-i-${interval}`,
+          label: emphasisToolLabel(key),
+          degree: key,
+          title: `強調 ${emphasisToolLabel(key)}`
+        })),
+        { id: "em-rel", label: emphasisToolLabel("rel"), degree: "rel", title: "強調 Relative Major / Minor" }
       ];
       emphasisTools.forEach(tool => {
         const button = document.createElement("button");
@@ -1600,12 +1640,13 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           "pitch-tool",
           "emphasis-tool",
           tool.id === "emphasis-target" ? "is-target" : "",
+          tool.id === "emphasis-mode" ? "is-mode is-active" : "",
           tool.degree && state.emphasisDegrees.has(tool.degree) ? "is-active" : ""
         ].filter(Boolean).join(" ");
         button.textContent = tool.label;
         button.title = tool.title;
         button.addEventListener("click", () => handleToolClick(tool.id));
-        dom.noteSwitchboard.append(button);
+        emphasisRow.append(button);
       });
     }
 
@@ -1632,6 +1673,16 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         transposeLayers(1);
       } else if (toolId === "emphasis-target") {
         state.emphasisTarget = state.emphasisTarget === "a" ? "b" : "a";
+      } else if (toolId === "emphasis-mode") {
+        state.degreeDisplayMode = state.degreeDisplayMode === "chord" ? "interval" : "chord";
+      } else if (toolId.startsWith("em-i-")) {
+        const interval = Number(toolId.replace("em-i-", ""));
+        const key = emphasisIntervalKey(interval);
+        if (state.emphasisDegrees.has(key)) {
+          state.emphasisDegrees.delete(key);
+        } else {
+          state.emphasisDegrees.add(key);
+        }
       } else if (toolId.startsWith("em-")) {
         const degree = toolId.replace("em-", "");
         if (state.emphasisDegrees.has(degree)) {
