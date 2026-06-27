@@ -237,8 +237,8 @@
             <div id="keyboard-map" class="keyboard-map" hidden></div>
             <aside class="palette-legend" aria-label="音名色票">
               <div class="palette-title">
-                <strong>音名調色盤</strong>
-                <span>目前為預設色，可自行微調</span>
+                <strong data-palette-mode-title>音名調色盤</strong>
+                <span data-palette-mode-subtitle>目前為預設色，可自行微調</span>
               </div>
               <div class="legend-row"><button type="button" class="legend-dot" data-palette-dot="C">C</button><span data-palette-code="C">#D8C85A</span><input class="legend-picker" type="color" data-note-color="C" value="#d8c85a"></div>
               <div class="legend-row"><button type="button" class="legend-dot" data-palette-dot="D">D</button><span data-palette-code="D">#C98C63</span><input class="legend-picker" type="color" data-note-color="D" value="#c98c63"></div>
@@ -247,6 +247,17 @@
               <div class="legend-row"><button type="button" class="legend-dot" data-palette-dot="G">G</button><span data-palette-code="G">#7FB39A</span><input class="legend-picker" type="color" data-note-color="G" value="#7fb39a"></div>
               <div class="legend-row"><button type="button" class="legend-dot" data-palette-dot="A">A</button><span data-palette-code="A">#D78479</span><input class="legend-picker" type="color" data-note-color="A" value="#d78479"></div>
               <div class="legend-row"><button type="button" class="legend-dot" data-palette-dot="B">B</button><span data-palette-code="B">#5FA7B4</span><input class="legend-picker" type="color" data-note-color="B" value="#5fa7b4"></div>
+              <div class="legend-row mono-legend-row">
+                <span class="mono-legend-label">外框</span>
+                <span data-mono-color-code="stroke">#6E93DB</span>
+                <input class="legend-picker" type="color" data-mono-color="stroke" value="#6e93db">
+              </div>
+              <div class="legend-row mono-legend-row">
+                <span class="mono-legend-label">文字</span>
+                <span data-mono-color-code="text">#6E93DB</span>
+                <input class="legend-picker" type="color" data-mono-color="text" value="#6e93db">
+              </div>
+              <div class="palette-set-dock" data-palette-set-dock aria-label="調色盤組合"></div>
             </aside>
           </div>
           <div id="note-switchboard" class="note-switchboard" aria-label="十二音名開關"></div>

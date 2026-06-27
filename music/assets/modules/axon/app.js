@@ -102,8 +102,50 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       A: "#d78479",
       B: "#5fa7b4"
     };
+    const COLOR_SET_PRESETS = [
+      {
+        name: "Default",
+        colors: { ...DEFAULT_NOTE_COLORS }
+      },
+      {
+        name: "Dracula",
+        colors: {
+          C: "#f1fa8c",
+          D: "#ffb86c",
+          E: "#bd93f9",
+          F: "#8be9fd",
+          G: "#50fa7b",
+          A: "#ff79c6",
+          B: "#ff5555"
+        }
+      },
+      {
+        name: "Solarized",
+        colors: {
+          C: "#b58900",
+          D: "#cb4b16",
+          E: "#6c71c4",
+          F: "#268bd2",
+          G: "#859900",
+          A: "#dc322f",
+          B: "#2aa198"
+        }
+      }
+    ];
+    const DEFAULT_MONO_COLORS = {
+      stroke: "#6e93db",
+      text: "#6e93db"
+    };
+    const MONO_COLOR_PRESETS = [
+      { name: "Blue", colors: { stroke: "#6e93db", text: "#6e93db" } },
+      { name: "Terminal", colors: { stroke: "#00d084", text: "#00d084" } },
+      { name: "Amber", colors: { stroke: "#ffb454", text: "#ffb454" } }
+    ];
     const NOTE_COLORS = { ...DEFAULT_NOTE_COLORS };
     const RECENT_NOTE_COLORS = { ...DEFAULT_NOTE_COLORS };
+    const USER_COLOR_SLOT_4A = { ...DEFAULT_NOTE_COLORS };
+    const MONO_COLORS = { ...DEFAULT_MONO_COLORS };
+    const USER_MONO_SLOT_4B = { ...DEFAULT_MONO_COLORS };
     const STORAGE_KEY = "bluesjamgt.fretboard.settings.v1";
     const TUNINGS = {
       4: {
@@ -293,7 +335,12 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       keyboardSoundButtons: document.querySelectorAll("[data-keyboard-sound]"),
       labelButtons: document.querySelectorAll("[data-label-mode]"),
       secondaryLabelButtons: document.querySelectorAll("[data-secondary-label]"),
+      paletteLegend: document.querySelector(".palette-legend"),
+      paletteModeTitle: document.querySelector("[data-palette-mode-title]"),
+      paletteModeSubtitle: document.querySelector("[data-palette-mode-subtitle]"),
+      paletteSetDock: document.querySelector("[data-palette-set-dock]"),
       colorPickers: document.querySelectorAll("[data-note-color]"),
+      monoColorPickers: document.querySelectorAll("[data-mono-color]"),
       paletteButtons: document.querySelectorAll("[data-palette-dot]"),
       quickMapMenu: document.querySelector("#fingerboard-map-menu"),
       quickMapToggle: document.querySelector("#fingerboard-map-toggle"),
@@ -490,6 +537,10 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
     }
 
     function syncPalette() {
+      const isMono = state.colorMode === "mono";
+      dom.paletteLegend?.classList.toggle("is-mono", isMono);
+      if (dom.paletteModeTitle) dom.paletteModeTitle.textContent = isMono ? "低彩調色盤" : "音名調色盤";
+      if (dom.paletteModeSubtitle) dom.paletteModeSubtitle.textContent = isMono ? "可設定外框與文字顏色" : "目前為預設色，可自行微調";
       Object.entries(NOTE_COLORS).forEach(([note, color]) => {
         document.querySelectorAll(`[data-palette-dot="${note}"]`).forEach(dot => {
           dot.style.setProperty("--legend-color", color);
@@ -502,6 +553,18 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           input.value = color;
         });
       });
+      Object.entries(MONO_COLORS).forEach(([key, color]) => {
+        document.querySelectorAll(`[data-mono-color-code="${key}"]`).forEach(code => {
+          code.textContent = color.toUpperCase();
+        });
+        document.querySelectorAll(`[data-mono-color="${key}"]`).forEach(input => {
+          input.value = color;
+        });
+      });
+      if (dom.paletteSetDock) {
+        dom.paletteSetDock.innerHTML = "";
+        dom.paletteSetDock.append(renderPaletteSetGroup());
+      }
     }
 
     function togglePaletteColor(note) {
@@ -509,6 +572,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const defaultColor = DEFAULT_NOTE_COLORS[note].toLowerCase();
       const recentColor = RECENT_NOTE_COLORS[note];
       NOTE_COLORS[note] = current === defaultColor ? recentColor : DEFAULT_NOTE_COLORS[note];
+      applyColorMap(USER_COLOR_SLOT_4A, NOTE_COLORS);
       syncPalette();
       render();
     }
@@ -541,6 +605,33 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           target[note] = source[note];
         }
       });
+    }
+
+    function applyMonoColorMap(target, source) {
+      if (!source || typeof source !== "object") return;
+      Object.keys(target).forEach(key => {
+        if (/^#[0-9a-f]{6}$/i.test(source[key] || "")) {
+          target[key] = source[key];
+        }
+      });
+    }
+
+    function sameColorMap(a, b) {
+      return Object.keys(DEFAULT_NOTE_COLORS).every(note => String(a[note]).toLowerCase() === String(b[note]).toLowerCase());
+    }
+
+    function sameMonoColorMap(a, b) {
+      return Object.keys(DEFAULT_MONO_COLORS).every(key => String(a[key]).toLowerCase() === String(b[key]).toLowerCase());
+    }
+
+    function setNoteColors(source, rememberUser = false) {
+      applyColorMap(NOTE_COLORS, source);
+      if (rememberUser) applyColorMap(USER_COLOR_SLOT_4A, NOTE_COLORS);
+    }
+
+    function setMonoColors(source, rememberUser = false) {
+      applyMonoColorMap(MONO_COLORS, source);
+      if (rememberUser) applyMonoColorMap(USER_MONO_SLOT_4B, MONO_COLORS);
     }
 
     function keyByName(name) {
@@ -607,7 +698,10 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         selectedKeyboardMidi: state.selectedKeyboardMidi,
         selected: state.selected,
         noteColors: { ...NOTE_COLORS },
-        recentNoteColors: { ...RECENT_NOTE_COLORS }
+        recentNoteColors: { ...RECENT_NOTE_COLORS },
+        userColorSlot4A: { ...USER_COLOR_SLOT_4A },
+        monoColors: { ...MONO_COLORS },
+        userMonoSlot4B: { ...USER_MONO_SLOT_4B }
       };
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
@@ -700,6 +794,9 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       }
       applyColorMap(NOTE_COLORS, saved.noteColors);
       applyColorMap(RECENT_NOTE_COLORS, saved.recentNoteColors);
+      applyColorMap(USER_COLOR_SLOT_4A, saved.userColorSlot4A || saved.recentNoteColors);
+      applyMonoColorMap(MONO_COLORS, saved.monoColors);
+      applyMonoColorMap(USER_MONO_SLOT_4B, saved.userMonoSlot4B || saved.monoColors);
     }
 
     function syncControlsFromState() {
@@ -723,6 +820,8 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
     function syncStageClass() {
       dom.stage.className = `stage theme-${state.boardTheme}${state.colorMode === "mono" ? " is-mono" : ""}`;
+      dom.stage.style.setProperty("--mono-stroke-color", MONO_COLORS.stroke);
+      dom.stage.style.setProperty("--mono-text-color", MONO_COLORS.text);
     }
 
     function layerDefinition(layer) {
@@ -1559,6 +1658,61 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         : rotated;
     }
 
+    function colorSetSwatches(colors) {
+      return ["C", "D", "E", "F"].map(note => `<span style="--set-color: ${colors[note]}"></span>`).join("");
+    }
+
+    function monoSetSwatches(colors) {
+      return `
+        <span class="is-ring" style="--set-color: ${colors.stroke}"></span>
+        <span style="--set-color: ${colors.text}"></span>
+      `;
+    }
+
+    function renderPaletteSetGroup() {
+      const group = document.createElement("div");
+      group.className = `palette-set-group${state.colorMode === "mono" ? " is-mono" : ""}`;
+
+      if (state.colorMode === "mono") {
+        [...MONO_COLOR_PRESETS, { name: "User 4B", colors: USER_MONO_SLOT_4B, user: true }].forEach((preset, index) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = [
+            "palette-set-button",
+            preset.user ? "is-user" : "",
+            sameMonoColorMap(MONO_COLORS, preset.colors) ? "is-active" : ""
+          ].filter(Boolean).join(" ");
+          button.title = preset.user ? "套用 User 自訂低彩色 Slot 4B" : `套用低彩預設 ${index + 1}: ${preset.name}`;
+          button.innerHTML = preset.user ? "<b>U</b>" : monoSetSwatches(preset.colors);
+          button.addEventListener("click", () => {
+            setMonoColors(preset.colors, false);
+            render();
+          });
+          group.append(button);
+        });
+        return group;
+      }
+
+      [...COLOR_SET_PRESETS, { name: "User 4A", colors: USER_COLOR_SLOT_4A, user: true }].forEach((preset, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = [
+          "palette-set-button",
+          preset.user ? "is-user" : "",
+          sameColorMap(NOTE_COLORS, preset.colors) ? "is-active" : ""
+        ].filter(Boolean).join(" ");
+        button.title = preset.user ? "套用 User 自訂高彩色 Slot 4A" : `套用高彩預設 ${index + 1}: ${preset.name}`;
+        button.innerHTML = preset.user ? "<b>U</b>" : colorSetSwatches(preset.colors);
+        button.addEventListener("click", () => {
+          setNoteColors(preset.colors, false);
+          render();
+        });
+        group.append(button);
+      });
+
+      return group;
+    }
+
     function renderNoteSwitchboard() {
       dom.noteSwitchboard.innerHTML = "";
       const notes = orderedPitchNotes();
@@ -1599,7 +1753,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       pitchRow.append(collapse);
 
       const tools = [
-        { id: "clear", label: "CLN", title: "Clear notes / toggle hidden canvas" },
+        { id: "clear", label: "🧹", title: "Clear notes / toggle hidden canvas" },
         { id: "select", label: "🎯", title: "選取 / 取消分析框選" },
         { id: "draw", label: "✏️", title: "顯示音名 / 點擊隱藏" },
         { id: "erase", label: "🧽", title: "Erase clicked note" },
@@ -1776,9 +1930,9 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           const noteColor = colorForNote(note);
           const overlap = sources.length > 1;
           const subOnly = sources.length === 1 && sources[0] === "b";
-          const fill = state.colorMode === "mono" ? (subOnly ? "#00a99d" : "#ffffff") : (subOnly ? "#ffffff" : (info.inKey ? noteColor : "#9da5aa"));
-          const stroke = state.colorMode === "mono" ? (subOnly ? "none" : "#151918") : (subOnly ? "#00a99d" : "none");
-          const textColor = overlap ? "#111615" : (state.colorMode === "mono" ? (subOnly ? "#ffffff" : "#6e93db") : (subOnly ? "#00a99d" : "#ffffff"));
+          const fill = state.colorMode === "mono" ? "#ffffff" : (subOnly ? "#ffffff" : (info.inKey ? noteColor : "#9da5aa"));
+          const stroke = state.colorMode === "mono" ? MONO_COLORS.stroke : (subOnly ? "#00a99d" : "none");
+          const textColor = state.colorMode === "mono" ? MONO_COLORS.text : (overlap ? "#111615" : (subOnly ? "#00a99d" : "#ffffff"));
           const labelFont = overlap ? markerFont + 4 : markerFont;
           const textStroke = overlap ? ` stroke="#ffffff" stroke-width="${Math.max(2, labelFont * .16)}" paint-order="stroke fill"` : "";
           const subTextStroke = overlap ? ` stroke="#ffffff" stroke-width="${Math.max(1, subFont * .16)}" paint-order="stroke fill"` : "";
@@ -1790,7 +1944,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
             parts.push(`<rect x="${x - (frameSize / 2)}" y="${y - (frameSize / 2)}" width="${frameSize}" height="${frameSize}" rx="8" fill="none" stroke="#ffffff" stroke-width="3"/>`);
             parts.push(`<rect x="${x - (frameSize / 2)}" y="${y - (frameSize / 2)}" width="${frameSize}" height="${frameSize}" rx="8" fill="none" stroke="#343b38" stroke-width="1" opacity=".18"/>`);
           }
-          parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius}" fill="${fill}" stroke="${stroke}" stroke-width="${state.colorMode === "mono" ? 2 : 0}"/>`);
+          parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius}" fill="${fill}" stroke="${stroke}" stroke-width="${state.colorMode === "mono" || subOnly ? 2 : 0}"/>`);
           parts.push(`<text x="${x}" y="${labels.secondary ? y - 1 : y + 5}" text-anchor="middle" font-size="${labelFont}" font-weight="${overlap ? 950 : 900}" fill="${textColor}"${textStroke}>${svgEscape(labels.primary)}</text>`);
           if (labels.secondary) {
             parts.push(`<text x="${x}" y="${y + 14}" text-anchor="middle" font-size="${subFont}" font-weight="${overlap ? 950 : 800}" fill="${textColor}" opacity=".75"${subTextStroke}>${svgEscape(labels.secondary)}</text>`);
@@ -2109,6 +2263,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       dom.fretboard.innerHTML = "";
       if (dom.keyboardMap) dom.keyboardMap.innerHTML = "";
       syncStageClass();
+      syncPalette();
       dom.noteSwitchboard.classList.toggle("is-mono", state.colorMode === "mono");
       const isKeyboardPage = state.activeLibraryPage === "keyboard";
       const stageLayout = document.querySelector("#stage-layout");
@@ -2381,6 +2536,17 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         const note = picker.dataset.noteColor;
         NOTE_COLORS[note] = event.target.value;
         RECENT_NOTE_COLORS[note] = event.target.value;
+        applyColorMap(USER_COLOR_SLOT_4A, NOTE_COLORS);
+        syncPalette();
+        render();
+      });
+    });
+
+    dom.monoColorPickers.forEach(picker => {
+      picker.addEventListener("input", event => {
+        const key = picker.dataset.monoColor;
+        MONO_COLORS[key] = event.target.value;
+        applyMonoColorMap(USER_MONO_SLOT_4B, MONO_COLORS);
         syncPalette();
         render();
       });
