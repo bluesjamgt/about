@@ -190,7 +190,7 @@
             </label>
             <label>
               <span data-layer-formula-label="a">Formula</span>
-              <output id="layer-a-formula" class="formula-output">1 2 3 4 5 6 7</output>
+              <select id="layer-a-formula" class="formula-output" data-layer="a" data-layer-formula-select></select>
             </label>
             <label>
               <span>Pattern</span>
@@ -220,12 +220,19 @@
             </label>
             <label>
               <span data-layer-formula-label="b">Formula</span>
-              <output id="layer-b-formula" class="formula-output">1 2 b3 4 5 6 b7</output>
+              <select id="layer-b-formula" class="formula-output" data-layer="b" data-layer-formula-select></select>
             </label>
             <label>
               <span>Pattern</span>
               <select id="layer-b-pattern" data-layer="b" data-layer-field="pattern"></select>
             </label>
+          </div>
+        </div>
+        <div class="form-summary" aria-label="目前 FORM 摘要">
+          <div class="form-summary-row" data-form-summary="a">
+            <span>Main</span>
+            <strong data-form-summary-title="a">C Major Scale</strong>
+            <output data-form-summary-formula="a">1 2 3 4 5 6 7</output>
           </div>
         </div>
       </section>
@@ -257,6 +264,11 @@
                 <span data-mono-color-code="text">#6E93DB</span>
                 <input class="legend-picker" type="color" data-mono-color="text" value="#6e93db">
               </div>
+              <div class="legend-row mono-legend-row">
+                <span class="mono-legend-label">底色</span>
+                <span data-mono-color-code="fill">#FFFFFF</span>
+                <input class="legend-picker" type="color" data-mono-color="fill" value="#ffffff">
+              </div>
               <div class="palette-set-dock" data-palette-set-dock aria-label="調色盤組合"></div>
             </aside>
           </div>
@@ -264,47 +276,55 @@
         </div>
       </section>
 
-      <section class="analysis-panel panel-shell workbench-panel" aria-label="選取分析區">
-        <div class="panel-title">
-          <strong>SCOPE</strong>
-          <span>Selection analysis shell</span>
-        </div>
-        <div class="analysis-placeholder">
-          <div class="scope-head">
-            <b>Selected Notes</b>
-            <button type="button" id="scope-view-toggle">Detail</button>
+      <div id="status-dock" class="status-dock" aria-label="狀態工具列">
+        <section class="analysis-panel panel-shell workbench-panel" aria-label="選取分析區">
+          <div class="panel-title">
+            <strong>SCOPE</strong>
+            <span>Selection analysis shell</span>
+            <button type="button" id="status-dock-toggle" aria-label="收合狀態工具列">⌄</button>
           </div>
-          <div class="scope-body">
-            <div id="scope-selection" class="scope-selection">
-              <span class="scope-empty">點擊指板或鍵盤上的音，這裡會先記錄選取內容。</span>
+          <div class="analysis-placeholder">
+            <div class="scope-head">
+              <b>Selected Notes</b>
+              <button type="button" id="scope-view-toggle">Detail</button>
             </div>
-            <div id="scope-suggestions" class="scope-suggestions">
-              <strong>Chord Suggestions</strong>
-              <span>選 2 個以上音，這裡會顯示可能和弦。</span>
+            <div class="scope-body">
+              <div id="scope-selection" class="scope-selection">
+                <span class="scope-empty">點擊指板或鍵盤上的音，這裡會先記錄選取內容。</span>
+              </div>
+              <div id="scope-suggestions" class="scope-suggestions">
+                <strong>Chord Suggestions</strong>
+                <span>選 2 個以上音，這裡會顯示可能和弦。</span>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="info-bar workbench-panel" aria-label="點選音符資訊">
-        <div class="info-item"><span>位置</span><strong id="info-position">第 6 弦 / 第 0 格</strong></div>
-        <div class="info-item"><span>音名</span><strong id="info-note">E</strong></div>
-        <div class="info-item"><span>唱名</span><strong id="info-solfege">Mi</strong></div>
-        <div class="info-item"><span>級數</span><strong id="info-degree">3</strong></div>
-        <div class="info-item"><span>調性關係</span><strong id="info-relation">C 大調內音</strong></div>
-        <div class="info-item"><span>位置細節</span><strong id="info-string">E</strong></div>
-      </section>
+        <section class="info-bar workbench-panel" aria-label="點選音符資訊">
+          <div class="info-item"><span>位置</span><strong id="info-position">第 6 弦 / 第 0 格</strong></div>
+          <div class="info-item"><span>音名</span><strong id="info-note">E</strong></div>
+          <div class="info-item"><span>唱名</span><strong id="info-solfege">Mi</strong></div>
+          <div class="info-item"><span>級數</span><strong id="info-degree">3</strong></div>
+          <div class="info-item"><span>調性關係</span><strong id="info-relation">C 大調內音</strong></div>
+          <div class="info-item"><span>位置細節</span><strong id="info-string">E</strong></div>
+        </section>
+      </div>
 
       <section id="theory-page" class="theory-page panel-shell" aria-label="樂理筆記內頁" hidden></section>
     </main>
   </div>
 
   <aside class="shortcut-help" aria-label="快捷鍵說明">
-    <strong>快捷鍵</strong>
-    <span><kbd>Tab</kbd> 選取 / 畫筆</span>
-    <span><kbd>C</kbd> 清除畫布</span>
-    <span><kbd>S</kbd> 升記號</span>
-    <span><kbd>F</kbd> 降記號</span>
+    <div class="shortcut-title">
+      <strong>快捷鍵</strong>
+      <button type="button" id="shortcut-help-toggle" aria-label="收合快捷鍵">⌄</button>
+    </div>
+    <div class="shortcut-body">
+      <span><kbd>Tab</kbd> 選取 / 畫筆</span>
+      <span><kbd>C</kbd> 清除畫布</span>
+      <span><kbd>S</kbd> 升記號</span>
+      <span><kbd>F</kbd> 降記號</span>
+    </div>
   </aside>
 
   <script src="assets/modules/axon/app.js" defer></script>

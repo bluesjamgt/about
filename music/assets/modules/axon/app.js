@@ -108,38 +108,39 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         colors: { ...DEFAULT_NOTE_COLORS }
       },
       {
-        name: "Dracula",
+        name: "Nord",
         colors: {
-          C: "#f1fa8c",
-          D: "#ffb86c",
-          E: "#bd93f9",
-          F: "#8be9fd",
-          G: "#50fa7b",
-          A: "#ff79c6",
-          B: "#ff5555"
+          C: "#ebcb8b",
+          D: "#d08770",
+          E: "#b48ead",
+          F: "#5e81ac",
+          G: "#a3be8c",
+          A: "#bf616a",
+          B: "#88c0d0"
         }
       },
       {
-        name: "Solarized",
+        name: "Tokyo",
         colors: {
-          C: "#b58900",
-          D: "#cb4b16",
-          E: "#6c71c4",
-          F: "#268bd2",
-          G: "#859900",
-          A: "#dc322f",
-          B: "#2aa198"
+          C: "#e0af68",
+          D: "#ff9e64",
+          E: "#bb9af7",
+          F: "#7aa2f7",
+          G: "#9ece6a",
+          A: "#f7768e",
+          B: "#7dcfff"
         }
       }
     ];
     const DEFAULT_MONO_COLORS = {
       stroke: "#6e93db",
-      text: "#6e93db"
+      text: "#6e93db",
+      fill: "#ffffff"
     };
     const MONO_COLOR_PRESETS = [
-      { name: "Blue", colors: { stroke: "#6e93db", text: "#6e93db" } },
-      { name: "Terminal", colors: { stroke: "#00d084", text: "#00d084" } },
-      { name: "Amber", colors: { stroke: "#ffb454", text: "#ffb454" } }
+      { name: "Blue", colors: { stroke: "#6e93db", text: "#6e93db", fill: "#ffffff" } },
+      { name: "Terminal", colors: { stroke: "#00d084", text: "#00d084", fill: "#ffffff" } },
+      { name: "Amber", colors: { stroke: "#ffb454", text: "#ffb454", fill: "#ffffff" } }
     ];
     const NOTE_COLORS = { ...DEFAULT_NOTE_COLORS };
     const RECENT_NOTE_COLORS = { ...DEFAULT_NOTE_COLORS };
@@ -320,6 +321,10 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         a: document.querySelector("#layer-a-formula"),
         b: document.querySelector("#layer-b-formula")
       },
+      formulaSelects: document.querySelectorAll("[data-layer-formula-select]"),
+      formSummaryRows: document.querySelectorAll("[data-form-summary]"),
+      formSummaryTitles: document.querySelectorAll("[data-form-summary-title]"),
+      formSummaryFormulas: document.querySelectorAll("[data-form-summary-formula]"),
       patternShape: document.querySelector("#pattern-shape"),
       noteSwitchboard: document.querySelector("#note-switchboard"),
       fretCount: document.querySelector("#fret-count"),
@@ -352,7 +357,11 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       infoString: document.querySelector("#info-string"),
       scopeSelection: document.querySelector("#scope-selection"),
       scopeSuggestions: document.querySelector("#scope-suggestions"),
-      scopeViewToggle: document.querySelector("#scope-view-toggle")
+      scopeViewToggle: document.querySelector("#scope-view-toggle"),
+      statusDock: document.querySelector("#status-dock"),
+      statusDockToggle: document.querySelector("#status-dock-toggle"),
+      shortcutHelp: document.querySelector(".shortcut-help"),
+      shortcutHelpToggle: document.querySelector("#shortcut-help-toggle")
     };
 
     const state = {
@@ -384,6 +393,8 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       pitchOverrides: {},
       markerTool: "draw",
       colorMode: "color",
+      colorOpacity: 100,
+      monoOpacity: 100,
       accidentalMode: "auto",
       hideSnapshot: null,
       manualOn: new Set(),
@@ -391,15 +402,22 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       manualSelected: new Set(),
       selectionLog: [],
       scopeView: "simple",
+      statusDockCollapsed: false,
+      shortcutHelpCollapsed: false,
       quickMapOpen: true,
       keyboardSize: 24,
       keyboardSoundEnabled: true,
       activeLibraryPage: "fretboard",
       selectedKeyboardMidi: 60,
-      selected: { stringIndex: 5, fret: 1 }
+      selected: { stringIndex: 5, fret: 1 },
+      transposeMotion: {
+        active: false,
+        direction: "up"
+      }
     };
     let scopeDragIndex = null;
     let audioContext = null;
+    let transposeMotionTimer = null;
 
     function noteIndex(note) {
       return NOTES.indexOf(note);
@@ -509,7 +527,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const scale = SCALES[state.scale];
       const distance = (noteIndex(note) - noteIndex(state.root) + 12) % 12;
       const degreeIndex = scale.intervals.indexOf(distance);
-      const degreeLabel = degreeDisplayLabel(distance);
+      const degreeLabel = formulaDegreeLabel(scale, degreeIndex, distance);
       if (degreeIndex < 0) {
         return {
           inKey: false,
@@ -526,6 +544,12 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       };
     }
 
+    function formulaDegreeLabel(definition, degreeIndex, distance) {
+      const tokens = String(definition?.formula || "").split(/\s+/).filter(Boolean);
+      if (degreeIndex >= 0 && tokens[degreeIndex]) return tokens[degreeIndex];
+      return ["1", "b2", "2", "b3", "3", "4", "b5", "5", "b6", "6", "b7", "7"][distance] || "-";
+    }
+
     function degreeDisplayLabel(distance) {
       const labels = DEGREE_DISPLAY_LABELS[state.degreeDisplayMode] || DEGREE_DISPLAY_LABELS.chord;
       return labels[distance] || "-";
@@ -540,7 +564,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       const isMono = state.colorMode === "mono";
       dom.paletteLegend?.classList.toggle("is-mono", isMono);
       if (dom.paletteModeTitle) dom.paletteModeTitle.textContent = isMono ? "低彩調色盤" : "音名調色盤";
-      if (dom.paletteModeSubtitle) dom.paletteModeSubtitle.textContent = isMono ? "可設定外框與文字顏色" : "目前為預設色，可自行微調";
+      if (dom.paletteModeSubtitle) dom.paletteModeSubtitle.textContent = isMono ? "可設定外框、文字與內圈底色" : "目前為預設色，可自行微調";
       Object.entries(NOTE_COLORS).forEach(([note, color]) => {
         document.querySelectorAll(`[data-palette-dot="${note}"]`).forEach(dot => {
           dot.style.setProperty("--legend-color", color);
@@ -684,10 +708,14 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         soloPitches: [...state.soloPitches],
         markerTool: state.markerTool,
         colorMode: state.colorMode,
+        colorOpacity: state.colorOpacity,
+        monoOpacity: state.monoOpacity,
         accidentalMode: state.accidentalMode,
         secondaryLabels: [...state.secondaryLabels],
         selectionLog: state.selectionLog,
         scopeView: state.scopeView,
+        statusDockCollapsed: state.statusDockCollapsed,
+        shortcutHelpCollapsed: state.shortcutHelpCollapsed,
         quickMapOpen: state.quickMapOpen,
         keyboardSize: state.keyboardSize,
         keyboardSoundEnabled: state.keyboardSoundEnabled,
@@ -774,6 +802,10 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           .slice(0, 12);
       }
       if (["simple", "detail"].includes(saved.scopeView)) state.scopeView = saved.scopeView;
+      if (typeof saved.statusDockCollapsed === "boolean") state.statusDockCollapsed = saved.statusDockCollapsed;
+      if (typeof saved.shortcutHelpCollapsed === "boolean") state.shortcutHelpCollapsed = saved.shortcutHelpCollapsed;
+      state.colorOpacity = validNumber(saved.colorOpacity, state.colorOpacity, 20, 100);
+      state.monoOpacity = validNumber(saved.monoOpacity, state.monoOpacity, 20, 100);
       if (typeof saved.quickMapOpen === "boolean") state.quickMapOpen = saved.quickMapOpen;
       if (Number(saved.keyboardSize) && KEYBOARD_PRESETS[Number(saved.keyboardSize)]) state.keyboardSize = Number(saved.keyboardSize);
       if (typeof saved.keyboardSoundEnabled === "boolean") state.keyboardSoundEnabled = saved.keyboardSoundEnabled;
@@ -822,6 +854,9 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       dom.stage.className = `stage theme-${state.boardTheme}${state.colorMode === "mono" ? " is-mono" : ""}`;
       dom.stage.style.setProperty("--mono-stroke-color", MONO_COLORS.stroke);
       dom.stage.style.setProperty("--mono-text-color", MONO_COLORS.text);
+      dom.stage.style.setProperty("--mono-fill-color", MONO_COLORS.fill);
+      dom.stage.style.setProperty("--color-fill-opacity", state.colorOpacity / 100);
+      dom.stage.style.setProperty("--mono-fill-opacity", state.monoOpacity / 100);
     }
 
     function layerDefinition(layer) {
@@ -926,6 +961,27 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       if (state.pitchOverrides[note] === true) return true;
       if (state.pitchOverrides[note] === false) return false;
       return baseVisible;
+    }
+
+    function startTransposeMotion(semitones) {
+      state.transposeMotion = {
+        active: true,
+        direction: semitones > 0 ? "up" : "down"
+      };
+      if (transposeMotionTimer) clearTimeout(transposeMotionTimer);
+      transposeMotionTimer = setTimeout(() => {
+        state.transposeMotion.active = false;
+        transposeMotionTimer = null;
+        render();
+      }, 260);
+    }
+
+    function transposeMotionClasses() {
+      if (!state.transposeMotion.active) return [];
+      return [
+        "is-transpose-slide",
+        state.transposeMotion.direction === "up" ? "is-transpose-up" : "is-transpose-down"
+      ];
     }
 
     function toggleMarker(stringIndex, fret, note) {
@@ -1111,6 +1167,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
     }
 
     function transposeLayers(semitones) {
+      startTransposeMotion(semitones);
       LAYER_IDS.forEach(layerId => {
         state.layers[layerId].keyName = transposeKeyName(state.layers[layerId].keyName, semitones);
       });
@@ -1133,6 +1190,22 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         button.classList.toggle("is-disabled", disabled);
         button.classList.toggle("is-active", state.secondaryLabels.has(kind));
       });
+    }
+
+    function syncStatusDock() {
+      dom.statusDock?.classList.toggle("is-collapsed", state.statusDockCollapsed);
+      if (dom.statusDockToggle) {
+        dom.statusDockToggle.textContent = state.statusDockCollapsed ? "⌃" : "⌄";
+        dom.statusDockToggle.setAttribute("aria-label", state.statusDockCollapsed ? "展開狀態工具列" : "收合狀態工具列");
+      }
+    }
+
+    function syncShortcutHelp() {
+      dom.shortcutHelp?.classList.toggle("is-collapsed", state.shortcutHelpCollapsed);
+      if (dom.shortcutHelpToggle) {
+        dom.shortcutHelpToggle.textContent = state.shortcutHelpCollapsed ? "⌃" : "⌄";
+        dom.shortcutHelpToggle.setAttribute("aria-label", state.shortcutHelpCollapsed ? "展開快捷鍵" : "收合快捷鍵");
+      }
     }
 
     function emphasisIntervalFor(layer, target) {
@@ -1666,7 +1739,34 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       return `
         <span class="is-ring" style="--set-color: ${colors.stroke}"></span>
         <span style="--set-color: ${colors.text}"></span>
+        <span style="--set-color: ${colors.fill}"></span>
       `;
+    }
+
+    function appendPaletteOpacityControl(group) {
+      const isMono = state.colorMode === "mono";
+      const value = isMono ? state.monoOpacity : state.colorOpacity;
+      const label = document.createElement("label");
+      label.className = "palette-opacity";
+      label.innerHTML = `
+        <span>透明度</span>
+        <input type="range" min="20" max="100" step="5" value="${value}">
+        <output>${value}%</output>
+      `;
+      const input = label.querySelector("input");
+      const output = label.querySelector("output");
+      input.addEventListener("input", event => {
+        const nextValue = validNumber(event.target.value, value, 20, 100);
+        if (isMono) {
+          state.monoOpacity = nextValue;
+        } else {
+          state.colorOpacity = nextValue;
+        }
+        output.textContent = `${nextValue}%`;
+        syncStageClass();
+        saveSettings();
+      });
+      group.append(label);
     }
 
     function renderPaletteSetGroup() {
@@ -1690,6 +1790,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           });
           group.append(button);
         });
+        appendPaletteOpacityControl(group);
         return group;
       }
 
@@ -1710,6 +1811,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         group.append(button);
       });
 
+      appendPaletteOpacityControl(group);
       return group;
     }
 
@@ -1930,8 +2032,9 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           const noteColor = colorForNote(note);
           const overlap = sources.length > 1;
           const subOnly = sources.length === 1 && sources[0] === "b";
-          const fill = state.colorMode === "mono" ? "#ffffff" : (subOnly ? "#ffffff" : (info.inKey ? noteColor : "#9da5aa"));
+          const fill = state.colorMode === "mono" ? MONO_COLORS.fill : (subOnly ? "#ffffff" : (info.inKey ? noteColor : "#9da5aa"));
           const stroke = state.colorMode === "mono" ? MONO_COLORS.stroke : (subOnly ? "#00a99d" : "none");
+          const fillOpacity = state.colorMode === "mono" ? state.monoOpacity / 100 : state.colorOpacity / 100;
           const textColor = state.colorMode === "mono" ? MONO_COLORS.text : (overlap ? "#111615" : (subOnly ? "#00a99d" : "#ffffff"));
           const labelFont = overlap ? markerFont + 4 : markerFont;
           const textStroke = overlap ? ` stroke="#ffffff" stroke-width="${Math.max(2, labelFont * .16)}" paint-order="stroke fill"` : "";
@@ -1944,7 +2047,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
             parts.push(`<rect x="${x - (frameSize / 2)}" y="${y - (frameSize / 2)}" width="${frameSize}" height="${frameSize}" rx="8" fill="none" stroke="#ffffff" stroke-width="3"/>`);
             parts.push(`<rect x="${x - (frameSize / 2)}" y="${y - (frameSize / 2)}" width="${frameSize}" height="${frameSize}" rx="8" fill="none" stroke="#343b38" stroke-width="1" opacity=".18"/>`);
           }
-          parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius}" fill="${fill}" stroke="${stroke}" stroke-width="${state.colorMode === "mono" || subOnly ? 2 : 0}"/>`);
+          parts.push(`<circle cx="${x}" cy="${y}" r="${markerRadius}" fill="${fill}" fill-opacity="${fillOpacity}" stroke="${stroke}" stroke-width="${state.colorMode === "mono" || subOnly ? 2 : 0}"/>`);
           parts.push(`<text x="${x}" y="${labels.secondary ? y - 1 : y + 5}" text-anchor="middle" font-size="${labelFont}" font-weight="${overlap ? 950 : 900}" fill="${textColor}"${textStroke}>${svgEscape(labels.primary)}</text>`);
           if (labels.secondary) {
             parts.push(`<text x="${x}" y="${y + 14}" text-anchor="middle" font-size="${subFont}" font-weight="${overlap ? 950 : 800}" fill="${textColor}" opacity=".75"${subTextStroke}>${svgEscape(labels.secondary)}</text>`);
@@ -2031,9 +2134,44 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       });
     }
 
+    function rebuildFormulaOptions(layerId) {
+      const layer = state.layers[layerId];
+      const select = document.querySelector(`[data-layer="${layerId}"][data-layer-formula-select]`);
+      if (!select) return;
+      const source = layer.kind === "arpeggio" ? ARPEGGIO_TYPES : SCALES;
+      const groups = layer.kind === "arpeggio" ? ARPEGGIO_GROUPS : SCALE_GROUPS;
+      select.innerHTML = "";
+      groups.forEach(group => {
+        const optgroup = document.createElement("optgroup");
+        optgroup.label = group.label;
+        group.values.forEach(value => {
+          const item = source[value];
+          if (!item) return;
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = item.formula;
+          optgroup.append(option);
+        });
+        select.append(optgroup);
+      });
+    }
+
+    function syncFormSummary(layerId) {
+      if (layerId !== "a") return;
+      const layer = state.layers[layerId];
+      const definition = layerDefinition(layer);
+      const row = document.querySelector(`[data-form-summary="${layerId}"]`);
+      const title = document.querySelector(`[data-form-summary-title="${layerId}"]`);
+      const formula = document.querySelector(`[data-form-summary-formula="${layerId}"]`);
+      if (row) row.classList.toggle("is-muted", !layer.enabled);
+      if (title) title.textContent = `${layer.keyName} ${definition.label} ${layer.kind === "arpeggio" ? "Arp." : "Scale"}`;
+      if (formula) formula.textContent = definition.formula;
+    }
+
     function syncLayerControls(layerId) {
       const layer = state.layers[layerId];
       rebuildVariantOptions(layerId);
+      rebuildFormulaOptions(layerId);
       document.querySelectorAll(`[data-layer="${layerId}"][data-layer-field]`).forEach(control => {
         const field = control.dataset.layerField;
         if (control.type === "checkbox") {
@@ -2050,7 +2188,8 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       if (label) label.textContent = layer.kind === "arpeggio" ? "Arp." : "Scale";
       const formulaLabel = document.querySelector(`[data-layer-formula-label="${layerId}"]`);
       if (formulaLabel) formulaLabel.textContent = layer.kind === "arpeggio" ? "Chord Tones" : "Formula";
-      if (dom.formulaOutputs[layerId]) dom.formulaOutputs[layerId].textContent = layerFormula(layer);
+      if (dom.formulaOutputs[layerId]) dom.formulaOutputs[layerId].value = layer.kind === "arpeggio" ? layer.arpeggio : layer.scale;
+      syncFormSummary(layerId);
     }
 
     function rebuildTuningOptions() {
@@ -2234,11 +2373,13 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           sources.length > 1 ? "is-overlap" : "",
           info.inKey ? "" : "is-out",
           emphasized ? "is-emphasis" : "",
-          selected ? "is-selected" : ""
+          selected ? "is-selected" : "",
+          ...transposeMotionClasses()
         ].filter(Boolean).join(" ");
         marker.style.setProperty("--note-color", colorForNote(note));
         marker.style.setProperty("--in-key-scale", 1);
         marker.innerHTML = `
+          <span class="marker-bg"></span>
           <span class="marker-note">${labels.primary}</span>
           <span class="marker-solfege">${labels.secondary}</span>
         `;
@@ -2264,6 +2405,8 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       if (dom.keyboardMap) dom.keyboardMap.innerHTML = "";
       syncStageClass();
       syncPalette();
+      syncStatusDock();
+      syncShortcutHelp();
       dom.noteSwitchboard.classList.toggle("is-mono", state.colorMode === "mono");
       const isKeyboardPage = state.activeLibraryPage === "keyboard";
       const stageLayout = document.querySelector("#stage-layout");
@@ -2348,11 +2491,13 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
               sources.length > 1 ? "is-overlap" : "",
               info.inKey ? "" : "is-out",
               emphasized ? "is-emphasis" : "",
-              selected ? "is-selected" : ""
+              selected ? "is-selected" : "",
+              ...transposeMotionClasses()
             ].filter(Boolean).join(" ");
             marker.style.setProperty("--note-color", colorForNote(note));
             marker.style.setProperty("--in-key-scale", 1);
             marker.innerHTML = `
+              <span class="marker-bg"></span>
               <span class="marker-note">${labels.primary}</span>
               <span class="marker-solfege">${labels.secondary}</span>
             `;
@@ -2458,6 +2603,25 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       control.addEventListener("change", () => applyLayerControl(control));
     });
 
+    dom.formulaSelects.forEach(select => {
+      select.addEventListener("pointerdown", restoreTheoryViewFromCustom);
+      select.addEventListener("change", () => {
+        const layerId = select.dataset.layer;
+        const layer = state.layers[layerId];
+        if (!layer) return;
+        if (layer.kind === "arpeggio") {
+          layer.arpeggio = select.value;
+        } else {
+          layer.scale = select.value;
+        }
+        if (layerId === "a") syncPrimaryLayer();
+        if (state.mode === "custom") state.mode = "scale";
+        syncLayerControls(layerId);
+        resetManualMarkers();
+        render();
+      });
+    });
+
     dom.fretCount.addEventListener("change", event => {
       state.frets = Number(event.target.value);
       state.selected.fret = Math.min(state.selected.fret, state.frets);
@@ -2511,6 +2675,18 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
     dom.scopeViewToggle?.addEventListener("click", () => {
       state.scopeView = state.scopeView === "simple" ? "detail" : "simple";
       render();
+    });
+
+    dom.statusDockToggle?.addEventListener("click", () => {
+      state.statusDockCollapsed = !state.statusDockCollapsed;
+      syncStatusDock();
+      saveSettings();
+    });
+
+    dom.shortcutHelpToggle?.addEventListener("click", () => {
+      state.shortcutHelpCollapsed = !state.shortcutHelpCollapsed;
+      syncShortcutHelp();
+      saveSettings();
     });
 
     dom.quickMapToggle?.addEventListener("click", () => {
