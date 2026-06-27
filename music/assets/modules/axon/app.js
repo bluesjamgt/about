@@ -759,7 +759,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
       }
       if (SCALES[saved.scale]) state.scale = saved.scale;
       if (["scale", "all", "root", "custom"].includes(saved.mode)) state.mode = saved.mode;
-      if (["note", "solfege", "degree"].includes(saved.labelMode)) state.labelMode = saved.labelMode;
+      if (["note", "solfege", "degree", "none"].includes(saved.labelMode)) state.labelMode = saved.labelMode;
       if (["chord", "interval"].includes(saved.degreeDisplayMode)) state.degreeDisplayMode = saved.degreeDisplayMode;
       if (["white", "ebony", "rosewood", "maple"].includes(saved.boardTheme)) state.boardTheme = saved.boardTheme;
       state.displayScale = validNumber(saved.displayScale, state.displayScale, 70, 150);
@@ -1176,6 +1176,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
     }
 
     function labelText(kind, note, info) {
+      if (kind === "none") return "";
       if (kind === "solfege") return info.solfege;
       if (kind === "degree") return info.degree;
       return displayNote(note);
@@ -1184,7 +1185,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
     function syncSecondaryLabelButtons() {
       dom.secondaryLabelButtons.forEach(button => {
         const kind = button.dataset.secondaryLabel;
-        const disabled = kind === state.labelMode;
+        const disabled = state.labelMode === "none" || kind === state.labelMode;
         if (disabled) state.secondaryLabels.delete(kind);
         button.disabled = disabled;
         button.classList.toggle("is-disabled", disabled);
@@ -1671,7 +1672,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           if (dom.heroTitle) dom.heroTitle.textContent = "Piano / Keyboard Map";
         } else {
           if (dom.heroCrumbs) dom.heroCrumbs.textContent = "Instruments / Guitar / Fretboard";
-          if (dom.heroTitle) dom.heroTitle.textContent = "Key Fretboard Map";
+          if (dom.heroTitle) dom.heroTitle.textContent = "Fretboard Map";
         }
         return;
       }
@@ -2374,6 +2375,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
           info.inKey ? "" : "is-out",
           emphasized ? "is-emphasis" : "",
           selected ? "is-selected" : "",
+          state.labelMode === "none" ? "is-label-hidden" : "",
           ...transposeMotionClasses()
         ].filter(Boolean).join(" ");
         marker.style.setProperty("--note-color", colorForNote(note));
@@ -2492,6 +2494,7 @@ const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
               info.inKey ? "" : "is-out",
               emphasized ? "is-emphasis" : "",
               selected ? "is-selected" : "",
+              state.labelMode === "none" ? "is-label-hidden" : "",
               ...transposeMotionClasses()
             ].filter(Boolean).join(" ");
             marker.style.setProperty("--note-color", colorForNote(note));

@@ -655,9 +655,12 @@
       min-width: 7.2rem;
     }
 
-    .control:has(#tuning-preset),
-    .control:has(#board-theme) {
+    .control:has(#tuning-preset) {
       width: 13.5rem;
+    }
+
+    .control:has(#board-theme) {
+      width: 10rem;
     }
 
     .control:has(#display-scale),
@@ -721,7 +724,7 @@
     }
 
     .name-toggle {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
     }
 
     .sound-toggle {
@@ -763,6 +766,13 @@
       color: rgba(93, 106, 101, .38);
       background: rgba(255, 255, 255, .56);
       cursor: not-allowed;
+    }
+
+    .tag-options:has(button:disabled) {
+      border-color: rgba(220, 228, 224, .65);
+      background: rgba(242, 246, 244, .52);
+      filter: grayscale(.25);
+      opacity: .72;
     }
 
     .tag-options button.is-disabled::before {
@@ -1328,6 +1338,11 @@
       animation: transpose-slide-up .24s cubic-bezier(.2, .72, .18, 1);
     }
 
+    .marker.is-label-hidden .marker-note,
+    .marker.is-label-hidden .marker-solfege {
+      display: none;
+    }
+
     .marker.is-transpose-slide.is-transpose-down {
       animation: transpose-slide-down .24s cubic-bezier(.2, .72, .18, 1);
     }
@@ -1891,14 +1906,24 @@
     }
 
     .analysis-placeholder {
-      display: grid;
-      grid-template-columns: minmax(0, .95fr) minmax(15rem, 1.05fr);
-      gap: .35rem .45rem;
-      align-items: stretch;
       min-height: 1.9rem;
       padding: .34rem;
       border-radius: 8px;
       background: #f4f8f6;
+    }
+
+    .scope-body {
+      display: grid;
+      grid-template-columns: minmax(0, .95fr) minmax(15rem, 1.05fr);
+      gap: .35rem .45rem;
+      align-items: stretch;
+    }
+
+    .scope-column {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: .35rem;
+      min-width: 0;
     }
 
     .scope-head {
@@ -1906,8 +1931,6 @@
       align-items: center;
       justify-content: space-between;
       gap: .75rem;
-      grid-column: 1;
-      grid-row: 1;
       align-self: start;
       min-height: 1.9rem;
     }
@@ -1939,13 +1962,7 @@
       line-height: 1.35;
     }
 
-    .scope-body {
-      display: contents;
-    }
-
     .scope-selection {
-      grid-column: 1;
-      grid-row: 2;
       display: flex;
       flex-wrap: wrap;
       gap: .35rem;
@@ -2006,8 +2023,6 @@
     }
 
     .scope-suggestions {
-      grid-column: 2;
-      grid-row: 1 / span 2;
       display: grid;
       gap: .25rem;
       min-height: 1.9rem;

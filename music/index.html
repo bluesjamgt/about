@@ -42,7 +42,7 @@
         <a class="nav-item" href="#">混音筆記 <span>soon</span></a>
       </nav>
 
-      <p class="sidebar-note">這裡先定位成公開可看的私人音樂履歷：學生可以練習，路人也能知道你會教什麼、怎麼整理知識。</p>
+      <p class="sidebar-note">音樂學習筆記。</p>
     </aside>
 
     <main class="main">
@@ -110,6 +110,7 @@
             <button type="button" class="is-active" data-label-mode="note">音名</button>
             <button type="button" data-label-mode="solfege">唱名</button>
             <button type="button" data-label-mode="degree">級數</button>
+            <button type="button" data-label-mode="none">圖形</button>
           </div>
         </div>
 
@@ -284,13 +285,15 @@
             <button type="button" id="status-dock-toggle" aria-label="收合狀態工具列">⌄</button>
           </div>
           <div class="analysis-placeholder">
-            <div class="scope-head">
-              <b>Selected Notes</b>
-              <button type="button" id="scope-view-toggle">Detail</button>
-            </div>
             <div class="scope-body">
-              <div id="scope-selection" class="scope-selection">
-                <span class="scope-empty">點擊指板或鍵盤上的音，這裡會先記錄選取內容。</span>
+              <div class="scope-column">
+                <div class="scope-head">
+                  <b>Selected Notes</b>
+                  <button type="button" id="scope-view-toggle">Detail</button>
+                </div>
+                <div id="scope-selection" class="scope-selection">
+                  <span class="scope-empty">點擊指板或鍵盤上的音，這裡會先記錄選取內容。</span>
+                </div>
               </div>
               <div id="scope-suggestions" class="scope-suggestions">
                 <strong>Chord Suggestions</strong>
